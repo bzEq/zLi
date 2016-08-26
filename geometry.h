@@ -41,7 +41,7 @@ struct Vector3 {
   }
   bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
   T operator[](int i) const { assert(i >= 0 && i <= 2); return (&x)[i]; }
-  T& operator[](int i) { assert(i >= 0 && i <= 2); return std::ref((&x)[i]); }
+  T& operator[](int i) { assert(i >= 0 && i <= 2); return (&x)[i]; }
   Vector4<T> ToVector4() const;
 };
 
@@ -58,7 +58,7 @@ struct Vector4 {
   }
   bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z) || std::isnan(w); }  
   T operator[](int i) const { assert(i >= 0 && i <= 3); return (&x)[i]; }
-  T& operator[](int i) { assert(i >= 0 && i <= 3); return std::ref((&x)[i]); }
+  T& operator[](int i) { assert(i >= 0 && i <= 3); return (&x)[i]; }
 };
 
 template<typename T>
