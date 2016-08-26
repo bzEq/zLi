@@ -17,5 +17,9 @@ int main()
                0, 0, 0, 1);
   std::cout << m.Inverse().value_or(Matrix4x4d()) << std::endl;
   std::cout << m * v4 << std::endl;
+
+  Quaternion4d q(1, 2, 2, 2);
+  std::cout << q * q.Conjugation() << std::endl;
+  std::cout << q * q.Inverse() << std::endl;
   return 0;
 }

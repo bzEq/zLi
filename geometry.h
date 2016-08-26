@@ -40,8 +40,8 @@ struct Vector3 {
     return *this;
   }
   bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
-  T operator[](int i) const { assert(i >= 0 && i <= 2); return (&x)[i]; }
-  T& operator[](int i) { assert(i >= 0 && i <= 2); return (&x)[i]; }
+  T operator[](int i) const { assert(i >= 0 && i < 3); return (&x)[i]; }
+  T& operator[](int i) { assert(i >= 0 && i < 3); return (&x)[i]; }
   Vector4<T> ToVector4() const;
 };
 
@@ -57,8 +57,8 @@ struct Vector4 {
     return Vector3<T>(x/w, y/w, z/w);
   }
   bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z) || std::isnan(w); }  
-  T operator[](int i) const { assert(i >= 0 && i <= 3); return (&x)[i]; }
-  T& operator[](int i) { assert(i >= 0 && i <= 3); return (&x)[i]; }
+  T operator[](int i) const { assert(i >= 0 && i < 4); return (&x)[i]; }
+  T& operator[](int i) { assert(i >= 0 && i < 4); return (&x)[i]; }
 };
 
 template<typename T>
@@ -66,9 +66,9 @@ struct Matrix4x4 {
   T m[4][4];
   
   Matrix4x4() {
-        m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
-        m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] =
-          m[2][1] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0;    
+    m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
+    m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] =
+      m[2][1] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0;    
   }
   
   Matrix4x4(const T mm[4][4]) {
@@ -158,11 +158,55 @@ struct Matrix4x4 {
 
 template <typename T>
 struct Quaternion {
-  
+  T r, i, j, k;
+  Quaternion(): r(0), i(0), j(0), k(0) {}
+  Quaternion(const T r, const T i, const T j, const T k): r(r), i(i), j(j), k(k) {}
+  Quaternion(const T r, const Vector3<T>& v): r(r), i(v.x), j(v.y), k(v.z) {}
+  Quaternion& operator+=(const Quaternion& q) {
+    r += q.r; i += q.i; j += q.j; k += q.k;
+    return *this;
+  }
+  Quaternion& operator-=(const Quaternion& q) {
+    r -= q.r; i -= q.i; j -= q.j; k -= q.k;
+    return *this;
+  }
+  Quaternion& operator*=(const T f) {
+    r *= f; i *= f; j *= f; k *= f;
+    return *this;
+  }
+  Quaternion& operator/=(const T f) {
+    r /= f; i /= f; j /= f; k /= f;
+    return *this;    
+  }
+  T operator[](int i) const { 
+    assert(i >= 0 && i < 4);
+    return (&r)[i];
+  }
+  T& operator[](int i) {
+    assert(i >= 0 && i < 4);
+    return (&r)[i];    
+  }
+  Quaternion Conjugation() const { return Quaternion(r, -i, -j, -k); }
+  T NormSquared() const {
+    return r * r + i * i + j * j + k * k;
+  }
+  T Norm() const {
+    return std::sqrt(NormSquared());
+  }
+  Quaternion Inverse() const { 
+    assert(!IsZero());
+    return Conjugation() / NormSquared();
+  }
+  bool IsZero() const {
+    return r == 0 && i == 0 && j == 0 && k == 0;
+  }
+  bool HasNaNs() const {
+    return std::isnan(r) || std::isnan(i) || std::isnan(j) || std::isnan(k);
+  }
 };
 
 template<typename T>
-Vector4<T> Vector3<T>::ToVector4() const {
+inline Vector4<T> Vector3<T>::ToVector4() const {
   return Vector4<T>(*this, 1);
 }
 
@@ -232,12 +276,74 @@ inline std::ostream& operator<<(std::ostream& out, const Matrix4x4<T>& m) {
   return out;
 }
 
+template<typename T>
+inline Quaternion<T> operator-(const Quaternion<T>& q) {
+  return Quaternion<T>(-q.r, -q.i, -q.j, -q.k);
+}
+
+template<typename T>
+inline Quaternion<T> operator+(const Quaternion<T>& p, const Quaternion<T>& q) {
+  return Quaternion<T>(p.r + q.r,
+                       p.i + q.i,
+                       p.j + q.j,
+                       p.k + q.k);
+}
+
+template<typename T>
+inline Quaternion<T> operator-(const Quaternion<T>& p, const Quaternion<T>& q) {
+  return Quaternion<T>(p.r - q.r,
+                       p.i - q.i,
+                       p.j - q.j,
+                       p.k - q.k);
+}
+
+template<typename T>
+inline Quaternion<T> operator*(const Quaternion<T>& p, const Quaternion<T>& q) {
+  return Quaternion<T>(p.r * q.r - (p.i * q.i + p.j * q.j + p.k * q.k),
+                       p.r * q.i + q.r * p.i + (p.j * q.k - p.k * q.j),
+                       p.r * q.j + q.r * p.j + (p.k * q.i - p.i * q.k),
+                       p.r * q.k + q.r * p.k + (p.i * q.j - p.j * q.i));
+}
+
+template<typename T>
+inline Quaternion<T> operator*(const Quaternion<T>& q, const T f) {
+  return Quaternion<T>(q.r * f,
+                       q.i * f,
+                       q.j * f,
+                       q.k * f);
+}
+
+template<typename T>
+inline Quaternion<T> operator*(const T f, const Quaternion<T>& q) {
+  return Quaternion<T>(q.r * f,
+                       q.i * f,
+                       q.j * f,
+                       q.k * f);
+}
+
+template<typename T>
+inline Quaternion<T> operator/(const Quaternion<T>& q, const T f) {
+  assert(f != 0);
+  return Quaternion<T>(q.r / f,
+                       q.i / f,
+                       q.j / f,
+                       q.k / f);
+}
+
+template<typename T>
+inline std::ostream& operator<<(std::ostream& out, const Quaternion<T>& q) {
+  out << "(" << q.r << ", " << q.i << ", " << q.j << ", " << q.k << ")";
+  return out;
+}
+
 typedef Vector3<float> Vector3f;
 typedef Vector3<double> Vector3d;
 typedef Vector4<float> Vector4f;
 typedef Vector4<double> Vector4d;
 typedef Matrix4x4<float> Matrix4x4f;
 typedef Matrix4x4<double> Matrix4x4d;
+typedef Quaternion<float> Quaternion4f;
+typedef Quaternion<double> Quaternion4d;
 
 } // end namespace zLi
 

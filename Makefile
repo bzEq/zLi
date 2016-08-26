@@ -9,7 +9,7 @@ all: $(OBJECTS) test
 
 test: $(TESTS)
 
-%: %.cc
+geometry_test: geometry_test.cc geometry.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
 
 clean:
