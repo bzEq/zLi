@@ -245,6 +245,16 @@ inline Vector3<T> operator-(const Vector3<T>& v) {
 }
 
 template<typename T>
+inline Vector3<T> operator*(const Vector3<T>& v, const T f) {
+  return Vector3<T>(v.x*f, v.y*f, v.z*f);
+}
+
+template<typename T>
+inline Vector3<T> operator*(const T f, const Vector3<T>& v) {
+  return Vector3<T>(v.x*f, v.y*f, v.z*f);
+}
+
+template<typename T>
 inline std::ostream& operator<<(std::ostream& out, const Vector3<T>& v) {
   out << "(" << v.x << ", " << v.y << ", " << v.z << ")";
   return out;
@@ -336,13 +346,14 @@ inline std::ostream& operator<<(std::ostream& out, const Quaternion<T>& q) {
   return out;
 }
 
-typedef Vector3<float> Vector3f;
+typedef double Float;
+typedef Vector3<Float> Vector3f;
 typedef Vector3<double> Vector3d;
-typedef Vector4<float> Vector4f;
+typedef Vector4<Float> Vector4f;
 typedef Vector4<double> Vector4d;
-typedef Matrix4x4<float> Matrix4x4f;
+typedef Matrix4x4<Float> Matrix4x4f;
 typedef Matrix4x4<double> Matrix4x4d;
-typedef Quaternion<float> Quaternion4f;
+typedef Quaternion<Float> Quaternion4f;
 typedef Quaternion<double> Quaternion4d;
 
 } // end namespace zLi
