@@ -2,8 +2,8 @@
 
 CXX := g++
 CXXFLAGS := -Wall -g -std=c++11
-INCLUDEDIR := ..
-INCLUDE := -I..
+INCLUDEDIR := ../include
+INCLUDE := -I../include
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
 	sphere_test
 
