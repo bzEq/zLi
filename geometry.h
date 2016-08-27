@@ -233,7 +233,7 @@ inline T operator*(const Vector3<T>& u, const Vector3<T>& v) {
 }
 
 template<typename T>
-inline T operator^(const Vector3<T>& u, const Vector3<T>& v) {
+inline Vector3<T> operator^(const Vector3<T>& u, const Vector3<T>& v) {
   return Vector3<T>(u.y * v.z - u.z * v.y,
                     u.z * v.x - u.x * v.z,
                     u.x * v.y - u.y * v.x);
@@ -358,6 +358,21 @@ typedef Quaternion<double> Quaternion4d;
 
 const Float INF = std::numeric_limits<Float>::max();
 const Float NINF = std::numeric_limits<Float>::lowest();
+const Float EPSILON = 1e-6;
+
+inline boost::optional< std::tuple<Float, Float > > Quadratic(Float a, Float b, Float c) {
+  Float delta = b*b - 4*a*c;
+  if (delta < 0) return {};
+  Float f = 0.5/a;
+  Float d = std::sqrt(delta);
+  Float x0 = f*(-d-b);
+  Float x1 = f*(d-b);
+  return std::make_tuple(std::min(x0, x1), std::max(x0, x1));
+}
+
+inline Float Determinant3x3(const Vector3f& a, const Vector3f& b, const Vector3f& c) {
+  return (-a^c) * b;
+}
 
 } // end namespace zLi
 
