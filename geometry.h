@@ -374,6 +374,13 @@ inline Float Determinant3x3(const Vector3f& a, const Vector3f& b, const Vector3f
   return (-a^c) * b;
 }
 
+inline Matrix4x4f Translate(const Vector3f& v) {
+  return Matrix4x4f(1, 0, 0, v.x,
+                    0, 1, 0, v.y,
+                    0, 0, 1, v.z,
+                    0, 0, 0, 1);
+}
+
 } // end namespace zLi
 
 #endif
