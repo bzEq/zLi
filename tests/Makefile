@@ -4,7 +4,8 @@ CXX := g++
 CXXFLAGS := -Wall -g -std=c++11
 INCLUDEDIR := ..
 INCLUDE := -I..
-TESTS := geometry_test ray_test boundbox_test kdtree_test
+TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
+	sphere_test
 
 all: $(TESTS)
 
@@ -20,5 +21,11 @@ kdtree_test: kdtree_test.cc $(INCLUDEDIR)/kdtree.h
 boundbox_test: boundbox_test.cc $(INCLUDEDIR)/boundbox.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
 
+triangle_test: triangle_test.cc $(INCLUDEDIR)/triangle.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+
+sphere_test: sphere_test.cc $(INCLUDEDIR)/sphere.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+
 clean:
-	@rm -f $(TESTS)
+	rm -f $(TESTS)
