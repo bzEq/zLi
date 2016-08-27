@@ -356,6 +356,9 @@ typedef Matrix4x4<double> Matrix4x4d;
 typedef Quaternion<Float> Quaternion4f;
 typedef Quaternion<double> Quaternion4d;
 
+const Float INF = std::numeric_limits<Float>::max();
+const Float NINF = std::numeric_limits<Float>::lowest();
+
 } // end namespace zLi
 
 #endif
