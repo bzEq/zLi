@@ -26,10 +26,15 @@ Vector3f SampleFromSphere() {
   return UniformSample() <= 0.5 ? v: -v;
 }
 
-std::tuple<Float, Float> SampleFromCircle() {
+std::tuple<Float, Float> SampleFromDisk() {
   Float r = UniformSample();
   Float u = 2*PI*UniformSample();
   return std::make_tuple(r*std::cos(u), r*std::sin(u));
+}
+
+std::tuple<Float, Float> SampleFromCircle() {
+  Float u = 2*PI*UniformSample();
+  return std::make_tuple(std::cos(u), std::sin(u));
 }
 
 } // end namespace zLi
