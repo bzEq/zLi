@@ -391,17 +391,17 @@ inline Matrix4x4f Translate(const Vector3f& v) {
 inline Matrix4x4f Ortho(const Float l, const Float r,
                         const Float b, const Float t,
                         const Float n, const Float f) {
-  return Matrix4x4f(2/(r-l), 0, 0, 0,
-                    0, 2/(t-b), 0, 0,
-                    0, 0, -2/(f-n), 0, // use gl convention
+  return Matrix4x4f(2/(r-l), 0, 0, -(r+l)/(r-l),
+                    0, 2/(t-b), 0, -(t+b)/(t-b),
+                    0, 0, -2/(f-n), -(f+n)/(f-n), // use gl convention
                     0, 0, 0, 1);
 }
 
 inline Matrix4x4f Perspective(const Float l, const Float r,
                               const Float b, const Float t,
                               const Float n, const Float f) {
-  return Matrix4x4f(n/r, 0, 0, 0,
-                    0, n/t, 0, 0,
+  return Matrix4x4f(2*n/(r-l), 0, (r+l)/(r-l), 0,
+                    0, 2*n/(t-b), (t+b)/(t-b), 0,
                     0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
                     0, 0, -1, 0);
 }
