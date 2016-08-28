@@ -5,7 +5,7 @@ CXXFLAGS := -Wall -g -std=c++11
 INCLUDEDIR := ../include
 INCLUDE := -I../include
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test
+	sphere_test camera_test
 
 all: $(TESTS)
 
@@ -25,6 +25,9 @@ triangle_test: triangle_test.cc $(INCLUDEDIR)/triangle.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
 
 sphere_test: sphere_test.cc $(INCLUDEDIR)/sphere.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+
+camera_test: camera_test.cc $(INCLUDEDIR)/camera.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
 
 clean:

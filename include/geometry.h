@@ -206,6 +206,18 @@ struct Quaternion {
 };
 
 template<typename T>
+Matrix4x4<T> SingularMatrixFallback() {
+  std::cerr << "singular matrix found" << std::endl;
+  return Matrix4x4<T>();
+}
+
+template<typename T>
+Vector4<T> InvalidVector4Fallback() {
+  std::cerr << "invalid vector4, check w component" << std::endl;
+  return Vector4<T>();
+}
+
+template<typename T>
 inline Vector4<T> Vector3<T>::ToVector4() const {
   return Vector4<T>(*this, 1);
 }
@@ -279,7 +291,7 @@ inline Vector4<T> operator*(const Matrix4x4<T>& m, const Vector4<T>& v) {
 }
 
 template<typename T>
-inline Vector3<T> operator*(const Matrix4x4<T>& m, const Vector3<T>& v) {
+inline boost::optional< Vector3<T> > operator*(const Matrix4x4<T>& m, const Vector3<T>& v) {
   return (m*(v.ToVector4())).ToVector3();
 }
 
@@ -405,6 +417,8 @@ inline Matrix4x4f Frustum(const Float l, const Float r,
                     0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
                     0, 0, -1, 0);
 }
+
+
 
 } // end namespace zLi
 
