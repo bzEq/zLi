@@ -388,6 +388,24 @@ inline Matrix4x4f Translate(const Vector3f& v) {
                     0, 0, 0, 1);
 }
 
+inline Matrix4x4f Ortho(const Float l, const Float r,
+                        const Float b, const Float t,
+                        const Float n, const Float f) {
+  return Matrix4x4f(2/(r-l), 0, 0, 0,
+                    0, 2/(t-b), 0, 0,
+                    0, 0, -2/(f-n), 0, // use gl convention
+                    0, 0, 0, 1);
+}
+
+inline Matrix4x4f Perspective(const Float l, const Float r,
+                              const Float b, const Float t,
+                              const Float n, const Float f) {
+  return Matrix4x4f(n/r, 0, 0, 0,
+                    0, n/t, 0, 0,
+                    0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
+                    0, 0, -1, 0);
+}
+
 } // end namespace zLi
 
 #endif
