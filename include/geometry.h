@@ -279,6 +279,11 @@ inline Vector4<T> operator*(const Matrix4x4<T>& m, const Vector4<T>& v) {
 }
 
 template<typename T>
+inline Vector3<T> operator*(const Matrix4x4<T>& m, const Vector3<T>& v) {
+  return (m*(v.ToVector4())).ToVector3();
+}
+
+template<typename T>
 inline std::ostream& operator<<(std::ostream& out, const Matrix4x4<T>& m) {
   for (int i = 0; i < 4; i++) {
     out << "(" << m.m[i][0] << ", " << m.m[i][1] << ", " << m.m[i][2] << ", " << m.m[i][3] << ")" << std::endl;
@@ -355,10 +360,12 @@ typedef Matrix4x4<Float> Matrix4x4f;
 typedef Matrix4x4<double> Matrix4x4d;
 typedef Quaternion<Float> Quaternion4f;
 typedef Quaternion<double> Quaternion4d;
+typedef Matrix4x4f Transform;
 
 const Float INF = std::numeric_limits<Float>::max();
 const Float NINF = std::numeric_limits<Float>::lowest();
 const Float EPSILON = 1e-6;
+const Float PI = 4*std::atan((Float)1);
 
 inline boost::optional< std::tuple<Float, Float > > Quadratic(Float a, Float b, Float c) {
   Float delta = b*b - 4*a*c;
