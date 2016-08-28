@@ -397,7 +397,7 @@ inline Matrix4x4f Ortho(const Float l, const Float r,
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f Perspective(const Float l, const Float r,
+inline Matrix4x4f Frustum(const Float l, const Float r,
                               const Float b, const Float t,
                               const Float n, const Float f) {
   return Matrix4x4f(2*n/(r-l), 0, (r+l)/(r-l), 0,
