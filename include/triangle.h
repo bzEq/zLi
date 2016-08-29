@@ -37,19 +37,23 @@ struct Triangle: public Shape {
 
 struct Mesh: public Shape {
   std::vector<Vector3f> vertices;
-  std::vector<unsigned int[3]> triangles;
+  std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
+  Mesh(const std::vector<Vector3f>& vertices, const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
+    : vertices(vertices), triangles(triangles) {}
   ~Mesh() {}
   boost::optional<RayIntersection> Intersect(const Ray& ray) const {
-    for (auto index: triangles) {
-      assert(index[0] < vertices.size());
-      assert(index[1] < vertices.size());
-      assert(index[2] < vertices.size());
+    for (auto tri: triangles) {
+      unsigned index[3] = { std::get<0>(tri), std::get<1>(tri), std::get<2>(tri) };
+      assert(index[0] < vertices.size() && index[0] >= 0);
+      assert(index[1] < vertices.size() && index[1] >= 0);
+      assert(index[2] < vertices.size() && index[2] >= 0);
       Triangle t(vertices[index[0]], vertices[index[1]], vertices[index[2]]);
       auto ri = t.Intersect(ray);
       if (ri) return ri;
     }
     return {};
   }
+  bool IsManifold() const;
   
 };
 
