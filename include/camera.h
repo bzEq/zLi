@@ -15,9 +15,9 @@ struct PerspectiveCamera {
   Float fov, lensr, lensp;
   Float l; // length of image
   PerspectiveCamera() {}
-  PerspectiveCamera(const Vector3f& e, const Vector3f& front, const Vector3f& up,
+  PerspectiveCamera(const Vector3f& e, const Vector3f& lookat, const Vector3f& up,
                     const Float fov = 30, const Float lensr = 0, const Float lensp = 0)
-    : e(e), front(front), up(up), right(front^up), 
+    : e(e), front((lookat-e).Normalize()), up(up), right(front^up), 
       fov(fov), lensr(lensr), lensp(lensp), l(std::tan(fov*PI/360)) {
     assert(front * up == 0);
     // FIXME: check if the matrix is singular
