@@ -4,14 +4,19 @@
 #include "ray.h"
 #include "shape.h"
 #include "boundbox.h"
+#include "spectrum.h"
+#include "bsdf.h"
 
 #include <boost/optional.hpp>
 #include <iostream>
+#include <memory>
 
 
 namespace zLi {
-struct Triangle: public Shape {
+struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
   Vector3f a, b, c, n;
+  Spectrum le;
+  std::shared_ptr<BSDF> bsdf_;
   Triangle() {}
   // counter clockwise
   Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, 
@@ -32,7 +37,7 @@ struct Triangle: public Shape {
     if (gamma < 0 || gamma > 1 - beta) return {};
     auto t = Determinant3x3(ba, ca, e) / det;
     if (t < ray.tmin || t > ray.tmax) return {};
-    return RayIntersection{ .t = t, .shape = this, .ray = ray };
+    return RayIntersection{ .t = t, .shape = shared_from_this(), .ray = ray };
   }
   BoundBox Bounds() const {
     return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
@@ -42,31 +47,40 @@ struct Triangle: public Shape {
                              std::max(a.y, std::max(b.y, c.y)),
                              std::max(a.z, std::max(b.z, c.z))));
   }
+  Spectrum Le() const {
+    return le;
+  }
+  std::shared_ptr<const BSDF> bsdf() const {
+    return bsdf_;
+  }
+  Vector3f Normal(const Vector3f& _) const {
+    return n;
+  }
 };
 
-struct Mesh: public Shape {
-  std::vector<Vector3f> vertices;
-  std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
-  Mesh() {}
-  Mesh(const std::vector<Vector3f>& vertices, 
-       const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
-    : vertices(vertices), triangles(triangles) {}
-  ~Mesh() {}
-  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
-    for (auto tri: triangles) {
-      unsigned index[3] = { std::get<0>(tri), std::get<1>(tri), std::get<2>(tri) };
-      assert(index[0] < vertices.size() && index[0] >= 0);
-      assert(index[1] < vertices.size() && index[1] >= 0);
-      assert(index[2] < vertices.size() && index[2] >= 0);
-      Triangle t(vertices[index[0]], vertices[index[1]], vertices[index[2]]);
-      auto ri = t.Intersect(ray);
-      if (ri) return ri;
-    }
-    return {};
-  }
-  bool IsManifold() const;
-  BoundBox Bounds() const;
-};
+//struct Mesh: public Shape, std::enable_shared_from_this<Shape> {
+//  std::vector<Vector3f> vertices;
+//  std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
+//  Mesh() {}
+//  Mesh(const std::vector<Vector3f>& vertices, 
+//       const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
+//    : vertices(vertices), triangles(triangles) {}
+//  ~Mesh() {}
+//  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
+//    for (auto tri: triangles) {
+//      unsigned index[3] = { std::get<0>(tri), std::get<1>(tri), std::get<2>(tri) };
+//      assert(index[0] < vertices.size() && index[0] >= 0);
+//      assert(index[1] < vertices.size() && index[1] >= 0);
+//      assert(index[2] < vertices.size() && index[2] >= 0);
+//      auto t = std::make_shared<Triangle>(vertices[index[0]], vertices[index[1]], vertices[index[2]]);
+//      auto ri = t->Intersect(ray);
+//      if (ri) return ri;
+//    }
+//    return {};
+//  }
+//  bool IsManifold() const;
+//  BoundBox Bounds() const;
+//};
 
 } // end namespace zLi
 
