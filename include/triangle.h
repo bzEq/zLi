@@ -48,7 +48,8 @@ struct Mesh: public Shape {
   std::vector<Vector3f> vertices;
   std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
   Mesh() {}
-  Mesh(const std::vector<Vector3f>& vertices, const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
+  Mesh(const std::vector<Vector3f>& vertices, 
+       const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
     : vertices(vertices), triangles(triangles) {}
   ~Mesh() {}
   boost::optional<RayIntersection> Intersect(const Ray& ray) const {
