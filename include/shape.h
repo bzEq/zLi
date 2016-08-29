@@ -2,9 +2,12 @@
 #define _ZLI_SHAPE_H_
 #include "geometry.h"
 #include "ray.h"
+#include "bsdf.h"
+#include "spectrum.h"
 
 #include <boost/optional.hpp>
 #include <iostream>
+#include <memory>
 
 
 namespace zLi {
@@ -15,10 +18,16 @@ struct RayIntersection {
   const Float t;
   const Shape* shape;
   const Ray ray;
+  Ray SpawnRay(const Vector3f& d) const {
+    return Ray(ray(t), d);
+  }
 };
 
 struct Shape {
   virtual boost::optional<RayIntersection> Intersect(const Ray&) const = 0;
+  virtual const std::shared_ptr<BSDF> bsdf() const = 0;
+  virtual Spectrum Le() const = 0;
+  virtual Vector3f Normal(const Vector3f&) const = 0;
   virtual ~Shape() {}
 };
 
