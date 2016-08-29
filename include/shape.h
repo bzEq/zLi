@@ -19,7 +19,7 @@ struct RayIntersection {
   const Shape* shape;
   const Ray ray;
   Ray SpawnRay(const Vector3f& d) const {
-    return Ray(ray(t), d);
+    return Ray(ray(t), d, EPSILON);
   }
 };
 
