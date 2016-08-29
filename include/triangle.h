@@ -38,6 +38,7 @@ struct Triangle: public Shape {
 struct Mesh: public Shape {
   std::vector<Vector3f> vertices;
   std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
+  Mes() {}
   Mesh(const std::vector<Vector3f>& vertices, const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
     : vertices(vertices), triangles(triangles) {}
   ~Mesh() {}
