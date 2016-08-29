@@ -3,6 +3,7 @@
 #include "geometry.h"
 #include "ray.h"
 #include "shape.h"
+#include "boundbox.h"
 
 #include <boost/optional.hpp>
 #include <iostream>
@@ -29,6 +30,10 @@ struct Sphere: public Shape {
     auto t = t0 < ray.tmin ? t1: t0;
     assert(t >= ray.tmin);
     return RayIntersection{ .t = t, .shape = this };
+  }
+  BoundBox Bounds() const {
+    return BoundBox(Vector3f(c.x-r, c.y-r, c.z-r),
+                    Vector3f(c.x+r, c.y+r, c.z+r));
   }
 };
 
