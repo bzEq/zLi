@@ -15,10 +15,10 @@ struct Spectrum {
   Spectrum(const Float v) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] = v; }
   Spectrum(const Spectrum& sp) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] = sp.s[i]; }
   Spectrum(const Float v[nrSpectrumSamples]) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] = v[i]; }
-  Spectrum& operator+=(const Spectrum& sp) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] += sp.s[i]; }
-  Spectrum& operator*=(const Spectrum& sp) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] *= sp.s[i]; }
-  Spectrum& operator*=(const Float f) { assert(f >= 0); for (int i = 0; i < nrSpectrumSamples; i++) s[i] *= f; }
-  Spectrum& operator/=(const Float f) { assert(f > 0); for (int i = 0; i < nrSpectrumSamples; i++) s[i] /= f; }
+  Spectrum& operator+=(const Spectrum& sp) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] += sp.s[i]; return *this; }
+  Spectrum& operator*=(const Spectrum& sp) { for (int i = 0; i < nrSpectrumSamples; i++) s[i] *= sp.s[i]; return *this; }
+  Spectrum& operator*=(const Float f) { assert(f >= 0); for (int i = 0; i < nrSpectrumSamples; i++) s[i] *= f; return *this; }
+  Spectrum& operator/=(const Float f) { assert(f > 0); for (int i = 0; i < nrSpectrumSamples; i++) s[i] /= f; return *this; }
   Float NormSquared() const { Float sum = 0; for (int i = 0; i < nrSpectrumSamples; i++) sum += s[i]*s[i]; return sum; }
   Float Norm() const { return std::sqrt(NormSquared()); }
 };
