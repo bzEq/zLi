@@ -29,7 +29,7 @@ struct Sphere: public Shape {
     if (t0 < ray.tmin && t1 < ray.tmin) return {};
     auto t = t0 < ray.tmin ? t1: t0;
     assert(t >= ray.tmin);
-    return RayIntersection{ .t = t, .shape = this };
+    return RayIntersection{ .t = t, .shape = this, .ray = ray };
   }
   BoundBox Bounds() const {
     return BoundBox(Vector3f(c.x-r, c.y-r, c.z-r),

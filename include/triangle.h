@@ -32,7 +32,7 @@ struct Triangle: public Shape {
     if (gamma < 0 || gamma > 1 - beta) return {};
     auto t = Determinant3x3(ba, ca, e) / det;
     if (t < ray.tmin || t > ray.tmax) return {};
-    return RayIntersection{ .t = t, .shape = this };
+    return RayIntersection{ .t = t, .shape = this, .ray = ray };
   }
   BoundBox Bounds() const {
     return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),

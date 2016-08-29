@@ -14,6 +14,7 @@ struct Shape;
 struct RayIntersection {
   const Float t;
   const Shape* shape;
+  const Ray ray;
 };
 
 struct Shape {
