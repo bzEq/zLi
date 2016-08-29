@@ -35,6 +35,24 @@ struct Triangle: public Shape {
   }
 };
 
+struct Mesh: public Shape {
+  std::vector<Vector3f> vertices;
+  std::vector<unsigned int[3]> triangles;
+  ~Mesh() {}
+  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
+    for (auto index: triangles) {
+      assert(index[0] < vertices.size());
+      assert(index[1] < vertices.size());
+      assert(index[2] < vertices.size());
+      Triangle t(vertices[index[0]], vertices[index[1]], vertices[index[2]]);
+      auto ri = t.Intersect(ray);
+      if (ri) return ri;
+    }
+    return {};
+  }
+  
+};
+
 } // end namespace zLi
 
 #endif
