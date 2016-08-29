@@ -3,6 +3,7 @@
 #include "geometry.h"
 #include "ray.h"
 #include "shape.h"
+#include "boundbox.h"
 
 #include <boost/optional.hpp>
 #include <iostream>
@@ -33,12 +34,20 @@ struct Triangle: public Shape {
     if (t < ray.tmin || t > ray.tmax) return {};
     return RayIntersection{ .t = t, .shape = this };
   }
+  BoundBox Bounds() const {
+    return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
+                             std::min(a.y, std::min(b.y, c.y)),
+                             std::min(a.z, std::min(b.z, c.z))),
+                    Vector3f(std::max(a.x, std::max(b.x, c.x)),
+                             std::max(a.y, std::max(b.y, c.y)),
+                             std::max(a.z, std::max(b.z, c.z))));
+  }
 };
 
 struct Mesh: public Shape {
   std::vector<Vector3f> vertices;
   std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
-  Mes() {}
+  Mesh() {}
   Mesh(const std::vector<Vector3f>& vertices, const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
     : vertices(vertices), triangles(triangles) {}
   ~Mesh() {}
@@ -55,7 +64,7 @@ struct Mesh: public Shape {
     return {};
   }
   bool IsManifold() const;
-  
+  BoundBox Bounds() const;
 };
 
 } // end namespace zLi
