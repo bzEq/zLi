@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 CXX := g++
-CXXFLAGS := -Wall -g -std=c++11
+CXXFLAGS := -Wall -Weffc++ -g -std=c++11
 OBJECTS :=
 
 all: $(OBJECTS) test
