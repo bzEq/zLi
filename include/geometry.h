@@ -418,7 +418,9 @@ inline Matrix4x4f Frustum(const Float l, const Float r,
                     0, 0, -1, 0);
 }
 
-
+inline bool EqualZero(const Float x) {
+  return std::abs(x) < EPSILON;
+}
 
 } // end namespace zLi
 
