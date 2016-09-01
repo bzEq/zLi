@@ -30,7 +30,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
     auto ba = b-a;
     auto ca = c-a;
     auto det = Determinant3x3(ba, ca, -ray.d);
-    if (det == 0) return {};
+    if (std::abs(det) < EPSILON) return {};
     auto beta = Determinant3x3(e, ca, -ray.d) / det;
     if (beta < 0 || beta > 1) return {};
     auto gamma = Determinant3x3(ba, e, -ray.d) / det;
