@@ -9,7 +9,8 @@
 namespace zLi {
 
 struct BSDF {
-  virtual std::tuple< Float, boost::optional<Vector3f> > SampleDirection(const Vector3f& normal, const Vector3f& wo) const = 0; // return (pdf, wi) tuple
+  virtual std::tuple< Float, boost::optional<Vector3f> > 
+    SampleDirection(const Vector3f& normal, const Vector3f& wo) const = 0; // return (pdf, wi) tuple
   virtual Float f(const Vector3f& normal, const Vector3f& wi, const Vector3f& wo) const = 0;
   virtual ~BSDF() {}
 };
