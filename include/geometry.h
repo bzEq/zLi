@@ -422,6 +422,7 @@ inline bool EqualZero(const Float x) {
   return std::abs(x) < EPSILON;
 }
 
+// https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix
 inline Matrix4x4f Rotate(const Vector3f& d, const Float degree) {
   // d is the direction vector of the line which goes through the origin
   Float radian = PI*degree/180;
