@@ -21,5 +21,10 @@ int main()
   Quaternion4f q(1, 2, 2, 2);
   std::cout << q * q.Conjugation() << std::endl;
   std::cout << q * q.Inverse() << std::endl;
+
+  Vector3f v(1, 0, 0);
+  Vector3f d(0, 0, 1);
+  std::cout << Rotate(d, 90, v) << std::endl;
+  std::cout << *(Rotate(d, 90) * v) << std::endl;
   return 0;
 }

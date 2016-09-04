@@ -422,6 +422,27 @@ inline bool EqualZero(const Float x) {
   return std::abs(x) < EPSILON;
 }
 
+inline Matrix4x4f Rotate(const Vector3f& d, const Float degree) {
+  // d is the direction vector of the line which goes through the origin
+  Float radian = PI*degree/180;
+  Float s = std::sin(radian/2);
+  Quaternion4f q(std::cos(radian/2), s*d.x, s*d.y, s*d.z);
+  return Matrix4x4f(1-2*q.j*q.j-2*q.k*q.k, 2*(q.i*q.j-q.k*q.r), 2*(q.i*q.k+q.j*q.r), 0,
+                    2*(q.i*q.j+q.k*q.r), 1-2*q.i*q.i-2*q.k*q.k, 2*(q.j*q.k-q.i*q.r), 0,
+                    2*(q.i*q.k-q.j*q.r), 2*(q.j*q.k+q.i*q.r), 1-2*q.i*q.i-2*q.j*q.j, 0,
+                    0, 0, 0, 1);
+}
+
+inline Vector3f Rotate(const Vector3f& d, const Float degree, const Vector3f& v) {
+  // use right-handed counter clockwise convention
+  Float radian = PI*degree/180;
+  Float s = std::sin(radian/2);
+  Quaternion4f vq(0, v.x, v.y, v.z);
+  Quaternion4f q(std::cos(radian/2), s*d.x, s*d.y, s*d.z);
+  Quaternion4f res = q * vq * q.Inverse();
+  return Vector3f(res.i, res.j, res.k);
+}
+
 } // end namespace zLi
 
 #endif
