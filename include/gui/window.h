@@ -10,12 +10,6 @@
 namespace zLi {
 namespace gui {
 
-struct Defer {
-  std::function<void(void)> f;
-  Defer(const std::function<void(void)>& f): f(f) {}
-  ~Defer() { f(); }
-};
-
 class Window {
 public:
   Window(const std::string&, const int, const int);
