@@ -1,4 +1,5 @@
 #include "gui/window.h"
+#include "defer.h"
 
 #include <xcb/xcb.h>
 #include <iostream>
@@ -53,6 +54,7 @@ Window::Window(const std::string& title, const int width, const int height)
   /* Magic code that will send notification when window is destroyed */
   xcb_intern_atom_cookie_t cookie = xcb_intern_atom(connection_, 1, 12, "WM_PROTOCOLS");
   xcb_intern_atom_reply_t* reply = xcb_intern_atom_reply(connection_, cookie, 0);
+  Defer free_reply([&]{ free(reply); });
 
   xcb_intern_atom_cookie_t cookie1 = xcb_intern_atom(connection_, 0, 16, "WM_DELETE_WINDOW");
   atom_wm_delete_window_ = xcb_intern_atom_reply(connection_, cookie1, 0);
@@ -64,8 +66,6 @@ Window::Window(const std::string& title, const int width, const int height)
   xcb_change_property(connection_, XCB_PROP_MODE_REPLACE,
                       win_, XCB_ATOM_WM_NAME, XCB_ATOM_STRING, 8,
                       title.size(), title.c_str());
-
-  free(reply);
 
   xcb_map_window(connection_, win_);
 };
@@ -84,8 +84,8 @@ void Window::RenderLoop() {
     auto start = std::chrono::high_resolution_clock::now();
     xcb_generic_event_t *event;
     while ((event = xcb_poll_for_event(connection_))) {
+      Defer free_event([&]{ free(event); });
       HandleEvent(event);
-      free(event);
     }
     // render();
     frame_counter_++;
