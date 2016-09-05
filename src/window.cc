@@ -54,8 +54,8 @@ Window::Window(const std::string& title, const int width, const int height)
   xcb_intern_atom_cookie_t cookie = xcb_intern_atom(connection_, 1, 12, "WM_PROTOCOLS");
   xcb_intern_atom_reply_t* reply = xcb_intern_atom_reply(connection_, cookie, 0);
 
-  xcb_intern_atom_cookie_t cookie2 = xcb_intern_atom(connection_, 0, 16, "WM_DELETE_WINDOW");
-  atom_wm_delete_window_ = xcb_intern_atom_reply(connection_, cookie2, 0);
+  xcb_intern_atom_cookie_t cookie1 = xcb_intern_atom(connection_, 0, 16, "WM_DELETE_WINDOW");
+  atom_wm_delete_window_ = xcb_intern_atom_reply(connection_, cookie1, 0);
 
   xcb_change_property(connection_, XCB_PROP_MODE_REPLACE,
                       win_, (*reply).atom, 4, 32, 1,
