@@ -4,8 +4,11 @@ CXX := g++
 CXXFLAGS := -Wall -g -std=c++11
 INCLUDEDIR := ../include
 INCLUDE := -I../include
+SRCDIR := ../src
+LIBS := -lxcb
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test
+	sphere_test camera_test window_test
+
 
 all: $(TESTS)
 
@@ -29,6 +32,9 @@ sphere_test: sphere_test.cc $(INCLUDEDIR)/sphere.h
 
 camera_test: camera_test.cc $(INCLUDEDIR)/camera.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+
+window_test: window_test.cc 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $< $(SRCDIR)/window.o -o $@ $(LIBS)
 
 clean:
 	rm -f $(TESTS)
