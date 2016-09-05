@@ -50,7 +50,7 @@ struct Vector4 {
   T x, y, z, w;
   Vector4(): x(0), y(0), z(0), w(0) {}
   Vector4(const T x, const T y, const T z, const T w): x(x), y(y), z(z), w(w) {}
-  Vector4(const Vector3<T>& v, T w): 
+  Vector4(const Vector3<T>& v, const T w): 
     x(v.x), y(v.y), z(v.z), w(w) {}
   boost::optional<Vector3<T>> ToVector3() const {
     if (w == 0) return {};
