@@ -1,40 +1,39 @@
 .PHONY: all clean
 
 CXX := g++
-CXXFLAGS := -Wall -g -std=c++11
-INCLUDEDIR := ../include
-INCLUDE := -I../include
-SRCDIR := ../src
-LIBS := -lxcb
+HEADERS := ../include
+CXXFLAGS := -Wall -g -std=c++11 -I$(HEADERS)
+SRC := ../src
+LDFLAGS := -lxcb -lvulkan
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
 	sphere_test camera_test window_test
 
 
 all: $(TESTS)
 
-geometry_test: geometry_test.cc $(INCLUDEDIR)/geometry.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+geometry_test: geometry_test.cc $(HEADERS)/geometry.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-ray_test: ray_test.cc $(INCLUDEDIR)/ray.h $(INCLUDEDIR)/geometry.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+ray_test: ray_test.cc $(HEADERS)/ray.h $(HEADERS)/geometry.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-kdtree_test: kdtree_test.cc $(INCLUDEDIR)/kdtree.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+kdtree_test: kdtree_test.cc $(HEADERS)/kdtree.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-boundbox_test: boundbox_test.cc $(INCLUDEDIR)/boundbox.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+boundbox_test: boundbox_test.cc $(HEADERS)/boundbox.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-triangle_test: triangle_test.cc $(INCLUDEDIR)/triangle.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+triangle_test: triangle_test.cc $(HEADERS)/triangle.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-sphere_test: sphere_test.cc $(INCLUDEDIR)/sphere.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+sphere_test: sphere_test.cc $(HEADERS)/sphere.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-camera_test: camera_test.cc $(INCLUDEDIR)/camera.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< -o $@ $(LIBS)
+camera_test: camera_test.cc $(HEADERS)/camera.h
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 window_test: window_test.cc 
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $< $(SRCDIR)/window.o -o $@ $(LIBS)
+	$(CXX) $(CXXFLAGS) $< $(SRC)/window.o -o $@ $(LDFLAGS)
 
 clean:
 	rm -f $(TESTS)
