@@ -32,7 +32,7 @@ sphere_test: sphere_test.cc $(HEADERS)/sphere.h
 camera_test: camera_test.cc $(HEADERS)/camera.h
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-window_test: window_test.cc 
+window_test: window_test.cc $(HEADERS)/gui/window.h
 	$(CXX) $(CXXFLAGS) $< $(SRC)/window.o -o $@ $(LDFLAGS)
 
 clean:
