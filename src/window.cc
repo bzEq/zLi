@@ -2,6 +2,7 @@
 #include "defer.h"
 
 #include <xcb/xcb.h>
+#include <vulkan/vulkan.h>
 #include <iostream>
 #include <chrono>
 #include <cstdlib>
@@ -12,7 +13,7 @@ namespace zLi {
 namespace gui {
 
 Window::Window(const std::string& title, const int width, const int height)
-  : connection_(nullptr), screen_(nullptr), quit_(false), frame_counter_(0), atom_wm_delete_window_(nullptr) {
+  : app_name_(title), connection_(nullptr), screen_(nullptr), quit_(false), frame_counter_(0), atom_wm_delete_window_(nullptr), vk_instance_(nullptr) {
   const xcb_setup_t *setup;
   xcb_screen_iterator_t iter;
   int scr;
@@ -68,15 +69,44 @@ Window::Window(const std::string& title, const int width, const int height)
                       title.size(), title.c_str());
 
   xcb_map_window(connection_, win_);
+  
+  // init vulkan
+  InitVulkan();
 };
 
-Window::~Window() {
-  if (connection_) {
-    xcb_destroy_window(connection_, win_);
-    xcb_disconnect(connection_);
-    connection_ = nullptr;
+void Window::InitVulkan() {
+  // create vk instance
+  VkApplicationInfo appinfo = {};
+  appinfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+  appinfo.pApplicationName = app_name_.c_str();
+  appinfo.applicationVersion = VK_MAKE_VERSION(0, 0, 2);
+  appinfo.pEngineName = app_name_.c_str();
+  appinfo.engineVersion = VK_MAKE_VERSION(0, 0, 2);
+  appinfo.apiVersion = VK_API_VERSION_1_0;
+
+  VkInstanceCreateInfo createinfo = {};
+  createinfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+  createinfo.pApplicationInfo = &appinfo;
+  
+  VkResult result = vkCreateInstance(&createinfo, nullptr, &vk_instance_);
+  if (result != VK_SUCCESS) {
+    throw std::runtime_error("could not init vk instance!");
   }
+
+  // pick physical device
+  uint32_t nr_device = 0;
+  vkEnumeratePhysicalDevices(vk_instance_, &nr_device, nullptr);
+  if (nr_device == 0) {
+    throw std::runtime_error("could not find available physical device!");
+  }
+  vk_phy_devs_.resize(nr_device);
+  vkEnumeratePhysicalDevices(vk_instance_, &nr_device, vk_phy_devs_.data());
+  // pick the first one as the valid physical device
+  vk_phy_dev_ = vk_phy_devs_[0];
+  vkGetPhysicalDeviceProperties(vk_phy_dev_, &vk_phy_dev_prop_);
 }
+
+void Window::Render() {}
 
 void Window::RenderLoop() {
   xcb_flush(connection_);
@@ -84,10 +114,11 @@ void Window::RenderLoop() {
     auto start = std::chrono::high_resolution_clock::now();
     xcb_generic_event_t *event;
     while ((event = xcb_poll_for_event(connection_))) {
+      //while ((event = xcb_poll_for_event(connection_))) {
       Defer free_event([&]{ free(event); });
       HandleEvent(event);
     }
-    // render();
+    Render();
     frame_counter_++;
   }
 }
@@ -104,6 +135,19 @@ void Window::HandleEvent(xcb_generic_event_t* event) {
       break;
   }
 }
+
+Window::~Window() {
+  if (vk_instance_) {
+    vkDestroyInstance(vk_instance_, nullptr);
+    vk_instance_ = nullptr;
+  }
+  if (connection_) {
+    xcb_destroy_window(connection_, win_);
+    xcb_disconnect(connection_);
+    connection_ = nullptr;
+  }
+}
+
 
 } // end namespace zLi::gui
 } // end namespace zLi
