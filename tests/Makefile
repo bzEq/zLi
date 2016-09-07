@@ -4,9 +4,9 @@ CXX := g++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++11 -I$(HEADERS)
 SRC := ../src
-LDFLAGS := -lxcb -lvulkan
+LDFLAGS :=
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test window_test
+	sphere_test camera_test
 
 
 all: $(TESTS)
@@ -31,9 +31,6 @@ sphere_test: sphere_test.cc $(HEADERS)/sphere.h
 
 camera_test: camera_test.cc $(HEADERS)/camera.h
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
-
-window_test: window_test.cc $(HEADERS)/gui/window.h
-	$(CXX) $(CXXFLAGS) $< $(SRC)/window.o -o $@ $(LDFLAGS)
 
 clean:
 	rm -f $(TESTS)

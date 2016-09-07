@@ -3,9 +3,9 @@
 CXX := g++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++11 -I$(HEADERS)
-LDFLAGS := -lxcb -lvulkan
+LDFLAGS :=
 
-OBJECTS := integrator.o window.o
+OBJECTS := integrator.o
 
 all: $(OBJECTS)
 
