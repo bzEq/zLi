@@ -4,7 +4,6 @@
 #include "boundbox.h"
 #include "ray.h"
 
-#include <boost/optional.hpp>
 #include <stack>
 #include <vector>
 #include <iostream>
@@ -30,7 +29,7 @@ struct KdNode {
   KdNode(const BoundBox& box): axis(-1), d(0), box(box) { child[0] = nullptr; child[1] = nullptr; }
   KdNode(const int axis, const Float d, const BoundBox& box)
     : axis(axis), d(d), box(box) { child[0] = nullptr; child[1] = nullptr; }
-  boost::optional< std::tuple<Float, Float> > Intersect(const Ray& ray) const {
+  std::optional< std::tuple<Float, Float> > Intersect(const Ray& ray) const {
     return box.Intersect(ray);
   }
   ~KdNode() { delete child[0]; delete child[1]; }

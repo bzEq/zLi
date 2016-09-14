@@ -3,7 +3,6 @@
 #include "geometry.h"
 #include "ray.h"
 
-#include <boost/optional.hpp>
 #include <iostream>
 
 
@@ -35,7 +34,7 @@ struct BoundBox {
     }
     return true;
   }
-  boost::optional< std::tuple<Float, Float> > Intersect(const Ray& ray) const {
+  std::optional< std::tuple<Float, Float> > Intersect(const Ray& ray) const {
     Float t0 = ray.tmin, t1 = ray.tmax;
     for (int i = 0; i < 3; i++) {
       if (ray.d[i] != 0) {
@@ -50,7 +49,7 @@ struct BoundBox {
     if (t0 > t1 || !InBox(ray(t0)) || !InBox(ray(t1))) return {};
     return std::make_tuple(t0, t1);
   }
-  boost::optional< std::tuple<BoundBox, BoundBox> >
+  std::optional< std::tuple<BoundBox, BoundBox> >
   Split(const int axis, const Float d) const {
     if (d <= pMin[axis] || d >= pMax[axis]) return {};
     Vector3f v0(pMin);

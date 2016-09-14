@@ -2,7 +2,7 @@
 
 CXX := g++
 HEADERS := ../include
-CXXFLAGS := -Wall -g -std=c++11 -I$(HEADERS)
+CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := ../src
 LDFLAGS :=
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \

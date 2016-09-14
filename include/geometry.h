@@ -1,12 +1,19 @@
 #ifndef _ZLI_GEOMETRY_H_
 #define _ZLI_GEOMETRY_H_
-#include <boost/optional.hpp>
+#include <experimental/optional>
 #include <iostream>
 #include <limits>
 #include <cassert>
 #include <cmath>
 #include <cstring>
+#include <tuple>
 
+namespace std {
+
+template<typename T>
+using optional = std::experimental::fundamentals_v1::optional<T>;
+
+}
 
 namespace zLi {
 
@@ -52,7 +59,7 @@ struct Vector4 {
   Vector4(const T x, const T y, const T z, const T w): x(x), y(y), z(z), w(w) {}
   Vector4(const Vector3<T>& v, const T w): 
     x(v.x), y(v.y), z(v.z), w(w) {}
-  boost::optional<Vector3<T>> ToVector3() const {
+  std::optional<Vector3<T>> ToVector3() const {
     if (w == 0) return {};
     return Vector3<T>(x/w, y/w, z/w);
   }
@@ -106,7 +113,7 @@ struct Matrix4x4 {
     return r;    
   }
   
-  boost::optional<Matrix4x4> Inverse() const {
+  std::optional<Matrix4x4> Inverse() const {
     T minv[4][4];
     int ind[4] = { 0, 1, 2, 3 };
     std::memcpy(minv, m, 4*4*sizeof(T));
@@ -291,7 +298,7 @@ inline Vector4<T> operator*(const Matrix4x4<T>& m, const Vector4<T>& v) {
 }
 
 template<typename T>
-inline boost::optional< Vector3<T> > operator*(const Matrix4x4<T>& m, const Vector3<T>& v) {
+inline std::optional< Vector3<T> > operator*(const Matrix4x4<T>& m, const Vector3<T>& v) {
   return (m*(v.ToVector4())).ToVector3();
 }
 
@@ -379,7 +386,7 @@ const Float NINF = std::numeric_limits<Float>::lowest();
 const Float EPSILON = 1e-6;
 const Float PI = 4*std::atan((Float)1);
 
-inline boost::optional< std::tuple<Float, Float > > Quadratic(Float a, Float b, Float c) {
+inline std::optional< std::tuple<Float, Float > > Quadratic(Float a, Float b, Float c) {
   Float delta = b*b - 4*a*c;
   if (delta < 0) return {};
   Float f = 0.5/a;

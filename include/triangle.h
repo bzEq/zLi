@@ -7,7 +7,6 @@
 #include "spectrum.h"
 #include "bsdf.h"
 
-#include <boost/optional.hpp>
 #include <iostream>
 #include <memory>
 
@@ -25,7 +24,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
   Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c):
     a(a), b(b), c(c), n(((b-a)^(c-a)).Normalize()) {}
   ~Triangle() {}
-  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
+  std::optional<RayIntersection> Intersect(const Ray& ray) const {
     auto e = ray.o - a;
     auto ba = b-a;
     auto ca = c-a;
@@ -66,7 +65,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
 //       const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
 //    : vertices(vertices), triangles(triangles) {}
 //  ~Mesh() {}
-//  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
+//  std::optional<RayIntersection> Intersect(const Ray& ray) const {
 //    for (auto tri: triangles) {
 //      unsigned index[3] = { std::get<0>(tri), std::get<1>(tri), std::get<2>(tri) };
 //      assert(index[0] < vertices.size() && index[0] >= 0);

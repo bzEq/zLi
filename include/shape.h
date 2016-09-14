@@ -5,7 +5,6 @@
 #include "bsdf.h"
 #include "spectrum.h"
 
-#include <boost/optional.hpp>
 #include <iostream>
 #include <memory>
 
@@ -24,7 +23,7 @@ struct RayIntersection {
 };
 
 struct Shape {
-  virtual boost::optional<RayIntersection> Intersect(const Ray&) const = 0;
+  virtual std::optional<RayIntersection> Intersect(const Ray&) const = 0;
   virtual std::shared_ptr<const BSDF> bsdf() const = 0;
   virtual Spectrum Le() const = 0;
   virtual Vector3f Normal(const Vector3f&) const = 0;

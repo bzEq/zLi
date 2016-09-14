@@ -5,7 +5,6 @@
 #include "shape.h"
 #include "boundbox.h"
 
-#include <boost/optional.hpp>
 #include <iostream>
 #include <memory>
 
@@ -19,7 +18,7 @@ struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
   Sphere(): r(1) {}
   Sphere(const Vector3f& c, const Float r): c(c), r(r) {}
   ~Sphere() {}
-  boost::optional<RayIntersection> Intersect(const Ray& ray) const {
+  std::optional<RayIntersection> Intersect(const Ray& ray) const {
     auto d = ray.o - c;
     auto a = ray.d*ray.d;
     auto b = 2 * (d * ray.d);
