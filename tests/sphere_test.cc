@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "sphere.hh"
 
 
 int main()

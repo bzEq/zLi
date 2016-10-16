@@ -1,7 +1,7 @@
-#include "integrator.h"
-#include "spectrum.h"
-#include "sample.h"
-#include "scene.h"
+#include "integrator.hh"
+#include "spectrum.hh"
+#include "sample.hh"
+#include "scene.hh"
 
 
 namespace zLi {

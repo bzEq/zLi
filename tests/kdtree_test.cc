@@ -1,4 +1,4 @@
-#include "kdtree.h"
+#include "kdtree.hh"
 
 #include <iostream>
 

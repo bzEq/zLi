@@ -1,4 +1,4 @@
-#include "geometry.h"
+#include "geometry.hh"
 
 #include <iostream>
 
@@ -10,7 +10,7 @@ int main()
   std::cout << v3.ToVector4() << std::endl;
   Vector4f v4(2., 3., 5., 0.5);
   std::cout << v4.ToVector3().value_or(Vector3f()) << std::endl;
-  
+
   Matrix4x4f m(1, 0, 0, 1,
                0, 1, 0, 2,
                0, 0, 1, 3,

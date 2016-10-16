@@ -1,4 +1,4 @@
-#include "boundbox.h"
+#include "boundbox.hh"
 
 
 int main()
