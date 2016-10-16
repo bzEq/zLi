@@ -1,13 +1,13 @@
 #ifndef _ZLI_BSDF_H_
 #define _ZLI_BSDF_H_
-#include "geometry.h"
-#include "sample.h"
+#include "geometry.hh"
+#include "sample.hh"
 
 
 namespace zLi {
 
 struct BSDF {
-  virtual std::tuple< Float, std::optional<Vector3f> > 
+  virtual std::tuple< Float, std::optional<Vector3f> >
     SampleDirection(const Vector3f& normal, const Vector3f& wo) const = 0; // return (pdf, wi) tuple
   virtual Float f(const Vector3f& normal, const Vector3f& wi, const Vector3f& wo) const = 0;
   virtual ~BSDF() {}
@@ -28,5 +28,5 @@ struct LambertianDiffuse: public BSDF {
 };
 
 } // end namespace zLi
-  
+
 #endif

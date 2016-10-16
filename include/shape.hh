@@ -1,9 +1,9 @@
 #ifndef _ZLI_SHAPE_H_
 #define _ZLI_SHAPE_H_
-#include "geometry.h"
-#include "ray.h"
-#include "bsdf.h"
-#include "spectrum.h"
+#include "geometry.hh"
+#include "ray.hh"
+#include "bsdf.hh"
+#include "spectrum.hh"
 
 #include <iostream>
 #include <memory>

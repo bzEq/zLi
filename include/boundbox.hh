@@ -1,7 +1,7 @@
 #ifndef _ZLI_BOUNDBOX_H_
 #define _ZLI_BOUNDBOX_H_
-#include "geometry.h"
-#include "ray.h"
+#include "geometry.hh"
+#include "ray.hh"
 
 #include <iostream>
 
@@ -20,8 +20,8 @@ struct BoundBox {
            std::max(p.y, q.y),
            std::max(p.z, q.z)) {}
   Vector3f Diagonal() const { return pMax - pMin; }
-  Float SurfaceArea() const { 
-    Vector3f d = Diagonal(); 
+  Float SurfaceArea() const {
+    Vector3f d = Diagonal();
     return 2 * (d.x * d.y + d.y * d.z + d.z + d.x);
   }
   Float Volume() const {

@@ -1,11 +1,11 @@
 #ifndef _ZLI_TRIANGLE_H_
 #define _ZLI_TRIANGLE_H_
-#include "geometry.h"
-#include "ray.h"
-#include "shape.h"
-#include "boundbox.h"
-#include "spectrum.h"
-#include "bsdf.h"
+#include "geometry.hh"
+#include "ray.hh"
+#include "shape.hh"
+#include "boundbox.hh"
+#include "spectrum.hh"
+#include "bsdf.hh"
 
 #include <iostream>
 #include <memory>
@@ -18,7 +18,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
   std::shared_ptr<BSDF> bsdf_;
   Triangle() {}
   // counter clockwise
-  Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, 
+  Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c,
            const Vector3f& n)
     : a(a), b(b), c(c), n(n) {}
   Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c):
@@ -61,7 +61,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
 //  std::vector<Vector3f> vertices;
 //  std::vector<std::tuple<unsigned, unsigned, unsigned> > triangles;
 //  Mesh() {}
-//  Mesh(const std::vector<Vector3f>& vertices, 
+//  Mesh(const std::vector<Vector3f>& vertices,
 //       const std::vector<std::tuple<unsigned, unsigned, unsigned>>& triangles)
 //    : vertices(vertices), triangles(triangles) {}
 //  ~Mesh() {}

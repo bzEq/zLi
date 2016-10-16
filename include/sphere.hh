@@ -1,9 +1,9 @@
 #ifndef _ZLI_SPHERE_H_
 #define _ZLI_SPHERE_H_
-#include "geometry.h"
-#include "ray.h"
-#include "shape.h"
-#include "boundbox.h"
+#include "geometry.hh"
+#include "ray.hh"
+#include "shape.hh"
+#include "boundbox.hh"
 
 #include <iostream>
 #include <memory>
@@ -14,7 +14,7 @@ struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
   Vector3f c;
   Float r;
   Spectrum le;
-  std::shared_ptr<BSDF> bsdf_;  
+  std::shared_ptr<BSDF> bsdf_;
   Sphere(): r(1) {}
   Sphere(const Vector3f& c, const Float r): c(c), r(r) {}
   ~Sphere() {}
@@ -45,7 +45,7 @@ struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
   }
   Vector3f Normal(const Vector3f& position) const {
     return (position-c).Normalize();
-  }  
+  }
 };
 
 } // end namespace zLi

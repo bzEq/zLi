@@ -1,8 +1,8 @@
 #ifndef _ZLI_CAMERA_H_
 #define _ZLI_CAMERA_H_
-#include "geometry.h"
-#include "sample.h"
-#include "ray.h"
+#include "geometry.hh"
+#include "sample.hh"
+#include "ray.hh"
 
 #include <iostream>
 
@@ -17,7 +17,7 @@ struct PerspectiveCamera {
   PerspectiveCamera() {}
   PerspectiveCamera(const Vector3f& e, const Vector3f& lookat, const Vector3f& up,
                     const Float fov = 30, const Float lensr = 0, const Float lensp = 0)
-    : e(e), front((lookat-e).Normalize()), up(up), right(up^front), 
+    : e(e), front((lookat-e).Normalize()), up(up), right(up^front),
       fov(fov), lensr(lensr), lensp(lensp), l(std::tan(fov*PI/360)) {
     assert(front * up == 0);
     // FIXME: check if the matrix is singular

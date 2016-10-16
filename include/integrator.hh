@@ -1,8 +1,8 @@
 #ifndef _ZLI_INTEGRATOR_H_
 #define _ZLI_INTEGRATOR_H_
-#include "spectrum.h"
-#include "scene.h"
-#include "light.h"
+#include "spectrum.hh"
+#include "scene.hh"
+#include "light.hh"
 
 #include <vector>
 

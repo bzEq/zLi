@@ -1,8 +1,8 @@
 #ifndef _ZLI_KDTREE_H_
 #define _ZLI_KDTREE_H_
-#include "geometry.h"
-#include "boundbox.h"
-#include "ray.h"
+#include "geometry.hh"
+#include "boundbox.hh"
+#include "ray.hh"
 
 #include <stack>
 #include <vector>
