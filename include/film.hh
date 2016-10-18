@@ -3,6 +3,9 @@
 #include "geometry.hh"
 #include "spectrum.hh"
 
+#include <vector>
+
+
 namespace zLi {
 struct Film {
   int w, h;
@@ -17,7 +20,7 @@ struct Film {
     assert(i >= 0 && i < w);
     return film[i];
   }
-}
+};
 
 } // namespace zLi
 #endif
