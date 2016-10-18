@@ -450,6 +450,12 @@ inline Matrix4x4f RotateTransform(const Vector3f& d, const Float degree) {
                     0, 0, 0, 1);
 }
 
+inline Matrix4x4f RotateTransform(const Line3f& line, const Float degree) {
+  return TranslateTransform(line.pt)
+    * RotateTransform(line.d, degree)
+    * TranslateTransform(-line.pt);
+}
+
 inline Vector3f Rotate(const Vector3f& d, const Float degree, const Vector3f& v) {
   // use right-handed counter clockwise convention
   Float radian = PI*degree/180;
