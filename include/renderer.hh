@@ -15,6 +15,7 @@ public:
            int filmHeight);
   int Render();
 private:
+  int SlowRender();
   int ParallelRender();
   void Work(int, int);
   std::unique_ptr<Film> film_;

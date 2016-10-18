@@ -21,6 +21,17 @@ Renderer::Renderer(const std::string& sceneFile,
 
 void Renderer::Work(int x, int y) { }
 
+int Renderer::SlowRender() {
+  int n = render_job_++;
+  while (!stopped_ && n < film_width_ * film_height_) {
+    INFO("start working on No.%d job", n);
+    Work(n / film_height_, n % film_height_);
+    n = render_job_++;
+  }
+  stopped_.store(true);
+  return 0;
+}
+
 int Renderer::ParallelRender() {
   std::vector<std::thread> workers;
   for (unsigned i = 0; i < std::thread::hardware_concurrency(); ++i) {
@@ -47,7 +58,8 @@ int Renderer::Render() {
   }
   scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);
-  return ParallelRender();
+  //return ParallelRender();
+  return SlowRender();
 }
 
 } // namespace zLi
