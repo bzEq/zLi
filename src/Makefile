@@ -1,16 +1,19 @@
 .PHONY: all clean
 
-CXX := g++
+CXX := clang++
 HEADERS := ../include
-CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
-LDFLAGS :=
+CXXFLAGS := -Wall -g -O2 -std=c++14 -I$(HEADERS)
+LDFLAGS := -lfltk -lpthread
 
-OBJECTS := integrator.o
+OBJECTS := main
 
 all: $(OBJECTS)
 
 %.o: %.cc
 	$(CXX) -c $< $(CXXFLAGS)
+
+main: main.o logging.o renderer.o
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 clean:
 	@rm -f $(OBJECTS)

@@ -1,12 +1,12 @@
 .PHONY: all clean
 
-CXX := g++
+CXX := clang++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := ../src
-LDFLAGS :=
+LDFLAGS := -lfltk
 TESTS := geometry_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test
+	sphere_test camera_test fltk_test
 
 
 all: $(TESTS)
@@ -30,6 +30,9 @@ sphere_test: sphere_test.cc $(HEADERS)/sphere.hh
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 camera_test: camera_test.cc $(HEADERS)/camera.hh
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
+
+fltk_test: fltk_test.cc
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 clean:

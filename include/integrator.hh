@@ -10,7 +10,7 @@ namespace zLi {
 
 struct PathIntegrator {
   static Spectrum Li(const Scene&,
-                     const Ray&, const int);
+                     const Ray&, int);
 };
 
 } // end namespace zLi
