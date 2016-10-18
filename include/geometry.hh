@@ -213,6 +213,13 @@ struct Quaternion {
 };
 
 template<typename T>
+struct Line3 {
+  Vector3<T> pt, d;
+  Line3() = default;
+  Line3(const Vector3<T>& pt, const Vector3<T>& d): pt(pt), d(d) { }
+};
+
+template<typename T>
 Matrix4x4<T> SingularMatrixFallback() {
   std::cerr << "singular matrix found" << std::endl;
   return Matrix4x4<T>();
@@ -379,6 +386,8 @@ typedef Matrix4x4<Float> Matrix4x4f;
 typedef Matrix4x4<double> Matrix4x4d;
 typedef Quaternion<Float> Quaternion4f;
 typedef Quaternion<double> Quaternion4d;
+typedef Line3<Float> Line3f;
+typedef Line3<double> Line3d;
 typedef Matrix4x4f Transform;
 
 const Float INF = std::numeric_limits<Float>::max();
@@ -400,25 +409,25 @@ inline Float Determinant3x3(const Vector3f& a, const Vector3f& b, const Vector3f
   return (-a^c) * b;
 }
 
-inline Matrix4x4f Translate(const Vector3f& v) {
+inline Matrix4x4f TranslateTransform(const Vector3f& v) {
   return Matrix4x4f(1, 0, 0, v.x,
                     0, 1, 0, v.y,
                     0, 0, 1, v.z,
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f Ortho(const Float l, const Float r,
-                        const Float b, const Float t,
-                        const Float n, const Float f) {
+inline Matrix4x4f OrthoTransform(const Float l, const Float r,
+                                 const Float b, const Float t,
+                                 const Float n, const Float f) {
   return Matrix4x4f(2/(r-l), 0, 0, -(r+l)/(r-l),
                     0, 2/(t-b), 0, -(t+b)/(t-b),
                     0, 0, -2/(f-n), -(f+n)/(f-n), // use gl convention
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f Frustum(const Float l, const Float r,
-                          const Float b, const Float t,
-                          const Float n, const Float f) {
+inline Matrix4x4f FrustumTransform(const Float l, const Float r,
+                                   const Float b, const Float t,
+                                   const Float n, const Float f) {
   return Matrix4x4f(2*n/(r-l), 0, (r+l)/(r-l), 0,
                     0, 2*n/(t-b), (t+b)/(t-b), 0,
                     0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
@@ -430,7 +439,7 @@ inline bool EqualZero(const Float x) {
 }
 
 // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix
-inline Matrix4x4f Rotate(const Vector3f& d, const Float degree) {
+inline Matrix4x4f RotateTransform(const Vector3f& d, const Float degree) {
   // d is the direction vector of the line which goes through the origin
   Float radian = PI*degree/180;
   Float s = std::sin(radian/2);
@@ -449,6 +458,10 @@ inline Vector3f Rotate(const Vector3f& d, const Float degree, const Vector3f& v)
   Quaternion4f q(std::cos(radian/2), s*d.x, s*d.y, s*d.z);
   Quaternion4f res = q * vq * q.Inverse();
   return Vector3f(res.i, res.j, res.k);
+}
+
+inline Vector3f Rotate(const Line3f& line, const Float degree, const Vector3f& v) {
+  return Rotate(line.d, degree, v-line.pt) + line.pt;
 }
 
 } // end namespace zLi

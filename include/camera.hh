@@ -24,7 +24,7 @@ struct PerspectiveCamera {
     wd2cam = *(Matrix4x4f(right.x, up.x, front.x, 0,
                           right.y, up.y, front.y, 0,
                           right.z, up.z, front.z, 0,
-                          0,    0,    0,       1).Inverse()) * Translate(-e);
+                          0,    0,    0,       1).Inverse()) * TranslateTransform(-e);
     cam2wd = *(wd2cam.Inverse());
   }
   Ray GenerateRay(const Float u, const Float v) const {
