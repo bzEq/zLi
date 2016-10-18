@@ -420,30 +420,30 @@ inline Matrix4x4f TranslateTransform(const Vector3f& v) {
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f OrthoTransform(const Float l, const Float r,
-                                 const Float b, const Float t,
-                                 const Float n, const Float f) {
+inline Matrix4x4f OrthoTransform(Float l, Float r,
+                                 Float b, Float t,
+                                 Float n, Float f) {
   return Matrix4x4f(2/(r-l), 0, 0, -(r+l)/(r-l),
                     0, 2/(t-b), 0, -(t+b)/(t-b),
                     0, 0, -2/(f-n), -(f+n)/(f-n), // use gl convention
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f FrustumTransform(const Float l, const Float r,
-                                   const Float b, const Float t,
-                                   const Float n, const Float f) {
+inline Matrix4x4f FrustumTransform(Float l, Float r,
+                                   Float b, Float t,
+                                   Float n, Float f) {
   return Matrix4x4f(2*n/(r-l), 0, (r+l)/(r-l), 0,
                     0, 2*n/(t-b), (t+b)/(t-b), 0,
                     0, 0, -(f+n)/(f-n), -2*f*n/(f-n),
                     0, 0, -1, 0);
 }
 
-inline bool EqualZero(const Float x) {
+inline bool EqualZero(Float x) {
   return std::abs(x) < EPSILON;
 }
 
 // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix
-inline Matrix4x4f RotateTransform(const Vector3f& d, const Float degree) {
+inline Matrix4x4f RotateTransform(const Vector3f& d, Float degree) {
   // d is the direction vector of the line which goes through the origin
   Float radian = PI*degree/180;
   Float s = std::sin(radian/2);
@@ -455,13 +455,13 @@ inline Matrix4x4f RotateTransform(const Vector3f& d, const Float degree) {
                     0, 0, 0, 1);
 }
 
-inline Matrix4x4f RotateTransform(const Line3f& line, const Float degree) {
+inline Matrix4x4f RotateTransform(const Line3f& line, Float degree) {
   return TranslateTransform(line.pt)
     * RotateTransform(line.d, degree)
     * TranslateTransform(-line.pt);
 }
 
-inline Vector3f Rotate(const Vector3f& v, const Vector3f& d, const Float degree) {
+inline Vector3f Rotate(const Vector3f& v, const Vector3f& d, Float degree) {
   // use right-handed counter clockwise convention
   Float radian = PI*degree/180;
   Float s = std::sin(radian/2);
@@ -472,7 +472,7 @@ inline Vector3f Rotate(const Vector3f& v, const Vector3f& d, const Float degree)
   return Vector3f(res.i, res.j, res.k);
 }
 
-inline Vector3f Rotate(const Vector3f& v, const Line3f& line, const Float degree) {
+inline Vector3f Rotate(const Vector3f& v, const Line3f& line, Float degree) {
   return Rotate(v-line.pt, line.d, degree) + line.pt;
 }
 

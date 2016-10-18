@@ -14,11 +14,10 @@ struct PerspectiveCamera {
   Transform wd2cam, cam2wd; // world2camera, camera2world;
   Float fov, lensr, lensp;
   Float l; // length of image
-  PerspectiveCamera() {}
-  PerspectiveCamera(const Vector3f& e, const Vector3f& lookat, const Vector3f& up,
-                    const Float fov = 30, const Float lensr = 0, const Float lensp = 0)
-    : e(e), front((lookat-e).Normalize()), up(up), right(up^front),
-      fov(fov), lensr(lensr), lensp(lensp), l(std::tan(fov*PI/360)) {
+  PerspectiveCamera(const Vector3f& e_, const Vector3f& lookat_, const Vector3f& up_,
+                    Float fov_ = 30, Float lensr_ = 0, Float lensp_ = 0)
+    : e(e_), front((lookat_-e_).Normalize()), up(up_.Normalize()), right(front^up),
+      fov(fov_), lensr(lensr_), lensp(lensp_), l(std::tan(fov_*PI/360)) {
     assert(front * up == 0);
     // FIXME: check if the matrix is singular
     wd2cam = *(Matrix4x4f(right.x, up.x, front.x, 0,
@@ -27,7 +26,7 @@ struct PerspectiveCamera {
                           0,    0,    0,       1).Inverse()) * TranslateTransform(-e);
     cam2wd = *(wd2cam.Inverse());
   }
-  Ray GenerateRay(const Float u, const Float v) const {
+  Ray GenerateRay(Float u, Float v) const {
     assert(u >= 0 and u < 1);
     assert(v >= 0 and v < 1);
     Float x = (u-0.5)*l;

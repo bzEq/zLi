@@ -24,7 +24,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
   Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c):
     a(a), b(b), c(c), n(((b-a)^(c-a)).Normalize()) {}
   ~Triangle() {}
-  std::optional<RayIntersection> Intersect(const Ray& ray) const {
+  std::optional<RayIntersection> Intersect(const Ray& ray) {
     auto e = ray.o - a;
     auto ba = b-a;
     auto ca = c-a;
@@ -38,7 +38,7 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
     if (t < ray.tmin || t > ray.tmax) return {};
     return RayIntersection{ .t = t, .shape = shared_from_this(), .ray = ray };
   }
-  BoundBox Bounds() const {
+  BoundBox Bounds() {
     return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
                              std::min(a.y, std::min(b.y, c.y)),
                              std::min(a.z, std::min(b.z, c.z))),
@@ -46,13 +46,13 @@ struct Triangle: public Shape, std::enable_shared_from_this<Shape> {
                              std::max(a.y, std::max(b.y, c.y)),
                              std::max(a.z, std::max(b.z, c.z))));
   }
-  Spectrum Le() const {
+  Spectrum Le() {
     return le;
   }
-  std::shared_ptr<const BSDF> bsdf() const {
+  std::shared_ptr<BSDF> bsdf() {
     return bsdf_;
   }
-  Vector3f Normal(const Vector3f& _) const {
+  Vector3f Normal(const Vector3f& _) {
     return n;
   }
 };

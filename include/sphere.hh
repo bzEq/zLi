@@ -16,9 +16,9 @@ struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
   Spectrum le;
   std::shared_ptr<BSDF> bsdf_;
   Sphere(): r(1) {}
-  Sphere(const Vector3f& c, const Float r): c(c), r(r) {}
+  Sphere(const Vector3f& c, Float r): c(c), r(r) {}
   ~Sphere() {}
-  std::optional<RayIntersection> Intersect(const Ray& ray) const {
+  std::optional<RayIntersection> Intersect(const Ray& ray) {
     auto d = ray.o - c;
     auto a = ray.d*ray.d;
     auto b = 2 * (d * ray.d);
@@ -33,17 +33,17 @@ struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
     assert(t >= ray.tmin);
     return RayIntersection{ .t = t, .shape = shared_from_this(), .ray = ray };
   }
-  BoundBox Bounds() const {
+  BoundBox Bounds() {
     return BoundBox(Vector3f(c.x-r, c.y-r, c.z-r),
                     Vector3f(c.x+r, c.y+r, c.z+r));
   }
-  Spectrum Le() const {
+  Spectrum Le() {
     return le;
   }
-  std::shared_ptr<const BSDF> bsdf() const {
+  std::shared_ptr<BSDF> bsdf() {
     return bsdf_;
   }
-  Vector3f Normal(const Vector3f& position) const {
+  Vector3f Normal(const Vector3f& position) {
     return (position-c).Normalize();
   }
 };

@@ -14,19 +14,19 @@ namespace zLi {
 struct Shape;
 
 struct RayIntersection {
-  const Float t;
-  const std::shared_ptr<const Shape> shape;
-  const Ray ray;
+  Float t;
+  std::shared_ptr<Shape> shape;
+  Ray ray;
   Ray SpawnRay(const Vector3f& d) const {
     return Ray(ray(t), d, EPSILON);
   }
 };
 
 struct Shape {
-  virtual std::optional<RayIntersection> Intersect(const Ray&) const = 0;
-  virtual std::shared_ptr<const BSDF> bsdf() const = 0;
-  virtual Spectrum Le() const = 0;
-  virtual Vector3f Normal(const Vector3f&) const = 0;
+  virtual std::optional<RayIntersection> Intersect(const Ray&) = 0;
+  virtual std::shared_ptr<BSDF> bsdf() = 0;
+  virtual Spectrum Le() = 0;
+  virtual Vector3f Normal(const Vector3f&) = 0;
   virtual ~Shape() {}
 };
 

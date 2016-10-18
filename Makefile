@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-CXX := g++
+CXX := clang++
 CXXFLAGS := -Wall -Weffc++ -g -std=c++14
 
 all: source test

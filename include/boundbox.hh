@@ -50,7 +50,7 @@ struct BoundBox {
     return std::make_tuple(t0, t1);
   }
   std::optional< std::tuple<BoundBox, BoundBox> >
-  Split(const int axis, const Float d) const {
+  Split(int axis, Float d) const {
     if (d <= pMin[axis] || d >= pMax[axis]) return {};
     Vector3f v0(pMin);
     v0[axis] = d;

@@ -7,7 +7,7 @@
 namespace zLi {
 
 Spectrum PathIntegrator::Li(const Scene& scene,
-                            const Ray& r, const int maxBounces) {
+                            const Ray& r, int maxBounces) {
   Spectrum L((Float)0);
   Spectrum F((Float)1);
   Ray ray(r);
