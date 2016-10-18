@@ -409,6 +409,10 @@ inline Float Determinant3x3(const Vector3f& a, const Vector3f& b, const Vector3f
   return (-a^c) * b;
 }
 
+inline Vector3f Translate(const Vector3f& v, const Vector3f& t) {
+  return v+t;
+}
+
 inline Matrix4x4f TranslateTransform(const Vector3f& v) {
   return Matrix4x4f(1, 0, 0, v.x,
                     0, 1, 0, v.y,
@@ -443,7 +447,8 @@ inline Matrix4x4f RotateTransform(const Vector3f& d, const Float degree) {
   // d is the direction vector of the line which goes through the origin
   Float radian = PI*degree/180;
   Float s = std::sin(radian/2);
-  Quaternion4f q(std::cos(radian/2), s*d.x, s*d.y, s*d.z);
+  Vector3f nd = d.Normalize();
+  Quaternion4f q(std::cos(radian/2), s*nd.x, s*nd.y, s*nd.z);
   return Matrix4x4f(1-2*q.j*q.j-2*q.k*q.k, 2*(q.i*q.j-q.k*q.r), 2*(q.i*q.k+q.j*q.r), 0,
                     2*(q.i*q.j+q.k*q.r), 1-2*q.i*q.i-2*q.k*q.k, 2*(q.j*q.k-q.i*q.r), 0,
                     2*(q.i*q.k-q.j*q.r), 2*(q.j*q.k+q.i*q.r), 1-2*q.i*q.i-2*q.j*q.j, 0,
@@ -456,18 +461,19 @@ inline Matrix4x4f RotateTransform(const Line3f& line, const Float degree) {
     * TranslateTransform(-line.pt);
 }
 
-inline Vector3f Rotate(const Vector3f& d, const Float degree, const Vector3f& v) {
+inline Vector3f Rotate(const Vector3f& v, const Vector3f& d, const Float degree) {
   // use right-handed counter clockwise convention
   Float radian = PI*degree/180;
   Float s = std::sin(radian/2);
+  Vector3f nd = d.Normalize();
   Quaternion4f vq(0, v.x, v.y, v.z);
-  Quaternion4f q(std::cos(radian/2), s*d.x, s*d.y, s*d.z);
+  Quaternion4f q(std::cos(radian/2), s*nd.x, s*nd.y, s*nd.z);
   Quaternion4f res = q * vq * q.Inverse();
   return Vector3f(res.i, res.j, res.k);
 }
 
-inline Vector3f Rotate(const Line3f& line, const Float degree, const Vector3f& v) {
-  return Rotate(line.d, degree, v-line.pt) + line.pt;
+inline Vector3f Rotate(const Vector3f& v, const Line3f& line, const Float degree) {
+  return Rotate(v-line.pt, line.d, degree) + line.pt;
 }
 
 } // end namespace zLi

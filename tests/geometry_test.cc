@@ -23,8 +23,22 @@ int main()
   std::cout << q * q.Inverse() << std::endl;
 
   Vector3f v(1, 0, 0);
-  Vector3f d(0, 0, 1);
-  std::cout << Rotate(d, 90, v) << std::endl;
+  Vector3f d(1, 1, 1);
+  Line3f l(Vector3f(1, 1, 1), Vector3f(1,1,1));
+  std::cout << "// Transform test" << std::endl;
+  std::cout << PI << std::endl;
+  std::cout << "// Translate test" << std::endl;
+  std::cout << Translate(v, d) << std::endl;
+  std::cout << *(TranslateTransform(d) * v) << std::endl;
+
+  std::cout << "// Rotate test" << std::endl;
+  std::cout << Rotate(v, d, 90) << std::endl;
   std::cout << *(RotateTransform(d, 90) * v) << std::endl;
+
+  std::cout << Rotate(v, l, 90) << std::endl;
+  std::cout << *(RotateTransform(l, 90) * v) << std::endl;
+
+  //std::cout << Rotate(v, l, 90) << std::endl;
+  //std::cout << *(RotateTransform(l, 90) * v) << std::endl;
   return 0;
 }
