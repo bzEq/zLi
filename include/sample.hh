@@ -1,6 +1,6 @@
-#ifndef _ZLI_SAMPLE_H_
-#define _ZLI_SAMPLE_H_
-#include "geometry.hh"
+#ifndef _ZLI_SAMPLE_HH_
+#define _ZLI_SAMPLE_HH_
+#include "math.hh"
 
 #include <cstdlib>
 #include <tuple>

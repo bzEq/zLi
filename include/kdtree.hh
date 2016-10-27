@@ -1,6 +1,6 @@
-#ifndef _ZLI_KDTREE_H_
-#define _ZLI_KDTREE_H_
-#include "geometry.hh"
+#ifndef _ZLI_KDTREE_HH_
+#define _ZLI_KDTREE_HH_
+#include "math.hh"
 #include "boundbox.hh"
 #include "ray.hh"
 

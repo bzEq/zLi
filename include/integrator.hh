@@ -1,5 +1,5 @@
-#ifndef _ZLI_INTEGRATOR_H_
-#define _ZLI_INTEGRATOR_H_
+#ifndef _ZLI_INTEGRATOR_HH_
+#define _ZLI_INTEGRATOR_HH_
 #include "spectrum.hh"
 #include "scene.hh"
 #include "light.hh"

@@ -1,6 +1,6 @@
 #ifndef _ZLI_FILM_HH_
 #define _ZLI_FILM_HH_
-#include "geometry.hh"
+#include "math.hh"
 #include "spectrum.hh"
 
 #include <vector>

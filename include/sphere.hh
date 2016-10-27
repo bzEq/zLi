@@ -1,51 +1,33 @@
-#ifndef _ZLI_SPHERE_H_
-#define _ZLI_SPHERE_H_
-#include "geometry.hh"
-#include "ray.hh"
-#include "shape.hh"
+#ifndef _ZLI_SPHERE_HH_
+#define _ZLI_SPHERE_HH_
 #include "boundbox.hh"
+#include "geometry.hh"
+#include "math.hh"
+#include "ray.hh"
 
 #include <iostream>
 #include <memory>
 
-
 namespace zLi {
-struct Sphere: public Shape, std::enable_shared_from_this<Shape> {
+struct Sphere : std::enable_shared_from_this<Sphere> {
   Vector3f c;
   Float r;
   Spectrum le;
   std::shared_ptr<BSDF> bsdf_;
-  Sphere(): r(1) {}
-  Sphere(const Vector3f& c, Float r): c(c), r(r) {}
+  Sphere() : r(1) {}
+  Sphere(const Vector3f &c, Float r) : c(c), r(r) {}
   ~Sphere() {}
-  std::optional<RayIntersection> Intersect(const Ray& ray) {
-    auto d = ray.o - c;
-    auto a = ray.d*ray.d;
-    auto b = 2 * (d * ray.d);
-    auto c = d*d - r*r;
-    auto res = Quadratic(a, b, c);
-    if (!res) return {};
-    auto t0 = std::get<0>(*res);
-    auto t1 = std::get<1>(*res);
-    assert(t0<=t1);
-    if (t0 < ray.tmin && t1 < ray.tmin) return {};
-    auto t = t0 < ray.tmin ? t1: t0;
-    assert(t >= ray.tmin);
-    return RayIntersection{ .t = t, .shape = shared_from_this(), .ray = ray };
-  }
+  std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
   BoundBox Bounds() {
-    return BoundBox(Vector3f(c.x-r, c.y-r, c.z-r),
-                    Vector3f(c.x+r, c.y+r, c.z+r));
+    return BoundBox(Vector3f(c.x - r, c.y - r, c.z - r),
+                    Vector3f(c.x + r, c.y + r, c.z + r));
   }
-  Spectrum Le() {
-    return le;
+  Spectrum Le() { return le; }
+  std::shared_ptr<BSDF> bsdf() { return bsdf_; }
+  Vector3f Normal(const Vector3f &position) {
+    return (position - c).Normalize();
   }
-  std::shared_ptr<BSDF> bsdf() {
-    return bsdf_;
-  }
-  Vector3f Normal(const Vector3f& position) {
-    return (position-c).Normalize();
-  }
+  Geometry ImplGeometry();
 };
 
 } // end namespace zLi

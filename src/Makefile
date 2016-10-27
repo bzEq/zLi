@@ -12,7 +12,7 @@ all: $(OBJECTS)
 %.o: %.cc
 	$(CXX) -c $< $(CXXFLAGS)
 
-main: main.o logging.o renderer.o
+main: main.o logging.o renderer.o triangle.o sphere.o
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 clean:

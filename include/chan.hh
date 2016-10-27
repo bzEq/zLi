@@ -1,6 +1,6 @@
 #ifndef _ZLI_CHAN_HH_
 #define _ZLI_CHAN_HH_
-#include "geometry.hh"
+#include "math.hh"
 
 #include <condition_variable>
 #include <mutex>

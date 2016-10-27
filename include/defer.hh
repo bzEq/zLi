@@ -1,5 +1,5 @@
-#ifndef _ZLI_DEFER_H_
-#define _ZLI_DEFER_H_
+#ifndef _ZLI_DEFER_HH_
+#define _ZLI_DEFER_HH_
 #include <functional>
 
 

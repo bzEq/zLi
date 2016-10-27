@@ -1,6 +1,6 @@
-#ifndef _ZLI_CAMERA_H_
-#define _ZLI_CAMERA_H_
-#include "geometry.hh"
+#ifndef _ZLI_CAMERA_HH_
+#define _ZLI_CAMERA_HH_
+#include "math.hh"
 #include "sample.hh"
 #include "ray.hh"
 

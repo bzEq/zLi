@@ -1,6 +1,6 @@
-#ifndef _ZLI_RAY_H_
-#define _ZLI_RAY_H_
-#include "geometry.hh"
+#ifndef _ZLI_RAY_HH_
+#define _ZLI_RAY_HH_
+#include "math.hh"
 
 #include <iostream>
 
