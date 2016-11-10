@@ -17,7 +17,7 @@ struct BoundBox {
   Vector3f Diagonal() const { return pMax - pMin; }
   Float SurfaceArea() const {
     Vector3f d = Diagonal();
-    return 2 * (d.x * d.y + d.y * d.z + d.z + d.x);
+    return 2 * (d.x * d.y + d.y * d.z + d.z * d.x);
   }
   Float Volume() const {
     Vector3f d = Diagonal();
