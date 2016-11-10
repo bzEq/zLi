@@ -6,7 +6,7 @@ CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := ../src
 LDFLAGS :=
 TESTS := math_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test
+	sphere_test camera_test diagram2d_test
 
 
 all: $(TESTS)
@@ -33,6 +33,9 @@ sphere_test: sphere_test.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 camera_test: camera_test.o
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+diagram2d_test: diagram2d_test.o $(SRC)/diagram2d.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
