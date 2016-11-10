@@ -17,14 +17,14 @@ void Diagram2d::Display(std::ostream &out) {
   }
 }
 
-std::optional<Float> Diagram2d::Query(Float x) {
+Float Diagram2d::Query(Float x) {
   auto iter = std::lower_bound(
       diagram_.begin(), diagram_.end(), std::make_tuple(x, 0),
       [](const std::tuple<Float, Float> &a, const std::tuple<Float, Float> &b) {
         return std::get<0>(a) < std::get<0>(b);
       });
   if (iter == diagram_.begin() || iter == diagram_.end()) {
-    return {};
+    return 0;
   }
   int j = iter - diagram_.begin();
   int i = j - 1;
