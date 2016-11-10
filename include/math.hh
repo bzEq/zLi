@@ -1,5 +1,7 @@
 #ifndef _ZLI_MATH_HH_
 #define _ZLI_MATH_HH_
+#include "option.hh"
+
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -11,7 +13,8 @@
 namespace std {
 
 template <typename T>
-using optional = std::experimental::fundamentals_v1::optional<T>;
+// using optional = std::experimental::fundamentals_v1::optional<T>;
+using optional = Option<T>;
 }
 
 namespace zLi {
@@ -475,6 +478,10 @@ inline Vector3f Rotate(const Vector3f &v, const Vector3f &d, Float degree) {
 
 inline Vector3f Rotate(const Vector3f &v, const Line3f &line, Float degree) {
   return Rotate(v - line.pt, line.d, degree) + line.pt;
+}
+
+inline Float Lerp(Float x0, Float y0, Float x1, Float y1, Float x) {
+  return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
 } // end namespace zLi
