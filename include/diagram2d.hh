@@ -8,7 +8,7 @@
 namespace zLi {
 class Diagram2d {
 public:
-  Diagram2d() = default;
+  Diagram2d() = delete;
   Diagram2d(const Diagram2d &) = default;
   Diagram2d(Diagram2d &&) = default;
   Diagram2d(Float *xs, Float *ys, size_t l);
