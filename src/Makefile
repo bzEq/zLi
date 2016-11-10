@@ -13,4 +13,4 @@ all: $(OBJECTS)
 	$(CXX) -c $< $(CXXFLAGS)
 
 clean:
-	@rm -f $(OBJECTS)
+	@rm -vf $(OBJECTS)

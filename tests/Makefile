@@ -39,4 +39,5 @@ diagram2d_test: diagram2d_test.o $(SRC)/diagram2d.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
-	rm -f $(TESTS)
+	@rm -vf *.o
+	@rm -vf $(TESTS)

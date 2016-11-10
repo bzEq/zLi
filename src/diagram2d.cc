@@ -17,7 +17,7 @@ void Diagram2d::Display(std::ostream &out) {
   }
 }
 
-Float Diagram2d::Query(Float x) {
+Float Diagram2d::Query(Float x) const {
   auto iter = std::lower_bound(
       diagram_.begin(), diagram_.end(), std::make_tuple(x, 0),
       [](const std::tuple<Float, Float> &a, const std::tuple<Float, Float> &b) {
@@ -30,5 +30,33 @@ Float Diagram2d::Query(Float x) {
   int i = j - 1;
   return Lerp(std::get<0>(diagram_[i]), std::get<1>(diagram_[i]),
               std::get<0>(diagram_[j]), std::get<1>(diagram_[j]), x);
+}
+
+Diagram2d &Diagram2d::operator+=(const Diagram2d &rhs) {
+  for (auto &p : diagram_) {
+    std::get<1>(p) += rhs.Query(std::get<0>(p));
+  }
+  return *this;
+}
+
+Diagram2d &Diagram2d::operator+=(Float d) {
+  for (auto &p : diagram_) {
+    std::get<1>(p) += d;
+  }
+  return *this;
+}
+
+Diagram2d &Diagram2d::operator*=(const Diagram2d &rhs) {
+  for (auto &p : diagram_) {
+    std::get<1>(p) *= rhs.Query(std::get<0>(p));
+  }
+  return *this;
+}
+
+Diagram2d &Diagram2d::operator*=(Float f) {
+  for (auto &p : diagram_) {
+    std::get<1>(p) *= f;
+  }
+  return *this;
 }
 }

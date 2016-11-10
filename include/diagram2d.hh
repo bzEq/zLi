@@ -18,8 +18,8 @@ public:
 
   Diagram2d &operator*=(const Diagram2d &);
   Diagram2d &operator*=(Float);
-  void Display(std::ostream &);
-  Float Query(Float x);
+  void Display(std::ostream &out = std::cout);
+  Float Query(Float x) const;
 
 private:
   std::vector<std::tuple<Float, Float>> diagram_;
