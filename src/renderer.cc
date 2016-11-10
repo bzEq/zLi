@@ -17,7 +17,7 @@ Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
       render_job_(0), stopped_(false), sample_radius_(sampleRadius), spp_(spp) {
 }
 
-Spectrum SampleSpectrum(Float x, Float y) { return Spectrum(); }
+Spectrum SampleSpectrumAt(Float x, Float y) { return Spectrum(); }
 
 void Renderer::Work(int i, int j) { Float x = i, y = j; }
 
