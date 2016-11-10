@@ -3,17 +3,15 @@
 #include "film.hh"
 #include "scene.hh"
 
-#include <memory>
 #include <atomic>
-
+#include <memory>
 
 namespace zLi {
 class Renderer {
 public:
-  Renderer(const std::string& sceneFile,
-           int filmWidth,
-           int filmHeight);
+  Renderer(const std::string &sceneFile, int filmWidth, int filmHeight);
   int Render();
+
 private:
   int SlowRender();
   int ParallelRender();
@@ -23,9 +21,8 @@ private:
   std::string scene_file_;
   int film_width_, film_height_;
   std::atomic<int> render_job_;
-  std::atomic<bool> stopped_;
+  std::atomic<bool> stopped_; // for sending external signal
 };
-
 }
 
 #endif
