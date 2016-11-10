@@ -12,7 +12,7 @@
 namespace zLi {
 
 const Float Renderer::SampleRadius = 1;
-const int Renderer::NrSamples = 9;
+const int Renderer::SPP = 9;
 
 Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),

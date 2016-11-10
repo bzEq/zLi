@@ -27,7 +27,7 @@ private:
   std::atomic<bool> stopped_;
   Spectrum SampleSpectrum(Float, Float);
   static const Float SampleRadius;
-  static const int NrSamples;
+  static const int SPP; // samples per pixel
 };
 }
 
