@@ -2,7 +2,7 @@
 
 CXX := clang++
 HEADERS := ../include
-CXXFLAGS := -Wall -g -O2 -std=c++14 -I$(HEADERS)
+CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 LDFLAGS := -lpthread
 SOURCE := $(wildcard *.cc)
 OBJECTS := $(patsubst %.cc,%.o,$(SOURCE))
