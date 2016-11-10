@@ -10,7 +10,8 @@
 namespace zLi {
 class Renderer {
 public:
-  Renderer(const std::string &sceneFile, int filmWidth, int filmHeight);
+  Renderer(const std::string &sceneFile, int filmWidth, int filmHeight, int spp,
+           Float sampleRadius);
   int Render();
   void Stop();
   bool Stopped();
@@ -26,8 +27,8 @@ private:
   std::atomic<int> render_job_;
   std::atomic<bool> stopped_;
   Spectrum SampleSpectrum(Float, Float);
-  static const Float SampleRadius;
-  static const int SPP; // samples per pixel
+  Float sample_radius_;
+  int spp_; // samples per pixel
 };
 }
 

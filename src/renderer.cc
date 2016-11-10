@@ -11,12 +11,11 @@
 
 namespace zLi {
 
-const Float Renderer::SampleRadius = 1;
-const int Renderer::SPP = 9;
-
-Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight)
+Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
+                   int spp = 25, Float sampleRadius = 1)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),
-      render_job_(0), stopped_(false) {}
+      render_job_(0), stopped_(false), sample_radius_(sampleRadius), spp_(spp) {
+}
 
 Spectrum SampleSpectrum(Float x, Float y) { return Spectrum(); }
 
