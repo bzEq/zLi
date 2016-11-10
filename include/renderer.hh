@@ -2,6 +2,7 @@
 #define __ZLI_RENDERER_HH_
 #include "film.hh"
 #include "scene.hh"
+#include "spectrum.hh"
 
 #include <atomic>
 #include <memory>
@@ -11,6 +12,8 @@ class Renderer {
 public:
   Renderer(const std::string &sceneFile, int filmWidth, int filmHeight);
   int Render();
+  void Stop();
+  bool Stopped();
 
 private:
   int SlowRender();
@@ -21,7 +24,10 @@ private:
   std::string scene_file_;
   int film_width_, film_height_;
   std::atomic<int> render_job_;
-  std::atomic<bool> stopped_; // for sending external signal
+  std::atomic<bool> stopped_;
+  Spectrum SampleSpectrum(Float, Float);
+  static const Float SampleRadius;
+  static const int NrSamples;
 };
 }
 
