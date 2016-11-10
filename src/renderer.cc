@@ -35,8 +35,9 @@ int Renderer::ParallelRender() {
       while (!stopped_) {
         int n = render_job_++;
         INFO("start working on No.%d job", n);
-        if (n >= film_width_ * film_height_)
-          return;
+        if (n >= film_width_ * film_height_) {
+          break;
+        }
         Work(n / film_height_, n % film_height_);
       }
     }));
