@@ -7,10 +7,8 @@ BoundBox::Intersect(const Ray &ray) const {
   Float t0 = ray.tmin, t1 = ray.tmax;
   for (int i = 0; i < 3; i++) {
     if (ray.d[i] != 0) {
-      Float d0 = pMin[i];
-      Float d1 = pMax[i];
-      Float tmp0 = (d0 - ray.o[i]) / ray.d[i];
-      Float tmp1 = (d1 - ray.o[i]) / ray.d[i];
+      Float tmp0 = (pMin[i] - ray.o[i]) / ray.d[i];
+      Float tmp1 = (pMax[i] - ray.o[i]) / ray.d[i];
       t0 = std::max(t0, std::min(tmp0, tmp1));
       t1 = std::min(t1, std::max(tmp0, tmp1));
     }
