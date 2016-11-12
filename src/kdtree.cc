@@ -1,5 +1,6 @@
 #include "kdtree.hh"
 #include "boundbox.hh"
+#include "logging.hh"
 
 #include <vector>
 
@@ -16,7 +17,6 @@ KdTree::KdTree(const std::vector<Geometry> &gs) {
 
 void KdTree::KdNode::Insert(const Geometry &g) {
   BoundBox b = g.Bounds();
-  assert(box.CanContain(b));
   if (!this->g) {
     this->g = std::make_unique<Geometry>(g);
     return;
@@ -24,12 +24,16 @@ void KdTree::KdNode::Insert(const Geometry &g) {
   if (!child[0]) {
     assert(!child[1]);
     this->axis = std::rand() % 3;
-    this->d = std::rand() % 2 ? b.pMin[axis] : b.pMax[axis];
+    this->d = std::rand() % 2 ? b.pMin[this->axis] : b.pMax[this->axis];
     auto res = box.Split(this->axis, this->d);
     child[0] = new KdNode(std::get<0>(*res));
     child[1] = new KdNode(std::get<1>(*res));
+    assert(!child[0]->g);
+    assert(!child[1]->g);
+    assert(this->axis >= 0 && this->axis < 3);
   }
   Vector3f mid = (b.pMin + b.pMax) * (Float)0.5;
+  assert(this->axis >= 0 && this->axis < 3);
   if (mid[this->axis] <= this->d) {
     child[0]->Insert(g);
   } else {
@@ -38,6 +42,8 @@ void KdTree::KdNode::Insert(const Geometry &g) {
 }
 
 std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
+  int loop_count = 0;
+  int compare_count = 0;
   std::unique_ptr<RaySurfaceIntersection> ret;
   auto test = root_.Intersect(ray);
   if (!test) {
@@ -46,11 +52,13 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
   std::stack<Todo> todoList;
   todoList.push(Todo(&root_, std::get<0>(*test), std::get<1>(*test)));
   while (!todoList.empty()) {
+    ++loop_count;
     Todo todo = todoList.top();
     todoList.pop();
     if (todo.node->g) {
       auto res = todo.node->g->Intersect(ray);
       if (res && (!ret || (*res).t < (*ret).t)) {
+        ++compare_count;
         ret = std::make_unique<RaySurfaceIntersection>(*res);
       }
     }
@@ -74,6 +82,8 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
       todoList.push(Todo(todo.node->child[side], todo.tmin, todo.tmax));
     }
   }
+  INFO("loop_count: %d", loop_count);
+  INFO("compare_count: %d", compare_count);
   return *ret;
 }
 

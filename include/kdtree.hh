@@ -37,8 +37,12 @@ private:
     BoundBox box;
     KdNode *child[2];
 
-    KdNode() = default;
-    KdNode(const BoundBox &box) : axis(-1), d(0), box(box) {
+    KdNode() {
+      child[0] = nullptr;
+      child[1] = nullptr;
+    }
+
+    KdNode(const BoundBox &box) : box(box) {
       child[0] = nullptr;
       child[1] = nullptr;
     }
