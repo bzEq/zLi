@@ -59,8 +59,8 @@ public:
   }
 
 private:
-  Spectrum(const Diagram2d &s) : spectrum_(s) {}
-  Diagram2d spectrum_;
+  Spectrum(const Diagram2D &s) : spectrum_(s) {}
+  Diagram2D spectrum_;
 };
 }
 #endif

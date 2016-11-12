@@ -6,29 +6,29 @@
 #include <vector>
 
 namespace zLi {
-class Diagram2d {
+class Diagram2D {
 public:
-  Diagram2d() = delete;
-  Diagram2d(const Diagram2d &) = default;
-  Diagram2d(Diagram2d &&) = default;
-  Diagram2d(const Float *xs, const Float *ys, size_t l);
-  Diagram2d(const Float *xs, Float y, size_t l);
+  Diagram2D() = delete;
+  Diagram2D(const Diagram2D &) = default;
+  Diagram2D(Diagram2D &&) = default;
+  Diagram2D(const Float *xs, const Float *ys, size_t l);
+  Diagram2D(const Float *xs, Float y, size_t l);
 
-  Diagram2d &operator+=(const Diagram2d &);
-  Diagram2d &operator+=(Float);
+  Diagram2D &operator+=(const Diagram2D &);
+  Diagram2D &operator+=(Float);
 
-  Diagram2d &operator*=(const Diagram2d &);
-  Diagram2d &operator*=(Float);
+  Diagram2D &operator*=(const Diagram2D &);
+  Diagram2D &operator*=(Float);
   void Display(std::ostream &out = std::cout);
   Float Query(Float x) const;
 
-  friend Diagram2d operator*(Float lhs, const Diagram2d &rhs);
-  friend Diagram2d operator*(const Diagram2d &lhs, Float rhs);
-  friend Diagram2d operator*(const Diagram2d &lhs, const Diagram2d &rhs);
+  friend Diagram2D operator*(Float lhs, const Diagram2D &rhs);
+  friend Diagram2D operator*(const Diagram2D &lhs, Float rhs);
+  friend Diagram2D operator*(const Diagram2D &lhs, const Diagram2D &rhs);
 
-  friend Diagram2d operator+(Float lhs, const Diagram2d &rhs);
-  friend Diagram2d operator+(const Diagram2d &lhs, Float rhs);
-  friend Diagram2d operator+(const Diagram2d &lhs, const Diagram2d &rhs);
+  friend Diagram2D operator+(Float lhs, const Diagram2D &rhs);
+  friend Diagram2D operator+(const Diagram2D &lhs, Float rhs);
+  friend Diagram2D operator+(const Diagram2D &lhs, const Diagram2D &rhs);
 
 private:
   std::vector<std::tuple<Float, Float>> diagram_;
