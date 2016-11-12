@@ -22,10 +22,16 @@ std::optional<RaySurfaceIntersection> Sphere::Intersect(const Ray &ray) {
   };
 }
 
+BoundBox Sphere::Bounds() {
+  return BoundBox(Vector3f(c.x - r, c.y - r, c.z - r),
+                  Vector3f(c.x + r, c.y + r, c.z + r));
+}
+
 Geometry Sphere::ImplGeometry() {
   return Geometry{
       .Intersect = std::bind(&Sphere::Intersect, shared_from_this(),
                              std::placeholders::_1),
+      .Bounds = std::bind(&Sphere::Bounds, shared_from_this()),
   };
 }
 

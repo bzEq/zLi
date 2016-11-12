@@ -18,10 +18,7 @@ struct Sphere : std::enable_shared_from_this<Sphere> {
   Sphere(const Vector3f &c, Float r) : c(c), r(r) {}
   ~Sphere() {}
   std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
-  BoundBox Bounds() {
-    return BoundBox(Vector3f(c.x - r, c.y - r, c.z - r),
-                    Vector3f(c.x + r, c.y + r, c.z + r));
-  }
+  BoundBox Bounds();
   Spectrum Le() { return le; }
   std::shared_ptr<BSDF> bsdf() { return bsdf_; }
   Vector3f Normal(const Vector3f &position) {

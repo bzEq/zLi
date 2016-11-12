@@ -20,13 +20,22 @@ BoundBox::Intersect(const Ray &ray) const {
 
 std::optional<std::tuple<BoundBox, BoundBox>> BoundBox::Split(int axis,
                                                               Float d) const {
-  if (d <= pMin[axis] || d >= pMax[axis])
+  if (d < pMin[axis] || d > pMax[axis])
     return {};
   Vector3f v0(pMin);
   v0[axis] = d;
   Vector3f v1(pMax);
   v1[axis] = d;
   return std::make_tuple(BoundBox(pMin, v1), BoundBox(v0, pMax));
+}
+
+BoundBox Union(const BoundBox &lhs, const BoundBox &rhs) {
+  BoundBox res;
+  for (int i = 0; i < 3; ++i) {
+    res.pMin[i] = std::min(lhs.pMin[i], rhs.pMin[i]);
+    res.pMax[i] = std::max(lhs.pMax[i], rhs.pMax[i]);
+  }
+  return res;
 }
 
 } // namespace zLi

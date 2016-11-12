@@ -1,5 +1,6 @@
 #ifndef _ZLI_GEOMETRY_HH_
 #define _ZLI_GEOMETRY_HH_
+#include "boundbox.hh"
 #include "bsdf.hh"
 #include "math.hh"
 #include "ray.hh"
@@ -26,6 +27,7 @@ struct Geometry {
   // @return: normal
   std::function<Vector3f(const Vector3f &)> Normal;
   std::function<BSDF()> bsdf;
+  std::function<BoundBox()> Bounds;
 };
 
 struct RaySurfaceIntersection {

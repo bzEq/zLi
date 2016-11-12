@@ -30,6 +30,15 @@ struct BoundBox {
     }
     return true;
   }
+  bool CanContain(const BoundBox &b) const {
+    for (int i = 0; i < 3; ++i) {
+      if (b.pMin[i] < pMin[i] || b.pMax[i] > pMax[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  friend BoundBox Union(const BoundBox &lhs, const BoundBox &rhs);
   std::optional<std::tuple<Float, Float>> Intersect(const Ray &ray) const;
   std::optional<std::tuple<BoundBox, BoundBox>> Split(int axis, Float d) const;
 };

@@ -25,10 +25,20 @@ std::optional<RaySurfaceIntersection> Triangle::Intersect(const Ray &ray) {
   };
 }
 
+BoundBox Triangle::Bounds() {
+  return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
+                           std::min(a.y, std::min(b.y, c.y)),
+                           std::min(a.z, std::min(b.z, c.z))),
+                  Vector3f(std::max(a.x, std::max(b.x, c.x)),
+                           std::max(a.y, std::max(b.y, c.y)),
+                           std::max(a.z, std::max(b.z, c.z))));
+}
+
 Geometry Triangle::ImplGeometry() {
   return Geometry{
       .Intersect = std::bind(&Triangle::Intersect, shared_from_this(),
                              std::placeholders::_1),
+      .Bounds = std::bind(&Triangle::Bounds, shared_from_this()),
   };
 }
 

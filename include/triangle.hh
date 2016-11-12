@@ -26,14 +26,7 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
 
   std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
 
-  BoundBox Bounds() {
-    return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
-                             std::min(a.y, std::min(b.y, c.y)),
-                             std::min(a.z, std::min(b.z, c.z))),
-                    Vector3f(std::max(a.x, std::max(b.x, c.x)),
-                             std::max(a.y, std::max(b.y, c.y)),
-                             std::max(a.z, std::max(b.z, c.z))));
-  }
+  BoundBox Bounds();
   Spectrum Le() { return le; }
   Vector3f Normal(const Vector3f &_) { return n; }
   Geometry ImplGeometry();
