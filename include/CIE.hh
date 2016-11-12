@@ -9,7 +9,6 @@ public:
   static const Float XYZ2RGB[3][3];
   static const Float RGB2XYZ[3][3];
 
-  static constexpr int NrSamples(int n) { return n / sizeof(Float); }
   static constexpr const Float CMF_R_X[] = {
       380, 385, 390, 395, 400, 405, 410, 415, 420, 425, 430, 435, 440, 445,
       450, 455, 460, 465, 470, 475, 480, 485, 490, 495, 500, 505, 510, 515,
