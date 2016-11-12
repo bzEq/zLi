@@ -5,9 +5,9 @@ HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := ../src
 ZLILIB := $(SRC)/libzli.a
-LDFLAGS := -lpthread -lm
+LDFLAGS := -lpthread -lm -lX11
 TESTS := math_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test diagram2d_test filter_test
+	sphere_test camera_test diagram2d_test filter_test window_test
 
 
 all: $(TESTS)
@@ -40,6 +40,9 @@ diagram2d_test: diagram2d_test.o $(ZLILIB)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 filter_test: filter_test.o $(ZLILIB)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+window_test: window_test.o $(ZLILIB)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
