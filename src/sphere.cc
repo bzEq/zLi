@@ -32,6 +32,8 @@ Geometry Sphere::ImplGeometry() {
       .Intersect = std::bind(&Sphere::Intersect, shared_from_this(),
                              std::placeholders::_1),
       .Bounds = std::bind(&Sphere::Bounds, shared_from_this()),
+      .Normal =
+          std::bind(&Sphere::Normal, shared_from_this(), std::placeholders::_1),
   };
 }
 

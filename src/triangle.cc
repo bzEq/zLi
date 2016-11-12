@@ -34,11 +34,15 @@ BoundBox Triangle::Bounds() {
                            std::max(a.z, std::max(b.z, c.z))));
 }
 
+Vector3f Triangle::Normal(const Vector3f &position) { return n; }
+
 Geometry Triangle::ImplGeometry() {
   return Geometry{
       .Intersect = std::bind(&Triangle::Intersect, shared_from_this(),
                              std::placeholders::_1),
       .Bounds = std::bind(&Triangle::Bounds, shared_from_this()),
+      .Normal = std::bind(&Triangle::Normal, shared_from_this(),
+                          std::placeholders::_1),
   };
 }
 
