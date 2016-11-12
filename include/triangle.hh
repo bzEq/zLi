@@ -28,7 +28,7 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
 
   BoundBox Bounds();
   Spectrum Le() { return le; }
-  Vector3f Normal(const Vector3f &_) { return n; }
+  Vector3f Normal(const Vector3f &_);
   Geometry ImplGeometry();
 };
 
