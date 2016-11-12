@@ -7,7 +7,8 @@ SRC := ../src
 ZLILIB := $(SRC)/libzli.a
 LDFLAGS := -lpthread -lm -lX11
 TESTS := math_test ray_test boundbox_test kdtree_test triangle_test \
-	sphere_test camera_test diagram2d_test filter_test window_test
+	sphere_test camera_test diagram2d_test filter_test window_test \
+	CIE_test
 
 
 all: $(TESTS)
@@ -43,6 +44,9 @@ filter_test: filter_test.o $(ZLILIB)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 window_test: window_test.o $(ZLILIB)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+CIE_test: CIE_test.o $(ZLILIB)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:

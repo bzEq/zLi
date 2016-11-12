@@ -103,6 +103,15 @@ template <typename T> struct Matrix4x4 {
   }
 
   Matrix4x4(const T mm[4][4]) { std::memcpy(m, mm, 16 * sizeof(T)); }
+  Matrix4x4(const T mm[3][3]) {
+    std::memset(m, 0, 16 * sizeof(T));
+    for (int i = 0; i < 3; ++i) {
+      for (int j = 0; j < 3; ++j) {
+        m[i][j] = mm[i][j];
+      }
+    }
+    m[3][3] = 1;
+  }
 
   Matrix4x4(T m00, T m01, T m02, T m03, T m10, T m11, T m12, T m13, T m20,
             T m21, T m22, T m23, T m30, T m31, T m32, T m33) {
@@ -254,9 +263,20 @@ template <typename T> struct Line3 {
   Line3(const Vector3<T> &pt, const Vector3<T> &d) : pt(pt), d(d) {}
 };
 
-template <typename T> Matrix4x4<T> SingularMatrixFallback() {
+template <typename T> Matrix4x4<T> inline SingularMatrixFallback() {
   std::cerr << "singular matrix found" << std::endl;
   return Matrix4x4<T>();
+}
+
+template <typename T>
+inline Matrix4x4<T> operator*(const Matrix4x4<T> &m, T f) {
+  Matrix4x4<T> ret(m.m);
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      ret.m[i][j] *= f;
+    }
+  }
+  return ret;
 }
 
 template <typename T> Vector4<T> InvalidVector4Fallback() {

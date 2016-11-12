@@ -1,4 +1,5 @@
 #include "math.hh"
+#include "CIE.hh"
 
 #include <iostream>
 
@@ -32,6 +33,12 @@ int main() {
 
   std::cout << Rotate(v, l, 90) << std::endl;
   std::cout << *(RotateTransform(l, 90) * v) << std::endl;
+
+  std::cout << "CIE XYZ2RGB " << std::endl;
+  Matrix4x4f cie(CIE::XYZ2RGB);
+  std::cout << cie << std::endl;
+  std::cout << "CIE RGB2XYZ " << std::endl;
+  std::cout << *cie.Inverse() << std::endl;
 
   // std::cout << Rotate(v, l, 90) << std::endl;
   // std::cout << *(RotateTransform(l, 90) * v) << std::endl;

@@ -1,5 +1,5 @@
-#ifndef _ZLI_SPECTRUM_HH_
-#define _ZLI_SPECTRUM_HH_
+#ifndef _ZLI_SPD_HH_
+#define _ZLI_SPD_HH_
 #include "diagram2d.hh"
 #include "math.hh"
 
@@ -19,48 +19,48 @@ public:
   Spectrum(const Spectrum &sp) = default;
 
   Spectrum &operator+=(const Spectrum &sp) {
-    spectrum_ += sp.spectrum_;
+    spd_ += sp.spd_;
     return *this;
   }
 
   Spectrum &operator*=(const Spectrum &sp) {
-    spectrum_ *= sp.spectrum_;
+    spd_ *= sp.spd_;
     return *this;
   }
 
   Spectrum &operator*=(Float f) {
-    spectrum_ *= f;
+    spd_ *= f;
     return *this;
   }
 
   Spectrum &operator/=(Float f) {
-    spectrum_ *= 1 / f;
+    spd_ *= 1 / f;
     return *this;
   }
 
   friend Spectrum operator+(const Spectrum &a, const Spectrum &b) {
-    return Spectrum(a.spectrum_ + b.spectrum_);
+    return Spectrum(a.spd_ + b.spd_);
   }
 
   friend Spectrum operator*(const Spectrum &a, const Spectrum &b) {
-    return Spectrum(a.spectrum_ * b.spectrum_);
+    return Spectrum(a.spd_ * b.spd_);
   }
 
   friend Spectrum operator*(const Spectrum &a, Float f) {
-    return Spectrum(a.spectrum_ * f);
+    return Spectrum(a.spd_ * f);
   }
 
   friend Spectrum operator*(Float f, const Spectrum &a) {
-    return Spectrum(a.spectrum_ * f);
+    return Spectrum(a.spd_ * f);
   }
 
   friend Spectrum operator/(const Spectrum &a, Float f) {
-    return Spectrum(a.spectrum_ * (1 / f));
+    return Spectrum(a.spd_ * (1 / f));
   }
 
 private:
-  Spectrum(const Diagram2D &s) : spectrum_(s) {}
-  Diagram2D spectrum_;
+  Spectrum(const Diagram2D &s) : spd_(s) {}
+  Diagram2D spd_; // Spectral power distribution
 };
 }
 #endif
