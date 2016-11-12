@@ -11,7 +11,8 @@ public:
   Diagram2d() = delete;
   Diagram2d(const Diagram2d &) = default;
   Diagram2d(Diagram2d &&) = default;
-  Diagram2d(Float *xs, Float *ys, size_t l);
+  Diagram2d(const Float *xs, const Float *ys, size_t l);
+  Diagram2d(const Float *xs, Float y, size_t l);
 
   Diagram2d &operator+=(const Diagram2d &);
   Diagram2d &operator+=(Float);
@@ -20,6 +21,14 @@ public:
   Diagram2d &operator*=(Float);
   void Display(std::ostream &out = std::cout);
   Float Query(Float x) const;
+
+  friend Diagram2d operator*(Float lhs, const Diagram2d &rhs);
+  friend Diagram2d operator*(const Diagram2d &lhs, Float rhs);
+  friend Diagram2d operator*(const Diagram2d &lhs, const Diagram2d &rhs);
+
+  friend Diagram2d operator+(Float lhs, const Diagram2d &rhs);
+  friend Diagram2d operator+(const Diagram2d &lhs, Float rhs);
+  friend Diagram2d operator+(const Diagram2d &lhs, const Diagram2d &rhs);
 
 private:
   std::vector<std::tuple<Float, Float>> diagram_;

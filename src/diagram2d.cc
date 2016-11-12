@@ -4,9 +4,16 @@
 
 namespace zLi {
 
-Diagram2d::Diagram2d(Float *xs, Float *ys, size_t l) {
+Diagram2d::Diagram2d(const Float *xs, const Float *ys, size_t l) {
   for (size_t i = 0; i < l; ++i) {
     diagram_.push_back(std::make_tuple(xs[i], ys[i]));
+  }
+  std::sort(diagram_.begin(), diagram_.end());
+}
+
+Diagram2d::Diagram2d(const Float *xs, Float y, size_t l) {
+  for (size_t i = 0; i < l; ++i) {
+    diagram_.push_back(std::make_tuple(xs[i], y));
   }
   std::sort(diagram_.begin(), diagram_.end());
 }
@@ -58,5 +65,39 @@ Diagram2d &Diagram2d::operator*=(Float f) {
     std::get<1>(p) *= f;
   }
   return *this;
+}
+
+Diagram2d operator*(Float f, const Diagram2d &rhs) {
+  Diagram2d res(rhs);
+  for (auto &p : res.diagram_) {
+    std::get<1>(p) *= f;
+  }
+  return res;
+}
+
+Diagram2d operator*(const Diagram2d &lhs, Float f) { return operator*(f, lhs); }
+Diagram2d operator*(const Diagram2d &lhs, const Diagram2d &rhs) {
+  Diagram2d res(lhs);
+  for (auto &p : res.diagram_) {
+    std::get<1>(p) *= rhs.Query(std::get<0>(p));
+  }
+  return res;
+}
+
+Diagram2d operator+(Float f, const Diagram2d &rhs) {
+  Diagram2d res(rhs);
+  for (auto &p : res.diagram_) {
+    std::get<1>(p) += f;
+  }
+  return res;
+}
+
+Diagram2d operator+(const Diagram2d &lhs, Float f) { return operator*(f, lhs); }
+Diagram2d operator+(const Diagram2d &lhs, const Diagram2d &rhs) {
+  Diagram2d res(lhs);
+  for (auto &p : res.diagram_) {
+    std::get<1>(p) += rhs.Query(std::get<0>(p));
+  }
+  return res;
 }
 }

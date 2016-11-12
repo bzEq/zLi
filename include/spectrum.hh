@@ -1,5 +1,6 @@
 #ifndef _ZLI_SPECTRUM_HH_
 #define _ZLI_SPECTRUM_HH_
+#include "diagram2d.hh"
 #include "math.hh"
 
 #include <cmath>
@@ -7,92 +8,59 @@
 
 namespace zLi {
 
-static const int nrSpectralSamples = 10;
+class Spectrum {
+public:
+  static const int NrSpectralSamples;
+  static const Float DefaultSampleX[];
+  static const Float DefaultSampleY[];
 
-struct Spectrum {
-  Float s[nrSpectralSamples];
-  Spectrum() {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] = 0;
-  }
-  Spectrum(Float v) {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] = v;
-  }
-  Spectrum(const Spectrum &sp) {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] = sp.s[i];
-  }
-  Spectrum(const Float v[nrSpectralSamples]) {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] = v[i];
-  }
+  Spectrum();
+  Spectrum(Float v);
+  Spectrum(const Spectrum &sp) = default;
+
   Spectrum &operator+=(const Spectrum &sp) {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] += sp.s[i];
+    spectrum_ += sp.spectrum_;
     return *this;
   }
+
   Spectrum &operator*=(const Spectrum &sp) {
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] *= sp.s[i];
+    spectrum_ *= sp.spectrum_;
     return *this;
   }
+
   Spectrum &operator*=(Float f) {
-    assert(f >= 0);
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] *= f;
+    spectrum_ *= f;
     return *this;
   }
+
   Spectrum &operator/=(Float f) {
-    assert(f > 0);
-    for (int i = 0; i < nrSpectralSamples; i++)
-      s[i] /= f;
+    spectrum_ *= 1 / f;
     return *this;
   }
-  Float NormSquared() const {
-    Float sum = 0;
-    for (int i = 0; i < nrSpectralSamples; i++)
-      sum += s[i] * s[i];
-    return sum;
+
+  friend Spectrum operator+(const Spectrum &a, const Spectrum &b) {
+    return Spectrum(a.spectrum_ + b.spectrum_);
   }
-  Float Norm() const { return std::sqrt(NormSquared()); }
+
+  friend Spectrum operator*(const Spectrum &a, const Spectrum &b) {
+    return Spectrum(a.spectrum_ * b.spectrum_);
+  }
+
+  friend Spectrum operator*(const Spectrum &a, Float f) {
+    return Spectrum(a.spectrum_ * f);
+  }
+
+  friend Spectrum operator*(Float f, const Spectrum &a) {
+    return Spectrum(a.spectrum_ * f);
+  }
+
+  friend Spectrum operator/(const Spectrum &a, Float f) {
+    return Spectrum(a.spectrum_ * (1 / f));
+  }
+
+private:
+  Spectrum(const Diagram2d &s) : spectrum_(s) {}
+  Diagram2d spectrum_;
 };
-
-inline Spectrum operator+(const Spectrum &a, const Spectrum &b) {
-  Spectrum c;
-  for (int i = 0; i < nrSpectralSamples; i++)
-    c.s[i] = a.s[i] + b.s[i];
-  return c;
-}
-
-inline Spectrum operator*(const Spectrum &a, const Spectrum &b) {
-  Spectrum c;
-  for (int i = 0; i < nrSpectralSamples; i++)
-    c.s[i] = a.s[i] * b.s[i];
-  return c;
-}
-
-inline Spectrum operator*(const Spectrum &a, Float f) {
-  assert(f >= 0);
-  Spectrum c;
-  for (int i = 0; i < nrSpectralSamples; i++)
-    c.s[i] = a.s[i] * f;
-  return c;
-}
-
-inline Spectrum operator*(Float f, const Spectrum &a) {
-  Spectrum c;
-  for (int i = 0; i < nrSpectralSamples; i++)
-    c.s[i] = a.s[i] * f;
-  return c;
-}
-
-inline Spectrum operator/(const Spectrum &a, Float f) {
-  assert(f > 0);
-  Spectrum c;
-  for (int i = 0; i < nrSpectralSamples; i++)
-    c.s[i] = a.s[i] / f;
-  return c;
-}
 }
 #endif
