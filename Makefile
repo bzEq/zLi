@@ -1,13 +1,14 @@
-.PHONY: all clean
+.PHONY: all clean source test
 
 CXX := clang++
 CXXFLAGS := -Wall -Weffc++ -g -std=c++14
 
-all: source test
+all: test
 
 source:
 	$(MAKE) -C src
-test:
+
+test: source
 	$(MAKE) -C tests
 
 clean:
