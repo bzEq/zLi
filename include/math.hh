@@ -386,7 +386,7 @@ inline std::ostream &operator<<(std::ostream &out, const Quaternion<T> &q) {
   return out;
 }
 
-typedef double Float;
+typedef float Float;
 typedef Vector3<Float> Vector3f;
 typedef Vector3<double> Vector3d;
 typedef Vector4<Float> Vector4f;
@@ -403,6 +403,7 @@ const Float INF = std::numeric_limits<Float>::max();
 const Float NINF = std::numeric_limits<Float>::lowest();
 const Float EPSILON = 1e-6;
 const Float PI = 4 * std::atan((Float)1);
+const Float E = std::exp(1);
 
 inline std::optional<std::tuple<Float, Float>> Quadratic(Float a, Float b,
                                                          Float c) {
@@ -518,27 +519,27 @@ inline std::tuple<Float, Float> SampleFromCircle() {
 template <typename Func>
 inline Float EstimateIntegration1D(Func F, Float l, Float r,
                                    unsigned int nrSamples = 64) {
-  assert(l < r);
+  assert(l <= r);
   Float s = 0;
   for (unsigned int i = 0; i < nrSamples; ++i) {
     Float x = l + (r - l) * UniformSample();
-    s += F(x) * (r - l);
+    s += F(x) / nrSamples;
   }
-  return s / nrSamples;
+  return (r - l) * s;
 }
 
 template <typename Func>
 inline Float EstimateIntegration2D(Func F, Float u, Float v, Float radius,
                                    unsigned int nrSamples = 64) {
+  assert(radius >= 0);
   Float s = 0;
-  Float area = PI * radius * radius;
   for (unsigned int i = 0; i < nrSamples; ++i) {
-    auto sample = SampleFromDisk();
-    Float x = u + radius * std::get<0>(sample);
-    Float y = v + radius * std::get<1>(sample);
-    s += F(x, y) * area;
+    Float x = u + radius * (UniformSample() - 0.5);
+    Float y = v + radius * (UniformSample() - 0.5);
+    // fprintf(stdout, "(%f, %f) -> %f\n", x, y, F(x, y) / nrSamples);
+    s += F(x, y) / nrSamples;
   }
-  return s / nrSamples;
+  return radius * radius * s;
 }
 
 } // end namespace zLi
