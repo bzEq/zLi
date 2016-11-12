@@ -516,12 +516,27 @@ inline std::tuple<Float, Float> SampleFromCircle() {
 }
 
 template <typename Func>
-Float EstimateIntegration(Func F, Float l, Float r,
-                          unsigned int nrSamples = 64) {
+inline Float EstimateIntegration1D(Func F, Float l, Float r,
+                                   unsigned int nrSamples = 64) {
+  assert(l < r);
   Float s = 0;
   for (unsigned int i = 0; i < nrSamples; ++i) {
     Float x = l + (r - l) * UniformSample();
     s += F(x) * (r - l);
+  }
+  return s / nrSamples;
+}
+
+template <typename Func>
+inline Float EstimateIntegration2D(Func F, Float u, Float v, Float radius,
+                                   unsigned int nrSamples = 64) {
+  Float s = 0;
+  Float area = PI * radius * radius;
+  for (unsigned int i = 0; i < nrSamples; ++i) {
+    auto sample = SampleFromDisk();
+    Float x = u + radius * std::get<0>(sample);
+    Float y = v + radius * std::get<1>(sample);
+    s += F(x, y) * area;
   }
   return s / nrSamples;
 }
