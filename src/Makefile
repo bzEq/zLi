@@ -6,11 +6,15 @@ CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 LDFLAGS := -lpthread
 SOURCE := $(wildcard *.cc)
 OBJECTS := $(patsubst %.cc,%.o,$(SOURCE))
+STATICLIB := libzli.a
 
-all: $(OBJECTS)
+all: $(STATICLIB)
 
 %.o: %.cc
-	$(CXX) -c $< $(CXXFLAGS)
+	$(CXX) -fPIC -c $< $(CXXFLAGS)
+
+$(STATICLIB): $(OBJECTS)
+	ar rcsv $@ $^
 
 clean:
-	@rm -vf $(OBJECTS)
+	@rm -vf *.a *.o *.so
