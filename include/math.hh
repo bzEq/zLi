@@ -486,6 +486,13 @@ inline Float Lerp(Float x0, Float y0, Float x1, Float y1, Float x) {
   return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
+template <typename T> inline T UniformInt(T l, T r) {
+  static std::random_device rd;
+  static std::mt19937 g(rd());
+  std::uniform_int_distribution<> u(l, r);
+  return u(g);
+}
+
 inline Float UniformSample() {
   static std::random_device rd;
   static std::mt19937 g(rd());
