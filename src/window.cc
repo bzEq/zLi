@@ -39,12 +39,17 @@ Result<void> Window::Init() {
   return Ok();
 }
 
-void Window::Loop(std::function<void()> &&display) {
+void Window::Loop(std::function<void()> &&display,
+                  std::function<void()> &&atExitLoop) {
   float time_slice = 1 / FPSLimit;
   auto start = std::chrono::high_resolution_clock::now();
   while (true) {
     XEvent ev;
     XNextEvent(disp_, &ev);
+    // ESC pressed
+    if (ev.type == KeyPress && ev.xkey.keycode == 9) {
+      break;
+    }
     if (ev.type == ClientMessage) {
       break;
     }
@@ -56,6 +61,9 @@ void Window::Loop(std::function<void()> &&display) {
           std::chrono::duration<float>(time_slice - diff.count()));
     }
     start = std::chrono::high_resolution_clock::now();
+  }
+  if (atExitLoop) {
+    atExitLoop();
   }
 }
 

@@ -3,6 +3,7 @@
 #include "result.hh"
 
 #include <X11/Xlib.h>
+#include <X11/keysym.h>
 #include <cstdio>
 #include <cstdlib>
 
@@ -12,7 +13,8 @@ public:
   static const float FPSLimit;
   Window(int w, int h);
   Result<void> Init();
-  void Loop(std::function<void()> &&);
+  void Loop(std::function<void()> &&,
+            std::function<void()> &&atExitLoop = nullptr);
   ~Window();
 
 private:
