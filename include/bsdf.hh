@@ -1,7 +1,6 @@
 #ifndef _ZLI_BSDF_HH_
 #define _ZLI_BSDF_HH_
 #include "math.hh"
-#include "sample.hh"
 
 #include <functional>
 #include <memory>

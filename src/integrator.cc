@@ -1,5 +1,4 @@
 #include "integrator.hh"
-#include "sample.hh"
 #include "scene.hh"
 #include "spectrum.hh"
 

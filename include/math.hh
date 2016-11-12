@@ -8,6 +8,7 @@
 #include <experimental/optional>
 #include <iostream>
 #include <limits>
+#include <random>
 #include <tuple>
 
 namespace std {
@@ -482,6 +483,47 @@ inline Vector3f Rotate(const Vector3f &v, const Line3f &line, Float degree) {
 
 inline Float Lerp(Float x0, Float y0, Float x1, Float y1, Float x) {
   return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+
+inline Float UniformSample() {
+  static std::random_device rd;
+  static std::mt19937 g(rd());
+  static std::uniform_real_distribution<Float> u(0, 1);
+  return u(g);
+}
+
+inline Vector3f SampleFromHemiSphere() {
+  Float u = 2 * PI * UniformSample();
+  Float v = UniformSample();
+  return Vector3f(std::cos(u) * std::sqrt(v), std::sin(u) * std::sqrt(v),
+                  std::sqrt(1 - v));
+}
+
+inline Vector3f SampleFromSphere() {
+  Vector3f v = SampleFromHemiSphere();
+  return UniformSample() <= 0.5 ? v : -v;
+}
+
+inline std::tuple<Float, Float> SampleFromDisk() {
+  Float r = UniformSample();
+  Float u = 2 * PI * UniformSample();
+  return std::make_tuple(r * std::cos(u), r * std::sin(u));
+}
+
+inline std::tuple<Float, Float> SampleFromCircle() {
+  Float u = 2 * PI * UniformSample();
+  return std::make_tuple(std::cos(u), std::sin(u));
+}
+
+template <typename Func>
+Float EstimateIntegration(Func F, Float l, Float r,
+                          unsigned int nrSamples = 64) {
+  Float s = 0;
+  for (unsigned int i = 0; i < nrSamples; ++i) {
+    Float x = l + (r - l) * UniformSample();
+    s += F(x) * (r - l);
+  }
+  return s / nrSamples;
 }
 
 } // end namespace zLi
