@@ -4,7 +4,7 @@ CXX := clang++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := ../src
-LDFLAGS := -lpthread -L../src -lzli
+LDFLAGS := -lpthread -lm -L../src -lzli
 TESTS := math_test ray_test boundbox_test kdtree_test triangle_test \
 	sphere_test camera_test diagram2d_test
 

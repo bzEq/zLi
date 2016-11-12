@@ -3,7 +3,7 @@
 CXX := clang++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
-LDFLAGS := -lpthread
+LDFLAGS :=
 SOURCE := $(wildcard *.cc)
 OBJECTS := $(patsubst %.cc,%.o,$(SOURCE))
 STATICLIB := libzli.a
