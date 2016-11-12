@@ -23,8 +23,8 @@ void KdTree::KdNode::Insert(const Geometry &g) {
   }
   if (!child[0]) {
     assert(!child[1]);
-    this->axis = std::rand() % 3;
-    this->d = std::rand() % 2 ? b.pMin[this->axis] : b.pMax[this->axis];
+    this->axis = UniformInt(0, 1023) % 3;
+    this->d = (box.pMin[this->axis] + b.pMax[this->axis]) / 2;
     auto res = box.Split(this->axis, this->d);
     child[0] = new KdNode(std::get<0>(*res));
     child[1] = new KdNode(std::get<1>(*res));
