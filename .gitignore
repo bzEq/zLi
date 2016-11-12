@@ -1,3 +1,5 @@
 *_test
 *.o
 *.gch
+*.a
+*.so
