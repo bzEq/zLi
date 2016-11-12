@@ -17,10 +17,6 @@ int main() {
   gs.push_back(
       std::make_shared<Sphere>(Vector3f(1800, 5200, 5300), 2)->ImplGeometry());
 
-  gs.push_back(std::make_shared<Triangle>(Vector3f(-1, -1, -6),
-                                          Vector3f(0, 2, -8),
-                                          Vector3f(1, -1, -8))
-                   ->ImplGeometry());
   gs.push_back(std::make_shared<Triangle>(Vector3f(134, 234, 23),
                                           Vector3f(0, 0, 0),
                                           Vector3f(100, 234, 78))
@@ -29,7 +25,10 @@ int main() {
                                           Vector3f(100, 8374, 234),
                                           Vector3f(100, 234, 78))
                    ->ImplGeometry());
-
+  gs.push_back(std::make_shared<Triangle>(Vector3f(-1, -1, -6),
+                                          Vector3f(0, 2, -8),
+                                          Vector3f(1, -1, -8))
+                   ->ImplGeometry());
   KdTree kt(gs);
   auto res = kt.Intersect(Ray(Vector3f(0, 0, -10), Vector3f(0, 0, 1)));
   assert(res);

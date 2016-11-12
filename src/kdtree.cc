@@ -82,8 +82,8 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
       todoList.push(Todo(todo.node->child[side], todo.tmin, todo.tmax));
     }
   }
-  INFO("loop_count: %d", loop_count);
-  INFO("compare_count: %d", compare_count);
+  DEBUG("loop_count: %d", loop_count);
+  DEBUG("compare_count: %d", compare_count);
   return *ret;
 }
 

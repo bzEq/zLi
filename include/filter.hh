@@ -68,7 +68,7 @@ public:
   Gauss1D(Float A, Float fx) : A_(A), fx_(fx) {}
   Float f(Float x) { return A_ * std::exp(-(x * x) / (2 * fx_ * fx_)); }
   template <typename Func> Float Convolve(Func F, Float x) {
-    static const Float r = std::sqrt(fx_ * fx_);
+    static const Float r = std::sqrt(fx_ * fx_); // FIXME
     auto conv = [&](Float t) { return f(t) * F(x - t); };
     return EstimateIntegration1D(conv, -r, r);
   }
