@@ -3,7 +3,7 @@
 CXX := clang++
 HEADERS := ../include
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
-LDFLAGS :=
+LDFLAGS := -lm -lpthread -L. -lzli
 SOURCE := $(wildcard *.cc)
 OBJECTS := $(patsubst %.cc,%.o,$(SOURCE))
 STATICLIB := libzli.a
@@ -11,7 +11,7 @@ STATICLIB := libzli.a
 all: $(STATICLIB)
 
 %.o: %.cc
-	$(CXX) -fPIC -c $< $(CXXFLAGS)
+	$(CXX) $(CXXFLAGS) -fPIC -c $<
 
 $(STATICLIB): $(OBJECTS)
 	ar rcsv $@ $^

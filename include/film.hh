@@ -5,18 +5,17 @@
 
 #include <vector>
 
-
 namespace zLi {
 struct Film {
   int w, h;
-  std::vector< std::vector<Spectrum>  > film;
-  Film(int width, int height): w(width), h(height) {
+  std::vector<std::vector<std::unique_ptr<Spectrum>>> film;
+  Film(int width, int height) : w(width), h(height) {
     film.resize(w);
     for (int i = 0; i < w; ++i) {
       film[i].resize(h);
     }
   }
-  std::vector<Spectrum>& operator[](int i) {
+  std::vector<std::unique_ptr<Spectrum>> &operator[](int i) {
     assert(i >= 0 && i < w);
     return film[i];
   }
