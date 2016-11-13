@@ -12,6 +12,7 @@ struct RGBColor {
   RGBColor(Float r, Float g, Float b) : r(r), g(g), b(b) {}
   Float &operator[](int i);
   Float operator[](int i) const;
+  RGBColor Clamp() const;
 };
 
 struct XYZColor {

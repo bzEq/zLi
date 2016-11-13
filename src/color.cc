@@ -54,4 +54,10 @@ Float RGBColor::operator[](int i) const {
   return r;
 }
 
+RGBColor RGBColor::Clamp() const {
+  return RGBColor(std::min(std::max(r, 0.f), 1.f),
+                  std::min(std::max(g, 0.f), 1.f),
+                  std::min(std::max(b, 0.f), 1.f));
+}
+
 } // zLi
