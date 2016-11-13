@@ -3,7 +3,7 @@
 import csv
 
 def main():
-    with open("CIE_CMF.csv", "rb") as f:
+    with open("CIE_XYZ_CMF.csv", "rb") as f:
         R_X = G_X = B_X = []
         R_Y = []
         G_Y = []
