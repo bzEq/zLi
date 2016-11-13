@@ -21,6 +21,8 @@ public:
     closed_ = true;
   }
 
+  bool Closed() { return closed_; }
+
   // TODO: version of dealing with time out is required.
   friend bool operator<<(Chan &c, const T &v) {
     std::unique_lock<std::mutex> l(c.mu_);
@@ -69,6 +71,17 @@ public:
     }
     if (q_.empty())
       return {};
+    auto f = q_.front();
+    q_.pop();
+    l.unlock();
+    return f;
+  }
+  // non blocking pop
+  std::optional<T> Popi() {
+    std::unique_lock<std::mutex> l(mu_);
+    if (q_.empty()) {
+      return {};
+    }
     auto f = q_.front();
     q_.pop();
     l.unlock();

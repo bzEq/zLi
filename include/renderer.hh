@@ -3,6 +3,7 @@
 #include "chan.hh"
 #include "film.hh"
 #include "filter.hh"
+#include "option.hh"
 #include "scene.hh"
 #include "spectrum.hh"
 
@@ -18,7 +19,7 @@ public:
   };
   Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
            int spp = 25);
-  int Render();
+  Result<void> Render();
   void Stop();
   bool Stopped();
   std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
@@ -27,8 +28,8 @@ public:
 private:
   static const Float SampleRadius;
   void AddToRGBChan(int, int, const Spectrum &);
-  int SlowRender();
-  int ParallelRender();
+  Result<void> SlowRender();
+  Result<void> ParallelRender();
   void Work(int, int);
   std::unique_ptr<Film> film_;
   std::unique_ptr<Scene> scene_;

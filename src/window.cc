@@ -15,6 +15,8 @@ Window::~Window() {
   }
 }
 
+void Window::FillPixel(int x, int y, const RGBColor &rgb) {}
+
 Result<void> Window::Init() {
   disp_ = XOpenDisplay(nullptr);
   if (!disp_) {
@@ -29,12 +31,9 @@ Result<void> Window::Init() {
   XSetWMProtocols(disp_, window_, &deleteWindow, 1);
   XSelectInput(disp_, window_, ExposureMask | KeyPressMask);
 
-  XGCValues values;
-  unsigned long valuemask = GCCapStyle | GCJoinStyle;
-  gc_ = XCreateGC(disp_, window_, valuemask, &values);
-  if (gc_ < 0) {
-    return Error("Can't create GC");
-  }
+  // XGCValues values;
+  // unsigned long valuemask = GCCapStyle | GCJoinStyle;
+  gc_ = DefaultGC(disp_, screen_);
   XMapWindow(disp_, window_);
   return Ok();
 }

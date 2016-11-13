@@ -9,8 +9,12 @@ namespace zLi {
 
 Result<Scene> Scene::SceneFromJson(const std::string &file) {
   boost::property_tree::ptree json;
-  boost::property_tree::read_json(file, json);
-  return Ok(Scene());
+  try {
+    boost::property_tree::read_json(file, json);
+    return Ok(Scene());
+  } catch (std::exception &e) {
+    return Error(e.what());
+  }
 }
 
 } // zLi

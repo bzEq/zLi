@@ -4,7 +4,7 @@ CXX := clang++
 HEADERS := include/
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 SRC := src/
-LDFLAGS := -lm -lpthread -L$(SRC) -lzli
+LDFLAGS := -lm -lpthread -L$(SRC) -lzli -lboost_program_options -lX11
 
 all: main
 

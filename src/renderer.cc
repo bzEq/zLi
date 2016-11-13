@@ -16,7 +16,9 @@ const Float Renderer::SampleRadius = 1.f;
 Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
                    int spp)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),
-      render_job_(0), stopped_(false), spp_(spp) {}
+      render_job_(0), stopped_(false), spp_(spp) {
+  rgb_chan_ = std::make_shared<Chan<RenderResult>>();
+}
 
 Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(0); }
 
@@ -45,7 +47,7 @@ void Renderer::Stop() { stopped_.store(true); }
 
 bool Renderer::Stopped() { return stopped_; }
 
-int Renderer::SlowRender() {
+Result<void> Renderer::SlowRender() {
   int n = render_job_++;
   while (!stopped_ && n < film_width_ * film_height_) {
     INFO("start working on No.%d job", n);
@@ -53,10 +55,10 @@ int Renderer::SlowRender() {
     n = render_job_++;
   }
   stopped_.store(true);
-  return 0;
+  return Ok();
 }
 
-int Renderer::ParallelRender() {
+Result<void> Renderer::ParallelRender() {
   std::vector<std::thread> workers;
   for (unsigned i = 0; i < std::thread::hardware_concurrency(); ++i) {
     workers.push_back(std::thread([this] {
@@ -74,14 +76,14 @@ int Renderer::ParallelRender() {
     w.join();
   }
   stopped_.store(true);
-  return 0;
+  return Ok();
 }
 
-int Renderer::Render() {
+Result<void> Renderer::Render() {
   auto res = Scene::SceneFromJson(scene_file_);
   if (!res) {
-    FATAL("can't load scene file: %s", scene_file_.c_str());
-    return -1;
+    DEBUG("can't load scene file: %s", scene_file_.c_str());
+    return FormatError("can't load scene file: %s", scene_file_.c_str());
   }
   scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);
@@ -89,6 +91,6 @@ int Renderer::Render() {
   return SlowRender();
 }
 
-Renderer::~Renderer() { rgb_chan_->Close(); }
+Renderer::~Renderer() {}
 
 } // namespace zLi
