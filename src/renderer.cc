@@ -1,6 +1,7 @@
 #include "renderer.hh"
 #include "integrator.hh"
 #include "logging.hh"
+#include "math.hh"
 #include "scene.hh"
 
 #include <boost/property_tree/json_parser.hpp>
@@ -11,15 +12,34 @@
 
 namespace zLi {
 
+const Float Renderer::SampleRadius = 1.f;
 Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
-                   int spp, Float sampleRadius)
+                   int spp)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),
-      render_job_(0), stopped_(false), sample_radius_(sampleRadius), spp_(spp) {
+      render_job_(0), stopped_(false), spp_(spp) {}
+
+Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(0); }
+
+void Renderer::AddToRGBChan(int i, int j, const Spectrum &s) {
+  rgb_chan_->Push(RenderResult{
+      .x = i, .y = j, .rgb = s.ToRGB().Clamp(),
+  });
 }
 
-Spectrum SampleSpectrumAt(Float x, Float y) { return Spectrum(); }
-
-void Renderer::Work(int i, int j) { Float x = i, y = j; }
+void Renderer::Work(int i, int j) {
+  Spectrum res(0);
+  for (int i = 0; i < spp_; ++i) {
+    Float x = i + SampleRadius * (UniformSample() - 0.5);
+    Float y = j + SampleRadius * (UniformSample() - 0.5);
+    Spectrum s = SampleSpectrumAt(x, y);
+    Float r = std::sqrt((x - i) * (x - i) + (y - j) * (y - j));
+    s *= filter_.f(r) * ((Float)1 / spp_);
+    res += s;
+  }
+  AddToRGBChan(i, j, res);
+  // add to film
+  (*film_)[i][j] = std::make_unique<Spectrum>(std::move(res));
+}
 
 void Renderer::Stop() { stopped_.store(true); }
 
@@ -68,5 +88,7 @@ int Renderer::Render() {
   // return ParallelRender();
   return SlowRender();
 }
+
+Renderer::~Renderer() { rgb_chan_->Close(); }
 
 } // namespace zLi

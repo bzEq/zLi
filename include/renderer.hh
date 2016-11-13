@@ -1,6 +1,8 @@
 #ifndef __ZLI_RENDERER_HH_
 #define __ZLI_RENDERER_HH_
+#include "chan.hh"
 #include "film.hh"
+#include "filter.hh"
 #include "scene.hh"
 #include "spectrum.hh"
 
@@ -10,13 +12,21 @@
 namespace zLi {
 class Renderer {
 public:
-  Renderer(const std::string &sceneFile, int filmWidth, int filmHeight, int spp,
-           Float sampleRadius);
+  struct RenderResult {
+    int x, y;
+    RGBColor rgb;
+  };
+  Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
+           int spp = 25);
   int Render();
   void Stop();
   bool Stopped();
+  std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
+  ~Renderer();
 
 private:
+  static const Float SampleRadius;
+  void AddToRGBChan(int, int, const Spectrum &);
   int SlowRender();
   int ParallelRender();
   void Work(int, int);
@@ -27,8 +37,9 @@ private:
   std::atomic<int> render_job_;
   std::atomic<bool> stopped_;
   Spectrum SampleSpectrumAt(Float, Float);
-  Float sample_radius_;
   int spp_; // samples per pixel
+  std::shared_ptr<Chan<RenderResult>> rgb_chan_;
+  filter::Gauss1D filter_;
 };
 }
 
