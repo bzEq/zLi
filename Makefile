@@ -14,7 +14,7 @@ source:
 test: source
 	$(MAKE) -C tests
 
-main: main.cc source tests
+main: main.cc source test
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
 
 clean:

@@ -16,15 +16,18 @@ public:
   Result<void> Init();
   void Loop(std::function<void()> &&,
             std::function<void()> &&atExitLoop = nullptr);
-  void FillPixel(int, int, const RGBColor &);
+  void DrawPoint(int, int, const RGBColor &);
+  void Flush();
   ~Window();
 
 private:
+  void PollEvents();
   int width_, height_;
   ::Display *disp_;
   int screen_;
   ::Window window_;
   ::GC gc_;
+  bool should_close_;
 };
 
 } // zLi

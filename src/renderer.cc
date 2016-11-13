@@ -20,7 +20,7 @@ Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
   rgb_chan_ = std::make_shared<Chan<RenderResult>>();
 }
 
-Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(0); }
+Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(1); }
 
 void Renderer::AddToRGBChan(int i, int j, const Spectrum &s) {
   rgb_chan_->Push(RenderResult{
@@ -40,6 +40,7 @@ void Renderer::Work(int i, int j) {
   }
   AddToRGBChan(i, j, res);
   // add to film
+  assert(film_);
   (*film_)[i][j] = std::make_unique<Spectrum>(std::move(res));
 }
 
@@ -80,15 +81,15 @@ Result<void> Renderer::ParallelRender() {
 }
 
 Result<void> Renderer::Render() {
-  auto res = Scene::SceneFromJson(scene_file_);
-  if (!res) {
-    DEBUG("can't load scene file: %s", scene_file_.c_str());
-    return FormatError("can't load scene file: %s", scene_file_.c_str());
-  }
-  scene_ = std::make_unique<Scene>(std::move(*res));
+  // auto res = Scene::SceneFromJson(scene_file_);
+  // if (!res) {
+  //   DEBUG("can't load scene file: %s", scene_file_.c_str());
+  //   return FormatError("can't load scene file: %s", scene_file_.c_str());
+  // }
+  // scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);
   // return ParallelRender();
-  return SlowRender();
+  return ParallelRender();
 }
 
 Renderer::~Renderer() {}

@@ -1,4 +1,5 @@
 #include "window.hh"
+#include "logging.hh"
 
 #include <chrono>
 #include <thread>
@@ -7,7 +8,8 @@ namespace zLi {
 
 const float Window::FPSLimit = 120;
 
-Window::Window(int w, int h) : width_(w), height_(h), disp_(nullptr) {}
+Window::Window(int w, int h)
+    : width_(w), height_(h), disp_(nullptr), should_close_(false) {}
 Window::~Window() {
   if (disp_) {
     XDestroyWindow(disp_, window_);
@@ -15,7 +17,23 @@ Window::~Window() {
   }
 }
 
-void Window::FillPixel(int x, int y, const RGBColor &rgb) {}
+static XColor ToXColor(const RGBColor &rgb) {
+  XColor xc{
+      .red = static_cast<unsigned short>(65535 * rgb.r),
+      .green = static_cast<unsigned short>(65535 * rgb.g),
+      .blue = static_cast<unsigned short>(65535 * rgb.b),
+  };
+  return xc;
+}
+
+void Window::DrawPoint(int x, int y, const RGBColor &rgb) {
+  auto xc = ToXColor(rgb);
+  XAllocColor(disp_, ::XDefaultColormap(disp_, screen_), &xc);
+  XSetForeground(disp_, gc_, xc.pixel);
+  XDrawPoint(disp_, window_, gc_, x, y);
+}
+
+void Window::Flush() { XFlush(disp_); }
 
 Result<void> Window::Init() {
   disp_ = XOpenDisplay(nullptr);
@@ -38,20 +56,27 @@ Result<void> Window::Init() {
   return Ok();
 }
 
-void Window::Loop(std::function<void()> &&display,
-                  std::function<void()> &&atExitLoop) {
-  float time_slice = 1 / FPSLimit;
-  auto start = std::chrono::high_resolution_clock::now();
-  while (true) {
+void Window::PollEvents() {
+  int count = XPending(disp_);
+  while (count--) {
     XEvent ev;
     XNextEvent(disp_, &ev);
     // ESC pressed
     if (ev.type == KeyPress && ev.xkey.keycode == 9) {
-      break;
+      should_close_ = true;
     }
     if (ev.type == ClientMessage) {
-      break;
+      should_close_ = true;
     }
+  }
+}
+
+void Window::Loop(std::function<void()> &&display,
+                  std::function<void()> &&atExitLoop) {
+  float time_slice = 1 / FPSLimit;
+  auto start = std::chrono::high_resolution_clock::now();
+  while (!should_close_) {
+    PollEvents();
     display();
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> diff = end - start;

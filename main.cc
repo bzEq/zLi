@@ -13,19 +13,23 @@
 namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
+  zLi::SetLogLevel(zLi::ERROR);
   DEBUG("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
-                                             "scene json file");
+                                             "scene json file")(
+      "width", po::value<int>(), "film width")("height", po::value<int>(),
+                                               "film height");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
-  if (vm.count("help") || !vm.count("scene")) {
+  if (vm.count("help") || !vm.count("scene") || !vm.count("width") ||
+      !vm.count("height")) {
     std::cout << desc << std::endl;
     exit(1);
   }
   std::string scene(vm["scene"].as<std::string>());
-  const int w = 1280, h = 720;
+  const int w = vm["width"].as<int>(), h = vm["height"].as<int>();
   zLi::Renderer rd(scene, w, h);
   zLi::Window window(w, h);
   auto res = window.Init();
@@ -49,8 +53,9 @@ int main(int argc, char *argv[]) {
             break;
           }
           auto some(std::move(*res));
-          window.FillPixel(some.x, some.y, some.rgb);
+          window.DrawPoint(some.x, some.y, some.rgb);
         }
+        window.Flush();
       },
       [&rd]() { rd.Stop(); });
   rt.join();
