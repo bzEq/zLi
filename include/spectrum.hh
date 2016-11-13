@@ -1,5 +1,6 @@
 #ifndef _ZLI_SPD_HH_
 #define _ZLI_SPD_HH_
+#include "color.hh"
 #include "diagram2d.hh"
 #include "math.hh"
 
@@ -16,6 +17,7 @@ public:
 
   Spectrum();
   Spectrum(Float v);
+  Spectrum(const Float *, const Float *, size_t);
   Spectrum(const Spectrum &sp) = default;
 
   Spectrum &operator+=(const Spectrum &sp) {
@@ -57,6 +59,9 @@ public:
   friend Spectrum operator/(const Spectrum &a, Float f) {
     return Spectrum(a.spd_ * (1 / f));
   }
+
+  XYZColor ToXYZ() const;
+  RGBColor ToRGB() const;
 
 private:
   Spectrum(const Diagram2D &s) : spd_(s) {}

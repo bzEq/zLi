@@ -14,6 +14,7 @@ def main():
             R_Y.append(row[1])
             G_Y.append(row[2])
             B_Y.append(row[3])
+        print len(R_X)
         print "{" + ', '.join(R_X) + "}"
         print "-"*32
         print "{" + ', '.join(R_Y) + "}"

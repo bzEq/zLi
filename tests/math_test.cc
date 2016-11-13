@@ -35,7 +35,7 @@ int main() {
   std::cout << *(RotateTransform(l, 90) * v) << std::endl;
 
   std::cout << "CIE XYZ2RGB " << std::endl;
-  Matrix4x4f cie(CIE::XYZ2RGB);
+  Matrix4x4f cie(CIE::mXYZ2RGB);
   std::cout << cie << std::endl;
   std::cout << "CIE RGB2XYZ " << std::endl;
   std::cout << *cie.Inverse() << std::endl;
