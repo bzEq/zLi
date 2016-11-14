@@ -17,16 +17,17 @@ class KdTree {
 public:
   KdTree() : root_(BoundBox()) {}
   KdTree(const std::vector<Geometry> &g);
-  std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
+  KdTree(KdTree &&) = default;
+  std::optional<RaySurfaceIntersection> Intersect(const Ray &ray) const;
 
 private:
   struct KdNode;
   struct Todo;
 
   struct Todo {
-    KdNode *node;
+    const KdNode *node;
     Float tmin, tmax;
-    Todo(KdNode *node, Float tmin, Float tmax)
+    Todo(const KdNode *node, Float tmin, Float tmax)
         : node(node), tmin(tmin), tmax(tmax) {}
   };
 
@@ -41,6 +42,7 @@ private:
       child[0] = nullptr;
       child[1] = nullptr;
     }
+    KdNode(KdNode &&) = default;
 
     KdNode(const BoundBox &box) : box(box) {
       child[0] = nullptr;

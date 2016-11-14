@@ -41,7 +41,7 @@ void KdTree::KdNode::Insert(const Geometry &g) {
   }
 }
 
-std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
+std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) const {
   int loop_count = 0;
   int compare_count = 0;
   std::unique_ptr<RaySurfaceIntersection> ret;

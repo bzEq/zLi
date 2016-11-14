@@ -22,7 +22,8 @@ struct Geometry {
   // virtual Vector3f Normal(const Vector3f&) = 0;
   // virtual ~Shape() {}
   std::function<std::optional<RaySurfaceIntersection>(const Ray &)> Intersect;
-  std::function<Spectrum()> Le;
+  std::function<Spectrum()> Le; // emitted radiance
+  std::function<Spectrum()> R;  // reflectance
   // @args: position
   // @return: normal
   std::function<Vector3f(const Vector3f &)> Normal;
@@ -34,7 +35,11 @@ struct RaySurfaceIntersection {
   Float t;
   Ray ray;
   Geometry g;
-  Ray SpawnRay(const Vector3f &d) { return Ray(ray(t), d, EPSILON); }
+  Ray SpawnRay(const Vector3f &d) const { return Ray(ray(t), d, EPSILON); }
+  Ray SpawnRayTowards(const Vector3f &p) const {
+    auto d = (p - ray(t)).Normalize();
+    return SpawnRay(d);
+  }
 };
 
 } // end namespace zLi

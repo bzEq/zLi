@@ -1,43 +1,52 @@
 #include "integrator.hh"
+#include "logging.hh"
 #include "scene.hh"
 #include "spectrum.hh"
 
 namespace zLi {
 
 Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
-  Spectrum L((Float)0);
-  Spectrum F((Float)1);
+  Spectrum L(0);
+  Spectrum F(1);
   Ray ray(r);
-  for (int bounces = 0; bounces < maxBounces; bounces++) {
+  for (int i = 0; i < maxBounces; ++i) {
     auto ri = scene.Intersect(ray);
     if (!ri) {
-      // TODO: check ray hit light
-      if (bounces == 0) {
-        L += scene.DirectLight(ray.o);
-      }
       break;
-    }
-    if (bounces == 0) {
-      L += (*ri).g.Le();
     }
     L += F * scene.DirectLight(*ri);
     // bsdf
-    Vector3f wo = -ray.d;
-    Vector3f position = ray((*ri).t);
-    Vector3f normal = (*ri).g.Normal(position);
-    auto sample = (*ri).g.bsdf().pdf(normal, wo);
-    Float pdf = std::get<0>(sample);
-    if (pdf <= 0)
-      break;
-    Vector3f wi = std::get<1>(sample);
-    Float f = (*ri).g.bsdf().f(normal, wi, wo);
-    F *= f * std::abs(normal * wi) / pdf;
-    ray = (*ri).SpawnRay(-wi);
-    // russian roulette
-    if (bounces > 3) {
-      Float q = 0.05;
-      if (UniformSample() <= q)
+    auto bsdf((*ri).g.bsdf());
+    if (bsdf.type() == BSDF::Type::Specular) {
+      // specular
+      auto n = (*ri).g.Normal(ray((*ri).t));
+      n = ray.d * n <= 0 ? n : -n;
+      auto rfl = bsdf.pdf(n, ray.d);
+      ray = (*ri).SpawnRay(std::get<1>(rfl));
+    } else if (bsdf.type() == BSDF::Type::Diffuse) {
+      // diffuse
+      auto n = (*ri).g.Normal(ray((*ri).t));
+      auto rfl = bsdf.pdf(n, ray.d);
+      Float pdf = std::get<0>(rfl);
+      if (pdf <= 0) {
         break;
+      }
+      auto wo = std::get<1>(rfl);
+      Float f = bsdf.f(n, ray.d, wo);
+      F *= f * std::abs(n * wo) / pdf;
+      ray = (*ri).SpawnRay(wo);
+    } else if (bsdf.type() == BSDF::Type::Refractive) {
+      // refractive
+    } else {
+      WARN("no such bsdf type, %d", bsdf.type());
+      continue;
+    }
+    // russian roulette
+    if (i > 3) {
+      Float q = F.ToXYZ().y;
+      if (UniformSample() <= q) {
+        break;
+      }
       F /= 1 - q;
     }
   }
