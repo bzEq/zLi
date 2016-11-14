@@ -1,0 +1,18 @@
+{
+    "geometry": [
+        {
+            "type": "sphere",
+            "radius": 3,
+            "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "bsdf": "diffuse",
+            "le": [],
+            "R": []
+        }
+    ],
+    "light": [
+    ]
+}
