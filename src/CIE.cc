@@ -81,6 +81,8 @@ const Float CIE::XYZ_CMF[3][CIE::NrXYZCMFSamples] = {
      0.000000E+00, 0.000000E+00, 0.000000E+00, 0.000000E+00},
 };
 
+const Float CIE::XYZ_CMF_Y_INT = 111.778458349f;
+
 RGBColor CIE::XYZ2RGB(const XYZColor &xyz) {
   RGBColor rgb;
   for (int i = 0; i < 3; ++i) {
@@ -99,5 +101,16 @@ XYZColor CIE::RGB2XYZ(const RGBColor &rgb) {
     }
   }
   return xyz;
+}
+
+xyYColor CIE::XYZ2xyY(const XYZColor &xyz) {
+  Float X = xyz.x, Y = xyz.y, Z = xyz.z;
+  Float s = X + Y + Z;
+  return xyYColor(X / s, Y / s, Y);
+}
+
+RGBColor CIE::xyY2RGB(const xyYColor &xyY) {
+  Float x = xyY.x, y = xyY.y, Y = xyY.Y;
+  return XYZ2RGB(XYZColor(Y * x / y, Y, Y * (1 - x - y) / y));
 }
 }

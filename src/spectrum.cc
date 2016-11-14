@@ -20,16 +20,20 @@ Spectrum::Spectrum(Float v)
 Spectrum::Spectrum(const Float *xs, const Float *ys, size_t l)
     : spd_(xs, ys, l) {}
 
+// Riemann sum
 XYZColor Spectrum::ToXYZ() const {
   Float x(0), y(0), z(0);
+  Float scale = (DefaultSampleX[NrSpectralSamples - 1] - DefaultSampleX[0]) /
+                (CIE::XYZ_CMF_Y_INT * NrSpectralSamples);
   for (int i = 0; i < CIE::NrXYZCMFSamples; ++i) {
     Float l = spd_.Query(CIE::XYZ_CMF_Wavelength[i]);
     x += l * CIE::XYZ_CMF[0][i];
-    y += l * CIE::XYZ_CMF[0][i];
-    z += l * CIE::XYZ_CMF[0][i];
+    y += l * CIE::XYZ_CMF[1][i];
+    z += l * CIE::XYZ_CMF[2][i];
   }
-  return XYZColor(x, y, z);
+  return XYZColor(x * scale, y * scale, z * scale);
 }
 
 RGBColor Spectrum::ToRGB() const { return CIE::XYZ2RGB(ToXYZ()); }
+xyYColor Spectrum::ToxyY() const { return CIE::XYZ2xyY(ToXYZ()); }
 } // zLi

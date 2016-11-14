@@ -12,8 +12,11 @@ public:
   static constexpr const int NrXYZCMFSamples = 89;
   static const Float XYZ_CMF_Wavelength[NrXYZCMFSamples];
   static const Float XYZ_CMF[3][NrXYZCMFSamples];
-  static RGBColor XYZ2RGB(const XYZColor &c);
-  static XYZColor RGB2XYZ(const RGBColor &c);
+  static const Float XYZ_CMF_Y_INT;
+  static RGBColor XYZ2RGB(const XYZColor &);
+  static xyYColor XYZ2xyY(const XYZColor &);
+  static XYZColor RGB2XYZ(const RGBColor &);
+  static RGBColor xyY2RGB(const xyYColor &);
 };
 }
 #endif

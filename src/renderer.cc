@@ -1,4 +1,6 @@
 #include "renderer.hh"
+#include "CIE.hh"
+#include "color.hh"
 #include "integrator.hh"
 #include "logging.hh"
 #include "math.hh"
@@ -17,14 +19,22 @@ Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
                    int spp)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),
       render_job_(0), stopped_(false), spp_(spp) {
-  rgb_chan_ = std::make_shared<Chan<RenderResult>>();
+  xyY_chan_ = std::make_shared<Chan<RenderResult>>();
 }
 
-Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(1); }
+Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(0.1); }
 
-void Renderer::AddToRGBChan(int i, int j, const Spectrum &s) {
-  rgb_chan_->Push(RenderResult{
-      .x = i, .y = j, .rgb = s.ToRGB().Clamp(),
+static xyYColor PrimaryColor[] = {
+    xyYColor(0.64, 0.33, 0.2126), xyYColor(0.3, 0.6, 0.7152),
+    xyYColor(0.15, 0.06, 0.0722), xyYColor(0.3127, 0.329, 1.0),
+};
+
+void Renderer::AddToxyYChan(int i, int j, const Spectrum &s) {
+  xyY_chan_->Push(RenderResult{
+      .x = i,
+      .y = j,
+      .xyY = xyYColor((Float)i / film_width_,
+                      (Float)(film_height_ - j) / film_height_, 0.1),
   });
 }
 
@@ -38,7 +48,7 @@ void Renderer::Work(int i, int j) {
     s *= filter_.f(r) * ((Float)1 / spp_);
     res += s;
   }
-  AddToRGBChan(i, j, res);
+  AddToxyYChan(i, j, res);
   // add to film
   assert(film_);
   (*film_)[i][j] = std::make_unique<Spectrum>(std::move(res));
@@ -81,14 +91,13 @@ Result<void> Renderer::ParallelRender() {
 }
 
 Result<void> Renderer::Render() {
-  // auto res = Scene::SceneFromJson(scene_file_);
-  // if (!res) {
-  //   DEBUG("can't load scene file: %s", scene_file_.c_str());
-  //   return FormatError("can't load scene file: %s", scene_file_.c_str());
-  // }
-  // scene_ = std::make_unique<Scene>(std::move(*res));
+  auto res = Scene::SceneFromJson(scene_file_);
+  if (!res) {
+    DEBUG("can't load scene file: %s", scene_file_.c_str());
+    return FormatError("can't load scene file: %s", scene_file_.c_str());
+  }
+  scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);
-  // return ParallelRender();
   return ParallelRender();
 }
 

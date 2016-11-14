@@ -7,6 +7,7 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <cstdlib>
+#include <string>
 
 namespace zLi {
 class Window {
@@ -16,11 +17,21 @@ public:
   Result<void> Init();
   void Loop(std::function<void()> &&,
             std::function<void()> &&atExitLoop = nullptr);
-  void DrawPoint(int, int, const RGBColor &);
+  template <typename ColorType>
+  void DrawPoint(int x, int y, const ColorType &c) {
+    std::string name = ToXColorName(c);
+    XColor screen, exact;
+    XAllocNamedColor(disp_, ::XDefaultColormap(disp_, screen_), name.c_str(),
+                     &screen, &exact);
+    XSetForeground(disp_, gc_, exact.pixel);
+    XDrawPoint(disp_, window_, gc_, x, y);
+  }
   void Flush();
   ~Window();
 
 private:
+  static std::string ToXColorName(const RGBColor &);
+  static std::string ToXColorName(const xyYColor &);
   void PollEvents();
   int width_, height_;
   ::Display *disp_;

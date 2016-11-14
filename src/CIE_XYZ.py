@@ -14,6 +14,7 @@ def main():
             R_Y.append(row[1])
             G_Y.append(row[2])
             B_Y.append(row[3])
+        Y_INT = sum([ float(x) for x in R_Y]) * (float(R_X[-1])-float(R_X[0])) / len(R_X)
         print len(R_X)
         print "{" + ', '.join(R_X) + "}"
         print "-"*32
@@ -22,5 +23,8 @@ def main():
         print "{" + ', '.join(G_Y) + "}"
         print "-"*32
         print "{" + ', '.join(B_Y) + "}"
+        print "-"*32
+        print Y_INT
+
 
 main()

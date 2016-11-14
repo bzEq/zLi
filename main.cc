@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
       return;
     }
   });
-  auto chan = rd.RGBChan();
+  auto chan = rd.xyYChan();
   window.Loop(
       [chan, &window]() {
         while (!chan->Closed()) {
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
             break;
           }
           auto some(std::move(*res));
-          window.DrawPoint(some.x, some.y, some.rgb);
+          window.DrawPoint(some.x, some.y, some.xyY);
         }
         window.Flush();
       },

@@ -54,10 +54,16 @@ Float RGBColor::operator[](int i) const {
   return r;
 }
 
-RGBColor RGBColor::Clamp() const {
-  return RGBColor(std::min(std::max(r, 0.f), 1.f),
-                  std::min(std::max(g, 0.f), 1.f),
-                  std::min(std::max(b, 0.f), 1.f));
+RGBColor RGBColor::sRGB() const {
+  RGBColor rgb;
+  for (int i = 0; i < 3; ++i) {
+    if (this->operator[](i) < 0.0031308) {
+      rgb[i] = 12.92 * this->operator[](i) < 0.0031308;
+    } else {
+      rgb[i] = 1.055 * std::pow(this->operator[](i), 1 / 2.4) - 0.055;
+    }
+  }
+  return rgb;
 }
 
 } // zLi

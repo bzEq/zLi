@@ -15,19 +15,21 @@ class Renderer {
 public:
   struct RenderResult {
     int x, y;
-    RGBColor rgb;
+    xyYColor xyY;
   };
   Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
            int spp = 25);
   Result<void> Render();
   void Stop();
   bool Stopped();
-  std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
+  // std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
+  std::shared_ptr<Chan<RenderResult>> xyYChan() { return xyY_chan_; }
   ~Renderer();
 
 private:
   static const Float SampleRadius;
-  void AddToRGBChan(int, int, const Spectrum &);
+  // void AddToRGBChan(int, int, const Spectrum &);
+  void AddToxyYChan(int, int, const Spectrum &);
   Result<void> SlowRender();
   Result<void> ParallelRender();
   void Work(int, int);
@@ -39,7 +41,8 @@ private:
   std::atomic<bool> stopped_;
   Spectrum SampleSpectrumAt(Float, Float);
   int spp_; // samples per pixel
-  std::shared_ptr<Chan<RenderResult>> rgb_chan_;
+  // std::shared_ptr<Chan<RenderResult>> rgb_chan_;
+  std::shared_ptr<Chan<RenderResult>> xyY_chan_;
   filter::Gauss1D filter_;
 };
 }

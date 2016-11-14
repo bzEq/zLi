@@ -17,20 +17,16 @@ Window::~Window() {
   }
 }
 
-static XColor ToXColor(const RGBColor &rgb) {
-  XColor xc{
-      .red = static_cast<unsigned short>(65535 * rgb.r),
-      .green = static_cast<unsigned short>(65535 * rgb.g),
-      .blue = static_cast<unsigned short>(65535 * rgb.b),
-  };
-  return xc;
+std::string Window::ToXColorName(const RGBColor &rgb) {
+  char buf[512];
+  std::snprintf(buf, sizeof(buf), "RGBi:%f/%f/%f", rgb.r, rgb.g, rgb.b);
+  return std::string(buf);
 }
 
-void Window::DrawPoint(int x, int y, const RGBColor &rgb) {
-  auto xc = ToXColor(rgb);
-  XAllocColor(disp_, ::XDefaultColormap(disp_, screen_), &xc);
-  XSetForeground(disp_, gc_, xc.pixel);
-  XDrawPoint(disp_, window_, gc_, x, y);
+std::string Window::ToXColorName(const xyYColor &xyY) {
+  char buf[512];
+  std::snprintf(buf, sizeof(buf), "CIExyY:%f/%f/%f", xyY.x, xyY.y, xyY.Y);
+  return std::string(buf);
 }
 
 void Window::Flush() { XFlush(disp_); }

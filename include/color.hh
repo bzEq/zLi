@@ -6,13 +6,19 @@
 
 namespace zLi {
 
+struct xyYColor {
+  Float x, y, Y;
+  xyYColor() : x(0), y(0), Y(0) {}
+  xyYColor(Float x, Float y, Float Y) : x(x), y(y), Y(Y) {}
+};
+
 struct RGBColor {
   Float r, g, b;
   RGBColor() : r(0), g(0), b(0) {}
   RGBColor(Float r, Float g, Float b) : r(r), g(g), b(b) {}
   Float &operator[](int i);
   Float operator[](int i) const;
-  RGBColor Clamp() const;
+  RGBColor sRGB() const;
 };
 
 struct XYZColor {
@@ -30,6 +36,11 @@ inline std::ostream &operator<<(std::ostream &out, const RGBColor &c) {
 
 inline std::ostream &operator<<(std::ostream &out, const XYZColor &c) {
   out << "(" << c.x << ", " << c.y << ", " << c.z << ")";
+  return out;
+}
+
+inline std::ostream &operator<<(std::ostream &out, const xyYColor &c) {
+  out << "(" << c.x << ", " << c.y << ", " << c.Y << ")";
   return out;
 }
 
