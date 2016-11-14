@@ -47,7 +47,8 @@ int main(int argc, char *argv[]) {
   auto chan = rd.xyYChan();
   window.Loop(
       [chan, &window]() {
-        int count = chan->Size();
+        static const int EventProcessLimits = 128;
+        int count = std::min((int)chan->Size(), EventProcessLimits);
         while (count--) {
           auto res = chan->Popi();
           if (!res) {
