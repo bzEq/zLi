@@ -13,7 +13,7 @@
 namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
-  zLi::SetLogLevel(zLi::ERROR);
+  zLi::SetLogLevel(zLi::DEBUG);
   DEBUG("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
@@ -47,7 +47,8 @@ int main(int argc, char *argv[]) {
   auto chan = rd.xyYChan();
   window.Loop(
       [chan, &window]() {
-        while (!chan->Closed()) {
+        int count = chan->Size();
+        while (count--) {
           auto res = chan->Popi();
           if (!res) {
             break;

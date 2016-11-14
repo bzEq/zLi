@@ -26,6 +26,7 @@ std::string Window::ToXColorName(const RGBColor &rgb) {
 std::string Window::ToXColorName(const xyYColor &xyY) {
   char buf[512];
   std::snprintf(buf, sizeof(buf), "CIExyY:%f/%f/%f", xyY.x, xyY.y, xyY.Y);
+  DEBUG(buf);
   return std::string(buf);
 }
 

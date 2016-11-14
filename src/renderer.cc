@@ -22,7 +22,11 @@ Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
   xyY_chan_ = std::make_shared<Chan<RenderResult>>();
 }
 
-Spectrum Renderer::SampleSpectrumAt(Float x, Float y) { return Spectrum(0.1); }
+Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
+  Float xs[5] = {380, 480, 580, 680, 780};
+  Float ys[5] = {0, 0, 0, 0, 20};
+  return Spectrum(xs, ys, sizeof(xs) / sizeof(Float));
+}
 
 static xyYColor PrimaryColors[] = {
     xyYColor(0.64, 0.33, 0.2126), xyYColor(0.3, 0.6, 0.7152),
@@ -33,9 +37,9 @@ static xyYColor PrimaryColors[] = {
 void Renderer::AddToxyYChan(int i, int j, const Spectrum &s) {
   xyY_chan_->Push(RenderResult{
       .x = i,
-      .y = j,
+      .y = j, // .xyY = s.ToxyY(),
       .xyY = xyYColor((Float)i / film_width_,
-                      (Float)(film_height_ - j) / film_height_, 0.1),
+                      (Float)(film_height_ - j) / film_height_, 0.3),
   });
 }
 

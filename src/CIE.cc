@@ -106,6 +106,9 @@ XYZColor CIE::RGB2XYZ(const RGBColor &rgb) {
 xyYColor CIE::XYZ2xyY(const XYZColor &xyz) {
   Float X = xyz.x, Y = xyz.y, Z = xyz.z;
   Float s = X + Y + Z;
+  if (s == 0) {
+    return xyYColor();
+  }
   return xyYColor(X / s, Y / s, Y);
 }
 
