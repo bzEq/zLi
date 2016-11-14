@@ -33,7 +33,7 @@ Float Diagram2D::Query(Float x) const {
   if (iter == diagram_.begin() || iter == diagram_.end()) {
     return 0;
   }
-  int j = iter - diagram_.begin();
+  int j = std::distance(diagram_.begin(), iter);
   int i = j - 1;
   return Lerp(std::get<0>(diagram_[i]), std::get<1>(diagram_[i]),
               std::get<0>(diagram_[j]), std::get<1>(diagram_[j]), x);
