@@ -62,7 +62,7 @@ public:
 
   XYZColor ToXYZ() const;
   RGBColor ToRGB() const;
-  xyYColor ToXYZ() const;
+  xyYColor ToxyY() const;
 
 private:
   Spectrum(const Diagram2D &s) : spd_(s) {}
