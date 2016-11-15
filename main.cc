@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   po::notify(vm);
   if (vm.count("help") || !vm.count("scene") || !vm.count("width") ||
       !vm.count("height")) {
-    std::cout << desc << std::endl;
+    std::cerr << desc << std::endl;
     exit(1);
   }
   std::string scene(vm["scene"].as<std::string>());
