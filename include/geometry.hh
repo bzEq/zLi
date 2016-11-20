@@ -35,7 +35,7 @@ struct RaySurfaceIntersection {
   Float t;
   Ray ray;
   Geometry g;
-  Ray SpawnRay(const Vector3f &d) const { return Ray(ray(t), d, EPSILON); }
+  Ray SpawnRay(const Vector3f &d) const { return Ray(ray(t), d, 0.001); }
   Ray SpawnRayTowards(const Vector3f &p) const {
     auto d = (p - ray(t)).Normalize();
     return SpawnRay(d);
