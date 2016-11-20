@@ -34,8 +34,7 @@ public:
 
 private:
   Scene() = default;
-  Scene(KdTree &&kdt) : kdt_(std::move(kdt)) {}
-  Scene(std::vector<Geometry> &&gs) : gs_(std::move(gs)) {}
+  Scene(std::vector<Geometry> &&gs) : gs_(std::move(gs)), kdt_(gs_) {}
   std::vector<Light> lights_;
   PerspectiveCamera camera_;
   std::vector<Geometry> gs_;

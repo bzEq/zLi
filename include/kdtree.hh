@@ -10,66 +10,32 @@
 #include <vector>
 
 namespace zLi {
-
-struct KdNode;
-
 class KdTree {
 public:
-  KdTree() : root_(BoundBox()) {}
-  KdTree(const std::vector<Geometry> &g);
   KdTree(KdTree &&) = default;
-  std::optional<RaySurfaceIntersection> Intersect(const Ray &ray) const;
+  KdTree(const std::vector<Geometry> &);
+  KdTree(std::vector<Geometry> &&);
+  std::optional<RaySurfaceIntersection> Intersect(const Ray &) const;
+  ~KdTree();
 
 private:
-  struct KdNode;
-  struct Todo;
-
-  struct Todo {
-    const KdNode *node;
-    Float tmin, tmax;
-    Todo(const KdNode *node, Float tmin, Float tmax)
-        : node(node), tmin(tmin), tmax(tmax) {}
+  static constexpr const int NonAxis = -1;
+  struct Node {
+    Node *child[2];
+    BoundBox bounds;
+    int axis, plane;
+    std::unique_ptr<Geometry> geometry;
+    Node();
+    ~Node();
+    Node(const Node &) = delete;
+    Node(Node &&) = default;
+    void Insert(Geometry &&);
   };
-
-  struct KdNode {
-    int axis;
-    Float d;
-    std::unique_ptr<Geometry> g;
-    BoundBox box;
-    KdNode *child[2];
-
-    KdNode() {
-      child[0] = nullptr;
-      child[1] = nullptr;
-    }
-    KdNode(KdNode &&) = default;
-
-    KdNode(const BoundBox &box) : box(box) {
-      child[0] = nullptr;
-      child[1] = nullptr;
-    }
-    KdNode(int axis, Float d, const BoundBox &box)
-        : axis(axis), d(d), box(box) {
-      child[0] = nullptr;
-      child[1] = nullptr;
-    }
-
-    int Side(const Vector3f &p) const { return p[axis] > d; }
-    int OtherSide(const Vector3f &p) const { return !Side(p); }
-    std::optional<std::tuple<Float, Float>> Intersect(const Ray &ray) const {
-      return box.Intersect(ray);
-    }
-    void Insert(const Geometry &g);
-
-    ~KdNode() {
-      delete child[0];
-      delete child[1];
-    }
-  };
-
-  KdNode root_;
+  KdTree() = default;
+  KdTree(const KdTree &) = default;
+  void Insert(const Geometry &);
+  void Insert(Geometry &&);
+  Node *root_;
 };
-
-} // end namespace zLi
-
+} // zLi
 #endif

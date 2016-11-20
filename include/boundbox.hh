@@ -30,6 +30,7 @@ struct BoundBox {
     }
     return true;
   }
+  Vector3f Middle() const { return (pMin + pMax) * (Float)0.5; }
   bool CanContain(const BoundBox &b) const {
     for (int i = 0; i < 3; ++i) {
       if (b.pMin[i] < pMin[i] || b.pMax[i] > pMax[i]) {
