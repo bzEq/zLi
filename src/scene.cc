@@ -45,8 +45,8 @@ Result<Scene> Scene::SceneFromJson(const std::string &file) {
     boost::property_tree::read_json(file, json);
     // read geometries
     std::vector<Geometry> gs(GeometriesFromJson(json.get_child("geometry")));
-    Scene scene((KdTree(gs)));
-    // Scene scene(std::move(gs));
+    // Scene scene((KdTree(gs)));
+    Scene scene(std::move(gs));
     // add lights
     // add camera
     scene.camera_ = CameraFromJson(json.get_child("camera"));
@@ -76,21 +76,21 @@ Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
-  return kdt_.Intersect(ray);
-  // Float t = INF;
-  // std::unique_ptr<RaySurfaceIntersection> get;
-  // for (auto &g : gs_) {
-  //   auto ri = g.Intersect(ray);
-  //   if (ri && (*ri).t < t) {
-  //     t = (*ri).t;
-  //     get = std::make_unique<RaySurfaceIntersection>(std::move(*ri));
-  //   }
-  // }
-  // if (get) {
-  //   RaySurfaceIntersection res(*get);
-  //   return res;
-  // }
-  // return {};
+  // return kdt_.Intersect(ray);
+  Float t = INF;
+  std::unique_ptr<RaySurfaceIntersection> get;
+  for (auto &g : gs_) {
+    auto ri = g.Intersect(ray);
+    if (ri && (*ri).t < t) {
+      t = (*ri).t;
+      get = std::make_unique<RaySurfaceIntersection>(std::move(*ri));
+    }
+  }
+  if (get) {
+    RaySurfaceIntersection res(*get);
+    return res;
+  }
+  return {};
 }
 
 bool Scene::IsVisible(const RaySurfaceIntersection &ri, const Vector3f &p) {
