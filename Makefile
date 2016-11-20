@@ -6,7 +6,7 @@ CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS) -O2
 SRC := src/
 LDFLAGS := -lm -lpthread -L$(SRC) -lzli -lboost_program_options -lX11
 
-all: main
+all: zlirender
 
 source:
 	$(MAKE) -C src
@@ -14,10 +14,10 @@ source:
 test: source
 	$(MAKE) -C tests
 
-main: main.cc source test
+zlirender: zlirender.cc source test
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
 
 clean:
-	@rm -vf main
+	@rm -vf zlirender
 	$(MAKE) -C tests clean
 	$(MAKE) -C src clean
