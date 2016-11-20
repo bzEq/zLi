@@ -76,7 +76,11 @@ Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
-  // return kdt_.Intersect(ray);
+  return kdt_.Intersect(ray);
+}
+
+std::optional<RaySurfaceIntersection>
+Scene::NaiveIntersect(const Ray &ray) const {
   Float t = INF;
   std::unique_ptr<RaySurfaceIntersection> get;
   for (auto &g : gs_) {

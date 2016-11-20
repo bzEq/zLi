@@ -30,6 +30,7 @@ public:
   Spectrum DirectLight(const RaySurfaceIntersection &ri) const;
   bool IsVisible(const RaySurfaceIntersection &, const Vector3f &);
   std::optional<RaySurfaceIntersection> Intersect(const Ray &) const;
+  std::optional<RaySurfaceIntersection> NaiveIntersect(const Ray &) const;
   Ray GenerateRay(Float, Float);
 
 private:
