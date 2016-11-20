@@ -24,8 +24,10 @@ template <typename T> struct Vector4;
 
 template <typename T> struct Vector3 {
   T x, y, z;
-  Vector3() = default;
+  Vector3() : x(0), y(0), z(0) {}
+  Vector3(const Vector3 &) = default;
   Vector3(const T &x, const T &y, const T &z) : x(x), y(y), z(z) {}
+
   bool IsZero() const { return x == 0 && y == 0 && z == 0; }
   T LengthSquared() const { return x * x + y * y + z * z; }
   T Length() const { return std::sqrt(LengthSquared()); }
@@ -72,6 +74,8 @@ template <typename T> struct Vector3 {
 template <typename T> struct Vector4 {
   T x, y, z, w;
   Vector4() : x(0), y(0), z(0), w(0) {}
+  Vector4(const Vector4 &) = default;
+  Vector4(Vector4 &&) = default;
   Vector4(const T x, const T y, const T z, const T w)
       : x(x), y(y), z(z), w(w) {}
   Vector4(const Vector3<T> &v, const T w) : x(v.x), y(v.y), z(v.z), w(w) {}
@@ -101,6 +105,7 @@ template <typename T> struct Matrix4x4 {
     m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] =
         m[2][1] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0;
   }
+  Matrix4x4(const Matrix4x4 &) = default;
 
   Matrix4x4(const T mm[4][4]) { std::memcpy(m, mm, 16 * sizeof(T)); }
   Matrix4x4(const T mm[3][3]) {
@@ -205,6 +210,8 @@ template <typename T> struct Matrix4x4 {
 template <typename T> struct Quaternion {
   T r, i, j, k;
   Quaternion() : r(0), i(0), j(0), k(0) {}
+  Quaternion(const Quaternion &) = default;
+  Quaternion(Quaternion &&) = default;
   Quaternion(const T r, const T i, const T j, const T k)
       : r(r), i(i), j(j), k(k) {}
   Quaternion(const T r, const Vector3<T> &v) : r(r), i(v.x), j(v.y), k(v.z) {}
@@ -260,6 +267,8 @@ template <typename T> struct Quaternion {
 template <typename T> struct Line3 {
   Vector3<T> pt, d;
   Line3() = default;
+  Line3(const Line3 &) = default;
+  Line3(Line3 &&) = default;
   Line3(const Vector3<T> &pt, const Vector3<T> &d) : pt(pt), d(d) {}
 };
 
@@ -421,7 +430,7 @@ typedef Matrix4x4f Transform;
 
 const Float INF = std::numeric_limits<Float>::max();
 const Float NINF = std::numeric_limits<Float>::lowest();
-const Float EPSILON = 1e-6;
+const Float EPSILON = 1e-5;
 const Float PI = 4 * std::atan((Float)1);
 const Float E = std::exp(1);
 
@@ -517,7 +526,9 @@ inline Float UniformSample() {
   static std::random_device rd;
   static std::mt19937 g(rd());
   static std::uniform_real_distribution<Float> u(0, 1);
-  return u(g);
+  auto r = u(g);
+  assert(r >= 0 && r <= 1);
+  return r;
 }
 
 inline Vector3f SampleFromHemiSphere() {

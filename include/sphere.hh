@@ -1,6 +1,7 @@
 #ifndef _ZLI_SPHERE_HH_
 #define _ZLI_SPHERE_HH_
 #include "boundbox.hh"
+#include "bsdf.hh"
 #include "geometry.hh"
 #include "math.hh"
 #include "ray.hh"
@@ -16,7 +17,10 @@ struct Sphere : std::enable_shared_from_this<Sphere> {
   Spectrum rfl;
   BSDF bsdf_;
   Sphere() : r(1) {}
-  Sphere(const Vector3f &c, Float r) : c(c), r(r) {}
+  Sphere(const Vector3f &c, Float r, const Spectrum &le = Spectrum(),
+         const Spectrum &rfl = Spectrum(),
+         const BSDF &bsdf = LambertianDiffuse::ImplBSDF())
+      : c(c), r(r), le(le), rfl(rfl), bsdf_(bsdf) {}
   ~Sphere() {}
   std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
   BoundBox Bounds();

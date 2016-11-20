@@ -2,11 +2,13 @@
 #define _ZLI_LIGHT_HH_
 #include "math.hh"
 
+#include <functional>
+
 namespace zLi {
 
 struct Light {
   // @arg: position, emit direction
-  std::function<Spectrum(const Vector3f &, const Vector3f &)> Le;
+  // std::function<Spectrum(const Vector3f &, const Vector3f &)> Le;
 };
 
 } // zLi

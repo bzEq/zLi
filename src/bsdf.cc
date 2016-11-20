@@ -32,6 +32,19 @@ BSDF LambertianDiffuse::ImplBSDF() {
   };
 }
 
+BSDF Specular::ImplBSDF() {
+  return BSDF{
+      .pdf = std::bind(&Specular::pdf, std::placeholders::_1,
+                       std::placeholders::_2),
+
+      .f = std::bind(&Specular::f, std::placeholders::_1, std::placeholders::_2,
+                     std::placeholders::_3),
+      .type = std::bind(&Specular::type),
+  };
+}
+
+BSDF::Type Specular::type() { return BSDF::Type::Specular; }
+
 std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
                                           const Vector3f &wi) {
   if (normal * wi >= 0)

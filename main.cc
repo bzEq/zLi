@@ -13,7 +13,7 @@
 namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
-  zLi::SetLogLevel(zLi::DEBUG);
+  zLi::SetLogLevel(zLi::ERROR);
   DEBUG("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
       DEBUG(res.Error().c_str());
       return;
     }
+    DEBUG("render finished");
   });
   auto chan = rd.xyYChan();
   window.Loop(

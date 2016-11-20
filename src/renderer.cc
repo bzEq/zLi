@@ -14,7 +14,7 @@
 
 namespace zLi {
 
-const Float Renderer::SampleRadius = 1.f;
+const Float Renderer::SampleRadius = 0.5;
 Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
                    int spp)
     : scene_file_(sceneFile), film_width_(filmWidth), film_height_(filmHeight),
@@ -23,9 +23,17 @@ Renderer::Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
 }
 
 Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
-  Float xs[5] = {380, 480, 580, 680, 780};
-  Float ys[5] = {0, 0, 0, 0, 20};
-  return Spectrum(xs, ys, sizeof(xs) / sizeof(Float));
+  Float l = (Float)std::max(film_width_ + 2 * SampleRadius,
+                            film_height_ + 2 * SampleRadius);
+  Float tx = (film_width_ + 2 * SampleRadius) / (2 * l);
+  Float ty = (film_height_ + 2 * SampleRadius) / (2 * l);
+  // normalize
+  Float nx = (x + SampleRadius) / l - tx;
+  Float ny = ty - (y + SampleRadius) / l;
+  // DEBUG("screen axis: (%f,%f), normalized axis: (%f,%f)", x, y, nx, ny);
+  Ray ray = scene_->GenerateRay(nx, ny);
+  // DEBUG("ray direction: (%f, %f, %f)", ray.d.x, ray.d.y, ray.d.z);
+  return PathIntegrator::Li(*scene_, ray);
 }
 
 static xyYColor PrimaryColors[] = {
@@ -36,18 +44,22 @@ static xyYColor PrimaryColors[] = {
 
 void Renderer::AddToxyYChan(int i, int j, const Spectrum &s) {
   xyY_chan_->Push(RenderResult{
-      .x = i,
-      .y = j, // .xyY = s.ToxyY(),
-      .xyY = xyYColor((Float)i / film_width_,
-                      (Float)(film_height_ - j) / film_height_, 0.3),
+      .x = i, .y = j, .xyY = s.ToxyY(),
   });
 }
 
 void Renderer::Work(int i, int j) {
+  // DEBUG("working on pixel (%d,%d)", i, j);
   Spectrum res(0);
-  for (int i = 0; i < spp_; ++i) {
-    Float x = i + SampleRadius * (UniformSample() - 0.5);
-    Float y = j + SampleRadius * (UniformSample() - 0.5);
+  for (int k = 0; k < spp_; ++k) {
+    auto sx = SampleRadius * (2 * UniformSample() - 1);
+    auto sy = SampleRadius * (2 * UniformSample() - 1);
+    // DEBUG("sample offset (%f, %f)", sx, sy);
+    Float x = i + sx;
+    Float y = j + sy;
+    assert(std::abs(x - i) <= SampleRadius);
+    assert(std::abs(y - j) <= SampleRadius);
+    // DEBUG("pixel sample (%f, %f)", x, y);
     Spectrum s = SampleSpectrumAt(x, y);
     Float r = std::sqrt((x - i) * (x - i) + (y - j) * (y - j));
     s *= filter_.f(r) * ((Float)1 / spp_);
@@ -104,6 +116,7 @@ Result<void> Renderer::Render() {
   scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);
   return ParallelRender();
+  // return SlowRender();
 }
 
 Renderer::~Renderer() {}

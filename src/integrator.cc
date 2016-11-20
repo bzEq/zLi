@@ -14,6 +14,13 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
     if (!ri) {
       break;
     }
+    auto pos = (*ri).ray((*ri).t);
+    // DEBUG("bounce %d, intersection found at position (%f, %f, %f)", i, pos.x,
+    //       pos.y, pos.z);
+
+    if (i == 0) {
+      L += (*ri).g.Le();
+    }
     L += F * scene.DirectLight(*ri);
     // bsdf
     auto bsdf((*ri).g.bsdf());

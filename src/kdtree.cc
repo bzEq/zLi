@@ -84,7 +84,10 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) const {
   }
   DEBUG("loop_count: %d", loop_count);
   DEBUG("compare_count: %d", compare_count);
-  return *ret;
+  if (ret) {
+    return *ret;
+  }
+  return {};
 }
 
 } // namespace zLi
