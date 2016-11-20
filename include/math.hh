@@ -430,7 +430,7 @@ typedef Matrix4x4f Transform;
 
 const Float INF = std::numeric_limits<Float>::max();
 const Float NINF = std::numeric_limits<Float>::lowest();
-const Float EPSILON = 1e-5;
+const Float EPSILON = 1e-6;
 const Float PI = 4 * std::atan((Float)1);
 const Float E = std::exp(1);
 
