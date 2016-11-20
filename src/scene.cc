@@ -72,7 +72,7 @@ Result<Sphere> Scene::SphereFromJson(const boost::property_tree::ptree &json) {
 }
 
 Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
-  return Spectrum();
+  return ri.g.Le();
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
