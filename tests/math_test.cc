@@ -40,6 +40,12 @@ int main() {
   std::cout << "CIE RGB2XYZ " << std::endl;
   std::cout << *cie.Inverse() << std::endl;
 
+  Matrix4x4f mm(1, 2, 3, 0, 23, 4, 3, 0, 34, 343, 3, 0, 0, 0, 0, 1);
+  Matrix4x4f mb(34, 23, 17, 0, 2, 3, 5, 0, 7, 4, 2, 0, 0, 0, 0, 1);
+  Vector3f vv(1, 2, 3);
+  std::cout << *(mm * vv) << std::endl;
+  std::cout << *(mm.Inverse()) << std::endl;
+  std::cout << mm * mb << std::endl;
   // std::cout << Rotate(v, l, 90) << std::endl;
   // std::cout << *(RotateTransform(l, 90) * v) << std::endl;
   return 0;

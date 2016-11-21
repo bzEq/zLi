@@ -9,7 +9,7 @@ namespace zLi {
 
 struct PerspectiveCamera {
   Vector3f e, front, up, right; // position and direction in world space
-  Transform wd2cam, cam2wd;     // world2camera, camera2world;
+  Transform wd2cam0, wd2cam, cam2wd0, cam2wd; // world2camera, camera2world;
   Float fov, lensr, lensp;
   Float l;
   PerspectiveCamera() = default;
@@ -17,15 +17,18 @@ struct PerspectiveCamera {
                     const Vector3f &up_, Float fov_ = 30, Float lensr_ = 0,
                     Float lensp_ = 0)
       : e(e_), front((lookat_ - e_).Normalize()), up(up_.Normalize()),
-        right(front ^ up), fov(fov_), lensr(lensr_), lensp(lensp_),
+        right(up ^ front), fov(fov_), lensr(lensr_), lensp(lensp_),
         l(std::tan(fov_ * PI / 360)) {
     assert(front * up == 0);
     // FIXME: check if the matrix is singular
-    wd2cam = *(Matrix4x4f(right.x, up.x, front.x, 0, right.y, up.y, front.y, 0,
+    wd2cam0 = *Matrix4x4f(right.x, up.x, front.x, 0, right.y, up.y, front.y, 0,
                           right.z, up.z, front.z, 0, 0, 0, 0, 1)
-                   .Inverse()) *
-             TranslateTransform(-e);
+                   .Inverse();
+
+    wd2cam = wd2cam0 * TranslateTransform(-e);
+
     cam2wd = *(wd2cam.Inverse());
+    cam2wd0 = *(wd2cam0.Inverse());
   }
   Ray GenerateRay(Float u, Float v) const {
     assert(std::abs(u) <= 0.5);
@@ -41,8 +44,8 @@ struct PerspectiveCamera {
       r.o.y += lensr * std::get<1>(s);
       r.d = (point - r.o).Normalize();
     }
-    // return Ray(*(cam2wd * r.o), *(cam2wd * r.d));
-    return r;
+    return Ray(*(cam2wd * r.o), (*(cam2wd0 * r.d)).Normalize());
+    // return r;
   }
 };
 
