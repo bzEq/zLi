@@ -36,7 +36,10 @@ Scene::CameraFromJson(const boost::property_tree::ptree &json) {
   auto eye = Utils::Vector3FromJson(json.get_child("eye"));
   auto lookat = Utils::Vector3FromJson(json.get_child("lookat"));
   auto up = Utils::Vector3FromJson(json.get_child("up"));
-  return PerspectiveCamera(eye, lookat, up);
+  auto fov = json.get<Float>("fov");
+  auto lensr = json.get<Float>("lensr");
+  auto lensp = json.get<Float>("lensp");
+  return PerspectiveCamera(eye, lookat, up, fov, lensr, lensp);
 }
 
 Result<Scene> Scene::SceneFromJson(const std::string &file) {
