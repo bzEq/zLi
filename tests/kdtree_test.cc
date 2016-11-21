@@ -16,7 +16,7 @@ int main() {
   gs.push_back(
       std::make_shared<Sphere>(Vector3f(1, 0, 10), 0.5)->ImplGeometry());
   DEBUG("building kdtree...");
-  KdTree kt(std::move(gs));
+  KdTree kt(KdTree::BuildKdTree(std::move(gs)));
   DEBUG("build kdtree: ok");
   auto ray = Ray(Vector3f(0, 0, 0), Vector3f(0, 0, 1));
   auto res = kt.Intersect(ray);

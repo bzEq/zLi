@@ -12,9 +12,8 @@
 namespace zLi {
 class KdTree {
 public:
+  static KdTree BuildKdTree(std::vector<Geometry> &&gs);
   KdTree(KdTree &&) = default;
-  KdTree(const std::vector<Geometry> &);
-  KdTree(std::vector<Geometry> &&);
   std::optional<RaySurfaceIntersection> Intersect(const Ray &);
   ~KdTree();
 
@@ -22,20 +21,21 @@ private:
   static constexpr const int NonAxis = -1;
   struct Node {
     Node *child[2];
-    BoundBox bounds;
-    int axis;
-    Float plane;
+    int split_axis;
+    Float split_plane;
     std::unique_ptr<Geometry> geometry;
+
     Node();
     ~Node();
     Node(const Node &) = delete;
     Node(Node &&) = default;
-    void Insert(Geometry &&);
+    void Insert(int, const Geometry &);
   };
-  KdTree() = default;
+  KdTree() : root_(nullptr) {}
   KdTree(const KdTree &) = default;
-  void Insert(Geometry &&);
+  KdTree(BoundBox &&b) : root_(nullptr), world_(std::move(b)) {}
   Node *root_;
+  BoundBox world_;
 };
 } // zLi
 #endif

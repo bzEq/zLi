@@ -51,7 +51,7 @@ Result<Scene> Scene::SceneFromJson(const std::string &file) {
     // Scene scene((KdTree(gs)));
     auto rep(gs);
     Scene scene(std::move(gs));
-    scene.kdt_ = std::make_unique<KdTree>(std::move(rep));
+    scene.kdt_ = std::make_unique<KdTree>(KdTree::BuildKdTree(std::move(rep)));
     // add lights
     // add camera
     scene.camera_ = CameraFromJson(json.get_child("camera"));

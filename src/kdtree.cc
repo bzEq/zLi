@@ -2,120 +2,103 @@
 #include "boundbox.hh"
 #include "geometry.hh"
 #include "logging.hh"
-#include "ray.hh"
+#include "math.hh"
 
 #include <queue>
-#include <vector>
 
 namespace zLi {
 
-KdTree::Node::Node() : child{nullptr, nullptr}, axis(NonAxis) {}
+KdTree::Node::Node() : child{nullptr, nullptr}, split_axis(NonAxis) {}
 
-KdTree::Node::~Node() {
-  delete child[0];
-  delete child[1];
-}
-
-KdTree::~KdTree() { delete root_; }
-
-void KdTree::Node::Insert(Geometry &&g) {
+void KdTree::Node::Insert(int axis, const Geometry &g) {
   if (!geometry) {
-    geometry = std::make_unique<Geometry>(std::move(g));
+    geometry = std::make_unique<Geometry>(g);
     return;
-  } else if (axis == NonAxis) {
-    Vector3f mid = bounds.Middle();
-    axis = UniformInt(0, 999) % 3;
-    plane = mid[axis];
+  }
+  if (split_axis == NonAxis) {
+    split_axis = axis;
+    split_plane = geometry->Bounds().Middle()[split_axis];
     child[0] = new Node();
     child[1] = new Node();
-    auto split = bounds.Split(axis, plane);
-    assert(split);
-    child[0]->bounds = std::get<0>(*split);
-    child[1]->bounds = std::get<1>(*split);
   }
-  BoundBox f = g.Bounds();
-  if (f.pMin[axis] > plane) {
-    return child[1]->Insert(std::move(g));
-  } else if (f.pMax[axis] < plane) {
-    return child[0]->Insert(std::move(g));
+  BoundBox b = g.Bounds();
+  if (b.pMin[split_axis] > split_plane) {
+    child[1]->Insert((axis + 1) % 3, g);
+  } else if (b.pMax[split_axis] < split_plane) {
+    child[0]->Insert((axis + 1) % 3, g);
   } else {
-    auto gg(g);
-    child[0]->Insert(std::move(g));
-    child[1]->Insert(std::move(gg));
+    child[0]->Insert((axis + 1) % 3, g);
+    child[1]->Insert((axis + 1) % 3, g);
   }
 }
 
-KdTree::KdTree(std::vector<Geometry> &&gs) : root_(nullptr) {
-  root_ = new Node();
+KdTree KdTree::BuildKdTree(std::vector<Geometry> &&gs) {
+  BoundBox world;
   for (auto &g : gs) {
-    CheckGeometry(g);
-    root_->bounds = Union(root_->bounds, g.Bounds());
+    world = Union(g.Bounds(), world);
   }
+  KdTree kd(std::move(world));
+  kd.root_ = new Node();
+  int k = 0;
   for (auto &g : gs) {
-    root_->Insert(std::move(g));
+    kd.root_->Insert((k++) % 3, g);
   }
+  return kd;
 }
 
-std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &ray) {
-  auto test = root_->bounds.Intersect(ray);
+std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &r) {
+  auto test = world_.Intersect(r);
   if (!test) {
     return {};
   }
-  int loop_count = 0;
-  int test_count = 0;
-
-  std::unique_ptr<RaySurfaceIntersection> ret;
   std::queue<std::tuple<Node *, Float, Float>> q;
   q.push(std::make_tuple(root_, std::get<0>(*test), std::get<1>(*test)));
+  std::unique_ptr<RaySurfaceIntersection> ans;
   while (!q.empty()) {
-    ++loop_count;
-    INFO("loop_count: %d", loop_count);
-    auto t = q.front();
+    auto task = q.front();
     q.pop();
-    Node *current = std::get<0>(t);
-    Float tmin = std::get<1>(t);
-    Float tmax = std::get<2>(t);
-    Ray r(ray.o, ray.d, tmin, tmax);
-    assert(current);
+    Node *current = std::get<0>(task);
+    Float tmin = std::get<1>(task), tmax = std::get<2>(task);
+    Ray ray(r.o, r.d, tmin, tmax);
     if (current->geometry) {
-      CheckGeometry(*current->geometry);
-      ++test_count;
-      auto test = current->geometry->Intersect(r);
-      if (test && (!ret || (*test).t < ret->t)) {
-        ret = std::make_unique<RaySurfaceIntersection>(std::move(*test));
+      auto test = current->geometry->Intersect(ray);
+      if (test && (!ans || ans->t > (*test).t)) {
+        ans = std::make_unique<RaySurfaceIntersection>(std::move(*test));
       }
     }
-    if (current->axis == NonAxis) {
+    if (current->split_axis == NonAxis) {
       continue;
     }
-    assert(current->child[0] && current->child[1]);
-    if (r.d[current->axis] == 0) {
-      if (r.o[current->axis] <= current->plane) {
+    // q.push(std::make_tuple(current->child[0], tmin, tmax));
+    // q.push(std::make_tuple(current->child[1], tmin, tmax));
+    // continue;
+    if (ray.d[current->split_axis] == 0) {
+      if (ray.o[current->split_axis] <= current->split_plane) {
         q.push(std::make_tuple(current->child[0], tmin, tmax));
       } else {
         q.push(std::make_tuple(current->child[1], tmin, tmax));
       }
       continue;
     }
-    Float tsplit = (current->plane - r.o[current->axis]) / r.d[current->axis];
-    if (tmin <= tsplit && tsplit <= tmax) {
-      if (!ret || tmin < ret->t) {
-        q.push(std::make_tuple(current->child[0], tmin, tsplit));
+    Float tsplit = (current->split_plane - ray.o[current->split_axis]) /
+                   ray.d[current->split_axis];
+    if (tsplit >= tmax || tsplit <= tmin) {
+      if (ray(tmin)[current->split_axis] <= current->split_plane) {
+        q.push(std::make_tuple(current->child[0], tmin, tmax));
+      } else {
+        q.push(std::make_tuple(current->child[1], tmin, tmax));
       }
-      if (!ret || tsplit < ret->t) {
-        q.push(std::make_tuple(current->child[1], tsplit, tmax));
-      }
-    } else if (tsplit < tmin && (!ret || tmin < ret->t)) {
-      q.push(std::make_tuple(current->child[1], tmin, tmax));
-    } else if (tsplit > tmax) {
-      q.push(std::make_tuple(current->child[0], tmin, tmax));
+    } else {
+      q.push(std::make_tuple(current->child[0], tmin, tsplit));
+      q.push(std::make_tuple(current->child[1], tsplit, tmax));
     }
   }
-  INFO("test_count: %d", test_count);
-
-  if (ret) {
-    return *ret;
+  if (ans) {
+    return *ans;
   }
   return {};
 }
-}
+
+KdTree::~KdTree() {}
+
+} // .zLi
