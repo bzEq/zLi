@@ -15,7 +15,7 @@ public:
   KdTree(KdTree &&) = default;
   KdTree(const std::vector<Geometry> &);
   KdTree(std::vector<Geometry> &&);
-  std::optional<RaySurfaceIntersection> Intersect(const Ray &) const;
+  std::optional<RaySurfaceIntersection> Intersect(const Ray &);
   ~KdTree();
 
 private:
@@ -23,7 +23,8 @@ private:
   struct Node {
     Node *child[2];
     BoundBox bounds;
-    int axis, plane;
+    int axis;
+    Float plane;
     std::unique_ptr<Geometry> geometry;
     Node();
     ~Node();
@@ -33,7 +34,6 @@ private:
   };
   KdTree() = default;
   KdTree(const KdTree &) = default;
-  void Insert(const Geometry &);
   void Insert(Geometry &&);
   Node *root_;
 };

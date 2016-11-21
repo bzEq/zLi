@@ -46,7 +46,9 @@ Result<Scene> Scene::SceneFromJson(const std::string &file) {
     // read geometries
     std::vector<Geometry> gs(GeometriesFromJson(json.get_child("geometry")));
     // Scene scene((KdTree(gs)));
+    auto rep(gs);
     Scene scene(std::move(gs));
+    scene.kdt_ = std::make_unique<KdTree>(std::move(rep));
     // add lights
     // add camera
     scene.camera_ = CameraFromJson(json.get_child("camera"));
@@ -76,7 +78,10 @@ Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
-  return kdt_.Intersect(ray);
+  if (kdt_) {
+    return kdt_->Intersect(ray);
+  }
+  return NaiveIntersect(ray);
 }
 
 std::optional<RaySurfaceIntersection>

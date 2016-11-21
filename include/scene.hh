@@ -35,11 +35,11 @@ public:
 
 private:
   Scene() = default;
-  Scene(std::vector<Geometry> &&gs) : gs_(std::move(gs)), kdt_(gs_) {}
+  Scene(std::vector<Geometry> &&gs) : gs_(gs) {} // kdt_(gs_) {}
   std::vector<Light> lights_;
   PerspectiveCamera camera_;
   std::vector<Geometry> gs_;
-  KdTree kdt_;
+  std::unique_ptr<KdTree> kdt_;
 };
 
 } // end namespace zLi

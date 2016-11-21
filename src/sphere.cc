@@ -6,8 +6,8 @@ std::optional<RaySurfaceIntersection> Sphere::Intersect(const Ray &ray) {
   auto d = ray.o - c;
   auto a = ray.d * ray.d;
   auto b = 2 * (d * ray.d);
-  auto c = d * d - r * r;
-  auto res = Quadratic(a, b, c);
+  auto f = d * d - r * r;
+  auto res = Quadratic(a, b, f);
   if (!res) {
     return {};
   }

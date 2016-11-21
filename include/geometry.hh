@@ -31,6 +31,15 @@ struct Geometry {
   std::function<BoundBox()> Bounds;
 };
 
+inline void CheckGeometry(const Geometry &g) {
+  assert(g.Intersect);
+  assert(g.Le);
+  assert(g.R);
+  assert(g.Normal);
+  assert(g.bsdf);
+  assert(g.Bounds);
+}
+
 struct RaySurfaceIntersection {
   Float t;
   Ray ray;

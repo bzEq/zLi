@@ -18,7 +18,7 @@ public:
     xyYColor xyY;
   };
   Renderer(const std::string &sceneFile, int filmWidth, int filmHeight,
-           int spp = 192);
+           int spp = 128);
   Result<void> Render();
   void Stop();
   bool Stopped();
