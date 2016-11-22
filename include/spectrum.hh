@@ -60,6 +60,8 @@ public:
     return Spectrum(a.spd_ * (1 / f));
   }
 
+  void Display(std::ostream &out) { return spd_.Display(out); }
+
   XYZColor ToXYZ() const;
   RGBColor ToRGB() const;
   xyYColor ToxyY() const;
