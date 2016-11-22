@@ -110,11 +110,27 @@ inline result_error<std::string> Error(const char *err) {
   return Error(std::string(err));
 }
 
+inline result_error<std::string> FormatError(const char *err) {
+  return Error(err);
+}
+
 template <typename... Args>
 inline result_error<std::string> FormatError(const char *fmt, Args &&... args) {
-  char buf[1024];
-  std::snprintf(buf, sizeof(buf), fmt, std::forward<Args>(args)...);
-  return Error(std::string((const char *)buf));
+  static const int LIMITS = (1 << 16);
+  int cap = 64;
+  char *buf = (char *)malloc(cap);
+  while (cap <= LIMITS) {
+    int len = std::snprintf(buf, cap, fmt, std::forward<Args>(args)...);
+    if (len < cap) {
+      break;
+    }
+    free(buf);
+    cap <<= 1;
+    buf = (char *)malloc(cap);
+  }
+  std::string s(buf);
+  free(buf);
+  return Error(std::move(s));
 }
 
 #endif
