@@ -9,6 +9,7 @@ namespace filter {
 
 class Tent1D {
 public:
+  Tent1D() : r_(1) {}
   Tent1D(Float r) : r_(r) {}
   Float f(Float x) { return tent(x / r_) / r_; }
   template <typename Func> Float Convolve(Func F, Float x) {
@@ -26,6 +27,7 @@ private:
 
 class Box1D {
 public:
+  Box1D() : r_(1) {}
   Box1D(Float r) : r_(r) {}
   Float f(Float x) {
     x = std::abs(x);
