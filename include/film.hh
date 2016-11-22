@@ -11,20 +11,23 @@
 #include <vector>
 
 namespace zLi {
-struct Film {
-  int w, h;
+class Film {
+public:
   std::vector<std::vector<std::unique_ptr<Spectrum>>> film;
-  Film(int width, int height) : w(width), h(height) {
-    film.resize(w);
-    for (int i = 0; i < w; ++i) {
-      film[i].resize(h);
+  Film(int width, int height) : width_(width), height_(height) {
+    film.resize(width_);
+    for (int i = 0; i < width_; ++i) {
+      film[i].resize(height_);
     }
   }
   std::vector<std::unique_ptr<Spectrum>> &operator[](int i) {
-    assert(i >= 0 && i < w);
+    assert(i >= 0 && i < width_);
     return film[i];
   }
   Result<void> WriteEXR(const std::string &);
+
+private:
+  int width_, height_;
   void FillRgba(Imf::Rgba *);
 };
 
