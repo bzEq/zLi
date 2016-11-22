@@ -1,5 +1,6 @@
 #ifndef _ZLI_LOGGING_HH_
 #define _ZLI_LOGGING_HH_
+#include <mutex>
 #include <string>
 
 #define LOG(level, format, ...)                                                \
@@ -35,9 +36,6 @@ public:
   static void SetLogLevel(LogLevel);
 
   static void Logging(LogLevel level, const char *file, const char *func,
-                      int line, std::string &&msg);
-
-  static void Logging(LogLevel level, const char *file, const char *func,
                       int line, const char *msg);
 
   template <typename... Args>
@@ -64,6 +62,7 @@ public:
   }
 
 private:
+  static std::mutex OutputMutex;
   static LogLevel CurrentLevel;
   static const char *LogLevelString[5];
 
