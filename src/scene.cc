@@ -26,6 +26,14 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
       } else {
         WARN(res.Error().c_str());
       }
+    } else if (type == "triangle") {
+      auto res = TriangleFromJson(s);
+      if (res) {
+        gs.push_back(
+            std::make_shared<Triangle>(std::move(*res))->ImplGeometry());
+      } else {
+        WARN(res.Error().c_str());
+      }
     }
   }
   return gs;
@@ -40,6 +48,21 @@ Scene::CameraFromJson(const boost::property_tree::ptree &json) {
   auto lensr = json.get<Float>("lensr");
   auto lensp = json.get<Float>("lensp");
   return PerspectiveCamera(eye, lookat, up, fov, lensr, lensp);
+}
+
+Result<Triangle>
+Scene::TriangleFromJson(const boost::property_tree::ptree &json) {
+  try {
+    Vector3f a = Utils::Vector3FromJson(json.get_child("a"));
+    Vector3f b = Utils::Vector3FromJson(json.get_child("b"));
+    Vector3f c = Utils::Vector3FromJson(json.get_child("c"));
+    Spectrum Le(Utils::SpectrumFromJson(json.get_child("le")));
+    Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
+    return Ok(Triangle(a, b, c, Le, R,
+                       Utils::BSDFFromName(json.get<std::string>("bsdf"))));
+  } catch (const std::exception &e) {
+    return ::Error(e.what());
+  }
 }
 
 Result<Scene> Scene::SceneFromJson(const std::string &file) {
@@ -71,7 +94,7 @@ Result<Sphere> Scene::SphereFromJson(const boost::property_tree::ptree &json) {
     Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
     return Ok(Sphere(center, radius, Le, R,
                      Utils::BSDFFromName(json.get<std::string>("bsdf"))));
-  } catch (std::exception &e) {
+  } catch (const std::exception &e) {
     return ::Error(e.what());
   }
 }

@@ -10,6 +10,7 @@
 #include "result.hh"
 #include "spectrum.hh"
 #include "sphere.hh"
+#include "triangle.hh"
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -24,6 +25,7 @@ public:
   Scene(Scene &&) = default;
   static Result<Scene> SceneFromJson(const std::string &file);
   static Result<Sphere> SphereFromJson(const boost::property_tree::ptree &);
+  static Result<Triangle> TriangleFromJson(const boost::property_tree::ptree &);
   static std::vector<Geometry>
   GeometriesFromJson(const boost::property_tree::ptree &);
   static PerspectiveCamera CameraFromJson(const boost::property_tree::ptree &);

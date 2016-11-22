@@ -43,6 +43,9 @@ Geometry Triangle::ImplGeometry() {
       .Bounds = std::bind(&Triangle::Bounds, shared_from_this()),
       .Normal = std::bind(&Triangle::Normal, shared_from_this(),
                           std::placeholders::_1),
+      .Le = std::bind(&Triangle::Le, shared_from_this()),
+      .R = std::bind(&Triangle::R, shared_from_this()),
+      .bsdf = std::bind(&Triangle::bsdf, shared_from_this()),
   };
 }
 
