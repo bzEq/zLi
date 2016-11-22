@@ -1,19 +1,21 @@
 #include "logging.hh"
 
-
 namespace zLi {
 
-LogLevel LL;
-const char *LLStr[5] = { "INFO", "DEBUG", "WARN", "ERROR", "FATAL" };
+Logger::LogLevel Logger::CurrentLevel = Logger::INFO;
 
-void SetLogLevel(LogLevel lv) {
-  LL = lv;
-}
+const char *Logger::LogLevelString[5] = {"INFO", "DEBUG", "WARN", "ERROR",
+                                         "FATAL"};
 
-void Logging(LogLevel level, const char* file, const char* func, int line,
-             const char* msg) {
-  if (level < LL) return;
-  std::fprintf(stderr, "[%s %s:%s:%d] %s\n", LLStr[level], file, func, line, msg);
+void Logger::SetLogLevel(Logger::LogLevel lv) { CurrentLevel = lv; }
+
+void Logger::Logging(Logger::LogLevel level, const char *file, const char *func,
+                     int line, const char *msg) {
+  if (level < CurrentLevel) {
+    return;
+  }
+  std::fprintf(stderr, "[%s %s:%s:%d] %s\n", LogLevelString[level], file, func,
+               line, msg);
 }
 
 } // namespace zLi

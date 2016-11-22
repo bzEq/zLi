@@ -13,7 +13,7 @@
 namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
-  zLi::SetLogLevel(zLi::DEBUG);
+  zLi::Logger::SetLogLevel(zLi::Logger::DEBUG);
   INFO("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
