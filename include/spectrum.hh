@@ -18,7 +18,7 @@ public:
   Spectrum();
   Spectrum(Float v);
   Spectrum(const Float *, const Float *, size_t);
-  Spectrum(const Spectrum &sp) = default;
+  Spectrum(const Spectrum &) = default;
 
   Spectrum &operator+=(const Spectrum &sp) {
     spd_ += sp.spd_;

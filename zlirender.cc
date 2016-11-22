@@ -49,7 +49,8 @@ int main(int argc, char *argv[]) {
       return;
     }
     if (!exr.empty()) {
-      rd.WriteEXR(exr);
+      zLi::Film f(rd.GetRenderResult());
+      f.WriteEXR(exr);
     }
     DEBUG("render finished");
   });
@@ -63,8 +64,8 @@ int main(int argc, char *argv[]) {
           if (!res) {
             break;
           }
-          auto some(std::move(*res));
-          window.DrawPoint(some.x, some.y, some.xyY);
+          zLi::Renderer::RenderResult ans(std::move(*res));
+          window.DrawPoint(ans.x, ans.y, ans.xyY);
         }
         window.Flush();
       },

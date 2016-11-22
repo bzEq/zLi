@@ -13,21 +13,20 @@
 namespace zLi {
 class Film {
 public:
-  std::vector<std::vector<std::unique_ptr<Spectrum>>> film;
   Film(int width, int height) : width_(width), height_(height) {
-    film.resize(width_);
+    data_.resize(width_);
     for (int i = 0; i < width_; ++i) {
-      film[i].resize(height_);
+      data_[i].resize(height_);
     }
   }
-  std::vector<std::unique_ptr<Spectrum>> &operator[](int i) {
-    assert(i >= 0 && i < width_);
-    return film[i];
-  }
+  Film(const Film &);
+  Film(Film &&) = default;
+  void Set(int i, int j, Spectrum &&s);
   Result<void> WriteEXR(const std::string &);
 
 private:
   int width_, height_;
+  std::vector<std::vector<std::unique_ptr<Spectrum>>> data_;
   void FillRgba(Imf::Rgba *);
 };
 

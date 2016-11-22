@@ -7,12 +7,27 @@
 
 namespace zLi {
 
+Film::Film(const Film &f) {
+  data_.resize(f.width_);
+  for (int i = 0; i < f.width_; ++i) {
+    for (int j = 0; j < f.height_; ++j) {
+      data_[i].push_back(std::make_unique<Spectrum>(*f.data_[i][j]));
+    }
+  }
+}
+
+void Film::Set(int i, int j, Spectrum &&s) {
+  if (i >= 0 && i < width_ && j >= 0 && j < height_) {
+    data_[i][j] = std::make_unique<Spectrum>(std::move(s));
+  }
+}
+
 // wont check size of pixels
 void Film::FillRgba(Imf::Rgba *pixels) {
   for (int i = 0; i < width_; ++i) {
     for (int j = 0; j < height_; ++j) {
-      if (film[i][j]) {
-        RGBColor rgb(film[i][j]->ToRGB());
+      if (data_[i][j]) {
+        RGBColor rgb(data_[i][j]->ToRGB());
         int k = i * height_ + j;
         pixels[k].r = rgb.r;
         pixels[k].g = rgb.g;

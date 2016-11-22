@@ -68,7 +68,7 @@ void Renderer::Work(int i, int j) {
   AddToxyYChan(i, j, res);
   // add to film
   assert(film_);
-  (*film_)[i][j] = std::make_unique<Spectrum>(std::move(res));
+  film_->Set(i, j, std::move(res));
 }
 
 void Renderer::Stop() { stopped_.store(true); }
@@ -119,9 +119,7 @@ Result<void> Renderer::Render() {
   // return SlowRender();
 }
 
-Result<void> Renderer::WriteEXR(const std::string &exr) {
-  return film_->WriteEXR(exr);
-}
+Film Renderer::GetRenderResult() { return std::move(*film_); }
 
 Renderer::~Renderer() {}
 
