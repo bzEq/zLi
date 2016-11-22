@@ -14,7 +14,7 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
   zLi::SetLogLevel(zLi::DEBUG);
-  DEBUG("main program started...");
+  INFO("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
                                              "scene json file")(
@@ -70,6 +70,6 @@ int main(int argc, char *argv[]) {
       },
       [&rd]() { rd.Stop(); });
   rt.join();
-  DEBUG("main program exiting...");
+  INFO("main program exiting...");
   return 0;
 }
