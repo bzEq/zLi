@@ -7,6 +7,7 @@
 
 namespace zLi {
 
+// wont check size of pixels
 void Film::FillRgba(Imf::Rgba *pixels) {
   for (int i = 0; i < width_; ++i) {
     for (int j = 0; j < height_; ++j) {
@@ -36,4 +37,4 @@ Result<void> Film::WriteEXR(const std::string &exr) {
   delete[] pixels;
   return Ok();
 }
-}
+} // zLi
