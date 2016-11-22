@@ -37,6 +37,7 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
       auto wo = std::get<1>(rfl);
       Float f = bsdf.f(n, ray.d, wo);
       F *= f * std::abs(n * wo) / pdf;
+      F *= (*ri).g.R();
       ray = (*ri).SpawnRay(wo);
     } else if (bsdf.type() == BSDF::Type::Refractive) {
       // refractive
@@ -46,7 +47,7 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
     }
     // russian roulette
     if (i > 3) {
-      Float q = F.ToXYZ().y;
+      Float q = F.ToxyY().Y;
       if (UniformSample() <= q) {
         break;
       }
