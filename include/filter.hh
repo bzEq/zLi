@@ -77,24 +77,6 @@ private:
   Float A_, fx_;
 };
 
-// class Gauss2D {
-// public:
-//   Gauss2D() : A_(1), fx_(1), fy_(1) {}
-//   Gauss2D(Float A, Float fx, Float fy) : A_(A), fx_(fx), fy_(fy) {}
-//   Float f(Float x, Float y) {
-//     return A_ *
-//            std::exp(-(x * x) / (2 * fx_ * fx_) - (y * y) / (2 * fy_ * fy_));
-//   }
-//   template <typename Func> Float Convolve(Func F, Float x, Float y) {
-//     static const Float r = std::sqrt(fx_ * fx_ + fy_ * fy_);
-//     auto conv = [&](Float u, Float v) { return f(u, v) * F(x - u, y - v); };
-//     return EstimateIntegration2D(conv, 0, 0, r);
-//   }
-
-// private:
-//   Float A_, fx_, fy_;
-// };
-
 } // filter
 } // zLi
 #endif
