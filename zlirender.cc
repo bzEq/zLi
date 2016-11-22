@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   std::thread rt([&rd, exr]() {
     auto res = rd.Render();
     if (!res) {
-      DEBUG(res.Error().c_str());
+      ERROR(res.Error().c_str());
       return;
     }
     if (!exr.empty()) {
