@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
                                              "scene json file")(
       "width", po::value<int>(), "film width")("height", po::value<int>(),
-                                               "film height");
+                                               "film height")(
+      "exr", po::value<std::string>(), "output openexr file");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -27,6 +28,10 @@ int main(int argc, char *argv[]) {
       !vm.count("height")) {
     std::cerr << desc << std::endl;
     exit(1);
+  }
+  std::string exr;
+  if (vm.count("exr")) {
+    exr = vm["exr"].as<std::string>();
   }
   std::string scene(vm["scene"].as<std::string>());
   const int w = vm["width"].as<int>(), h = vm["height"].as<int>();
@@ -37,11 +42,14 @@ int main(int argc, char *argv[]) {
     ERROR(res.Error().c_str());
     exit(1);
   }
-  std::thread rt([&rd]() {
+  std::thread rt([&rd, exr]() {
     auto res = rd.Render();
     if (!res) {
       DEBUG(res.Error().c_str());
       return;
+    }
+    if (!exr.empty()) {
+      rd.WriteEXR(exr);
     }
     DEBUG("render finished");
   });

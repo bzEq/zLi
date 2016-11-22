@@ -119,6 +119,10 @@ Result<void> Renderer::Render() {
   // return SlowRender();
 }
 
+Result<void> Renderer::WriteEXR(const std::string &exr) {
+  return film_->WriteEXR(exr);
+}
+
 Renderer::~Renderer() {}
 
 } // namespace zLi

@@ -4,7 +4,8 @@ CXX := clang++
 HEADERS := include/
 CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS) -O2
 SRC := src/
-LDFLAGS := -lm -lpthread -L$(SRC) -lzli -lboost_program_options -lX11
+LDFLAGS := -lm -lpthread -L$(SRC) -lzli -lboost_program_options -lX11 \
+	  $(shell pkg-config --libs OpenEXR)
 
 all: zlirender
 

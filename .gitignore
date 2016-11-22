@@ -3,5 +3,6 @@
 *.gch
 *.a
 *.so
+*.exr
 core
 zlirender

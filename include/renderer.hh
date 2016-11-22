@@ -24,6 +24,7 @@ public:
   bool Stopped();
   // std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
   std::shared_ptr<Chan<RenderResult>> xyYChan() { return xyY_chan_; }
+  Result<void> WriteEXR(const std::string &);
   ~Renderer();
 
 private:
