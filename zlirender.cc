@@ -22,7 +22,12 @@ int main(int argc, char *argv[]) {
                                                "film height")(
       "exr", po::value<std::string>(), "output openexr file");
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, desc), vm);
+  try {
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << std::endl;
+    exit(1);
+  }
   po::notify(vm);
   if (vm.count("help") || !vm.count("scene") || !vm.count("width") ||
       !vm.count("height")) {
