@@ -34,7 +34,7 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
   BoundBox Bounds();
   Spectrum R() { return rfl; }
   Spectrum Le() { return le; }
-  BSDF &bsdf() { return bsdf_; }
+  BSDF bsdf() { return bsdf_; }
   Vector3f Normal(const Vector3f &_);
   Geometry ImplGeometry();
 };

@@ -26,7 +26,7 @@ struct Sphere : std::enable_shared_from_this<Sphere> {
   BoundBox Bounds();
   Spectrum Le() { return le; }
   Spectrum R() { return rfl; }
-  BSDF &bsdf() { return bsdf_; }
+  BSDF bsdf() { return bsdf_; }
   Vector3f Normal(const Vector3f &position) {
     return (position - c).Normalize();
   }

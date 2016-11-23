@@ -19,7 +19,7 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
     //       pos.y, pos.z);
     L += F * scene.DirectLight(*ri);
     // bsdf
-    auto &bsdf = (*ri).g.bsdf();
+    auto bsdf = (*ri).g.bsdf();
     if (bsdf.btdf) {
       auto n = (*ri).g.Normal(ray((*ri).t));
       auto rfr = bsdf.btdf->pdf(n, ray.d);
@@ -29,7 +29,7 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
         ray = (*ri).SpawnRay(wo);
         Spectrum tmp = PathIntegrator::Li(scene, ray, maxBounces - i);
         Float f = bsdf.btdf->f(n, ray.d, wo);
-        L += (*ri).g.R() * (f * std::abs(n * wo) / pdf) * tmp;
+        L += F * (*ri).g.R() * (f * std::abs(n * wo) / pdf) * tmp;
       }
     }
     if (bsdf.brdf) {

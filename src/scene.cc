@@ -104,9 +104,9 @@ Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
-  if (kdt_) {
-    return kdt_->Intersect(ray);
-  }
+  // if (kdt_) {
+  //   return kdt_->Intersect(ray);
+  // }
   return NaiveIntersect(ray);
 }
 

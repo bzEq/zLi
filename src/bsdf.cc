@@ -66,6 +66,18 @@ Float Specular::f(const Vector3f &noraml, const Vector3f &wi,
 
 BSDF Refractive::ImplBSDF(Float index) {
   BSDF ret;
+  ret.brdf = std::make_unique<BRDF>(BRDF{
+      .pdf = std::bind(&Specular::pdf, std::placeholders::_1,
+                       std::placeholders::_2),
+
+      .f =
+          [index](const Vector3f &n, const Vector3f &wi,
+                  const Vector3f &wo) mutable {
+            Float R0 = (index - 1) * (index - 1) / ((index + 1) * (index + 1));
+            return R0 + (1 - R0) * std::pow(1 - std::abs(wi * n), 5);
+          },
+      .type = []() { return BRDF::Type::Specular; },
+  });
   ret.btdf = std::make_unique<BTDF>(BTDF{
       .pdf =
           [index](const Vector3f &normal, const Vector3f &wi) mutable {
@@ -85,8 +97,11 @@ BSDF Refractive::ImplBSDF(Float index) {
             assert(!wo.HasNaNs());
             return std::make_tuple(1.f, wo.Normalize());
           },
-      .f = [index](const Vector3f &normal, const Vector3f &wi,
-                   const Vector3f &wo) -> Float { return 0.5; },
+      .f = [index](const Vector3f &n, const Vector3f &wi,
+                   const Vector3f &wo) -> Float {
+        Float R0 = (index - 1) * (index - 1) / ((index + 1) * (index + 1));
+        return 1 - (R0 + (1 - R0) * std::pow(1 - std::abs(wi * n), 5));
+      },
   });
   return ret;
 }

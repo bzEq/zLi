@@ -9,8 +9,8 @@
                 "z": 10
             },
             "bsdf": {
-                "type": "specular",
-                "index": 1.1
+                "type": "refractive",
+                "index": 6
             },
             "le": {
                 "xs": [
@@ -98,7 +98,7 @@
                 "z": 10
             },
             "bsdf": {
-                "type": "specular",
+                "type": "refractive",
                 "index": 0.9
             },
             "le": {
@@ -143,8 +143,8 @@
                 "z": 10
             },
             "bsdf": {
-                "type": "specular",
-                "index": 1.25
+                "type": "refractive",
+                "index": 3
             },
             "le": {
                 "xs": [
