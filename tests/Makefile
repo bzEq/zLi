@@ -8,7 +8,7 @@ CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS)
 LDFLAGS := -lpthread -lm -lX11 $(ZLILIB)
 TESTS := math_test ray_test boundbox_test kdtree_test triangle_test \
 	sphere_test camera_test diagram2d_test filter_test window_test \
-	CIE_test
+	CIE_test bsdf_test
 
 
 all: $(TESTS)
@@ -47,6 +47,9 @@ window_test: window_test.o
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 CIE_test: CIE_test.o
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
+
+bsdf_test: bsdf_test.o
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 clean:
