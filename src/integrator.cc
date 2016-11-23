@@ -37,7 +37,15 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
         auto n = (*ri).g.Normal(ray((*ri).t));
         n = ray.d * n <= 0 ? n : -n;
         auto rfl = bsdf.brdf->pdf(n, ray.d);
-        ray = (*ri).SpawnRay(std::get<1>(rfl));
+        Float pdf = std::get<0>(rfl);
+        if (pdf <= 0) {
+          break;
+        }
+        auto wo = std::get<1>(rfl);
+        Float f = bsdf.brdf->f(n, ray.d, wo);
+        F *= f * std::abs(n * wo) / pdf;
+        F *= (*ri).g.R();
+        ray = (*ri).SpawnRay(wo);
       } else if (bsdf.brdf->type() == BRDF::Type::Diffuse) {
         auto n = (*ri).g.Normal(ray((*ri).t));
         auto rfl = bsdf.brdf->pdf(n, ray.d);

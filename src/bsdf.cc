@@ -61,7 +61,7 @@ std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
 
 Float Specular::f(const Vector3f &noraml, const Vector3f &wi,
                   const Vector3f &wo) {
-  return 0;
+  return 1;
 }
 
 BSDF Refractive::ImplBSDF(Float index) {
@@ -71,8 +71,15 @@ BSDF Refractive::ImplBSDF(Float index) {
                        std::placeholders::_2),
 
       .f =
-          [index](const Vector3f &n, const Vector3f &wi,
+          [index](const Vector3f &normal, const Vector3f &wi,
                   const Vector3f &wo) mutable {
+            Vector3f n(normal);
+            Float f = n * wi;
+            if (f > 0) {
+              index = 1 / index;
+              n = -n;
+              f = -f;
+            }
             Float R0 = (index - 1) * (index - 1) / ((index + 1) * (index + 1));
             return R0 + (1 - R0) * std::pow(1 - std::abs(wi * n), 5);
           },
@@ -97,11 +104,19 @@ BSDF Refractive::ImplBSDF(Float index) {
             assert(!wo.HasNaNs());
             return std::make_tuple(1.f, wo.Normalize());
           },
-      .f = [index](const Vector3f &n, const Vector3f &wi,
-                   const Vector3f &wo) -> Float {
-        Float R0 = (index - 1) * (index - 1) / ((index + 1) * (index + 1));
-        return 1 - (R0 + (1 - R0) * std::pow(1 - std::abs(wi * n), 5));
-      },
+      .f =
+          [index](const Vector3f &normal, const Vector3f &wi,
+                  const Vector3f &wo) mutable {
+            Vector3f n(normal);
+            Float f = n * wi;
+            if (f > 0) {
+              index = 1 / index;
+              n = -n;
+              f = -f;
+            }
+            Float R0 = (index - 1) * (index - 1) / ((index + 1) * (index + 1));
+            return 1 - (R0 + (1 - R0) * std::pow(1 - std::abs(wi * n), 5));
+          },
   });
   return ret;
 }
