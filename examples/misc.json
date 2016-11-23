@@ -17,7 +17,9 @@
                 "y": 1,
                 "z": -1
             },
-            "bsdf": "diffuse",
+            "bsdf": {
+                "type": "diffuse"
+            },
             "le": {
                 "xs": [
                     380,
@@ -68,7 +70,9 @@
                 "y": 1,
                 "z": -1
             },
-            "bsdf": "diffuse",
+            "bsdf": {
+                "type": "diffuse"
+            },
             "le": {
                 "xs": [
                     380,
@@ -119,7 +123,9 @@
                 "y": 1,
                 "z": -1
             },
-            "bsdf": "diffuse",
+            "bsdf": {
+                "type": "diffuse"
+            },
             "le": {
                 "xs": [
                     380,
@@ -161,7 +167,9 @@
                 "y": 0,
                 "z": -5
             },
-            "bsdf": "diffuse",
+            "bsdf": {
+                "type": "diffuse"
+            },
             "le": {
                 "xs": [
                     380,

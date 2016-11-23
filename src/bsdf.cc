@@ -47,8 +47,9 @@ BSDF::Type Specular::type() { return BSDF::Type::Specular; }
 
 std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
                                           const Vector3f &wi) {
-  if (normal * wi >= 0)
+  if (normal * wi >= 0) {
     return std::make_tuple(0, Vector3f());
+  }
   auto wo = (wi - normal * (2 * (wi * normal))); // if noraml and wi r unit
   // vectors, wo should be an unit
   // vector too
@@ -58,5 +59,31 @@ std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
 Float Specular::f(const Vector3f &noraml, const Vector3f &wi,
                   const Vector3f &wo) {
   return 0;
+}
+
+BSDF Refractive::ImplBSDF(Float index) {
+  return BSDF{
+      .pdf =
+          [index](const Vector3f &normal, const Vector3f &wi) mutable {
+            Vector3f n(normal);
+            Float f = n * wi;
+            if (f > 0) {
+              index = 1 / index;
+              n = -n;
+              f = -f;
+            }
+            if ((1 - (f * f)) / (index * index) > 1) {
+              return std::make_tuple(0.f, Vector3f());
+            }
+            // assumes normal points outside
+            Vector3f wo = (wi - f * n) * (1 / index) -
+                          n * std::sqrt(1 - ((1 - f * f) / (index * index)));
+            assert(!wo.HasNaNs());
+            return std::make_tuple(1.f, wo.Normalize());
+          },
+      .f = [index](const Vector3f &normal, const Vector3f &wi,
+                   const Vector3f &wo) -> Float { return 0; },
+      .type = []() { return BSDF::Type::Refractive; },
+  };
 }
 }

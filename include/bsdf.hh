@@ -44,6 +44,12 @@ struct Specular {
   static BSDF ImplBSDF();
 };
 
+struct Refractive {
+  static std::tuple<Float, Vector3f> pdf(const Vector3f &normal,
+                                         const Vector3f &wi);
+  static BSDF ImplBSDF(Float);
+};
+
 } // end namespace zLi
 
 #endif

@@ -436,13 +436,24 @@ const Float E = std::exp(1);
 
 inline std::optional<std::tuple<Float, Float>> Quadratic(Float a, Float b,
                                                          Float c) {
+  assert(a != 0);
+  assert(!std::isnan(a));
+  assert(!std::isnan(b));
+  assert(!std::isnan(c));
   Float delta = b * b - 4 * a * c;
-  if (delta < 0)
+  if (delta < 0) {
     return {};
+  }
+  assert(delta >= 0 && !std::isnan(delta));
   Float f = 0.5 / a;
+  assert(!std::isnan(f));
   Float d = std::sqrt(delta);
+  assert(!std::isnan(d));
   Float x0 = f * (-d - b);
   Float x1 = f * (d - b);
+  assert(!std::isnan(x0));
+  assert(!std::isnan(x1));
+  assert(std::min(x0, x1) <= std::max(x0, x1));
   return std::make_tuple(std::min(x0, x1), std::max(x0, x1));
 }
 

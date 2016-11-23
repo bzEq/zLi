@@ -35,9 +35,12 @@ public:
     return Spectrum(xs.data(), ys.data(), xs.size());
   }
 
-  static BSDF BSDFFromName(const std::string &name) {
-    if (name == "specular") {
+  static BSDF BSDFFromJson(const boost::property_tree::ptree &json) {
+    std::string type = json.get<std::string>("type");
+    if (type == "specular") {
       return Specular::ImplBSDF();
+    } else if (type == "refractive") {
+      return Refractive::ImplBSDF(json.get<Float>("index"));
     }
     return LambertianDiffuse::ImplBSDF();
   }
