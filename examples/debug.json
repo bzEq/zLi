@@ -10,7 +10,7 @@
             },
             "bsdf": {
                 "type": "refractive",
-                "index": 6
+                "index": 1
             },
             "le": {
                 "xs": [
@@ -99,7 +99,7 @@
             },
             "bsdf": {
                 "type": "refractive",
-                "index": 0.9
+                "index": 1
             },
             "le": {
                 "xs": [
@@ -126,11 +126,11 @@
                     780
                 ],
                 "ys": [
-                    0.5,
+                    0.1,
+                    0.8,
                     0.2,
-                    0.1,
-                    0.1,
-                    0.1
+                    0.3,
+                    0.01
                 ]
             }
         },
@@ -144,7 +144,7 @@
             },
             "bsdf": {
                 "type": "refractive",
-                "index": 3
+                "index": 1
             },
             "le": {
                 "xs": [

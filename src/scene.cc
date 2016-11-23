@@ -104,26 +104,39 @@ Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
-  // if (kdt_) {
-  //   return kdt_->Intersect(ray);
-  // }
+  if (kdt_) {
+    return kdt_->Intersect(ray);
+  }
   return NaiveIntersect(ray);
+  // auto r1 = NaiveIntersect(ray);
+  // if (r0) {
+  //   assert(r1);
+  //   assert((*r0).t == (*r1).t);
+  // }
+  // if (r1) {
+  //   if (!r0) {
+  //     WARN("r1 found, but r0, t = %f. ray: ", (*r1).t);
+  //     std::cerr << ray.o << " " << ray.d;
+  //     WARN(" %f %f", ray.tmin, ray.tmax);
+  //     auto world(kdt_->World());
+  //     std::cerr << world.pMin << " " << world.pMax << std::endl;
+  //     assert(world.Intersect(ray));
+  //     assert(false);
+  //   }
+  // }
 }
 
 std::optional<RaySurfaceIntersection>
 Scene::NaiveIntersect(const Ray &ray) const {
-  Float t = INF;
   std::unique_ptr<RaySurfaceIntersection> get;
   for (auto &g : gs_) {
     auto ri = g.Intersect(ray);
-    if (ri && (*ri).t < t) {
-      t = (*ri).t;
+    if (ri && (!get || (*ri).t < get->t)) {
       get = std::make_unique<RaySurfaceIntersection>(std::move(*ri));
     }
   }
   if (get) {
-    RaySurfaceIntersection res(*get);
-    return res;
+    return *get;
   }
   return {};
 }

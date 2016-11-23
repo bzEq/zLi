@@ -15,6 +15,7 @@ public:
   static KdTree BuildKdTree(std::vector<Geometry> &&gs);
   KdTree(KdTree &&) = default;
   std::optional<RaySurfaceIntersection> Intersect(const Ray &);
+  BoundBox World();
   ~KdTree();
 
 private:

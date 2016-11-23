@@ -10,6 +10,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <atomic>
+#include <chrono>
 #include <thread>
 
 namespace zLi {
@@ -88,6 +89,7 @@ Result<void> Renderer::SlowRender() {
 
 Result<void> Renderer::ParallelRender() {
   std::vector<std::thread> workers;
+  auto start = std::chrono::high_resolution_clock::now();
   for (unsigned i = 0; i < std::thread::hardware_concurrency(); ++i) {
     workers.push_back(std::thread([this] {
       while (!stopped_) {
@@ -103,6 +105,9 @@ Result<void> Renderer::ParallelRender() {
   for (auto &w : workers) {
     w.join();
   }
+  std::chrono::duration<Float> diff =
+      std::chrono::high_resolution_clock::now() - start;
+  DEBUG("time elapse: %fs", diff.count());
   stopped_.store(true);
   return Ok();
 }

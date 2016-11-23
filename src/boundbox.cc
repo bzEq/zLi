@@ -13,8 +13,9 @@ BoundBox::Intersect(const Ray &ray) const {
       t1 = std::min(t1, std::max(tmp0, tmp1));
     }
   }
-  if (t0 > t1 || !InBox(ray(t0)) || !InBox(ray(t1)))
+  if (t0 > t1 || (!InBox(ray(t0)) && !InBox(ray(t1)))) {
     return {};
+  }
   return std::make_tuple(t0, t1);
 }
 
@@ -27,6 +28,14 @@ std::optional<std::tuple<BoundBox, BoundBox>> BoundBox::Split(int axis,
   Vector3f v1(pMax);
   v1[axis] = d;
   return std::make_tuple(BoundBox(pMin, v1), BoundBox(v0, pMax));
+}
+
+bool BoundBox::InBox(const Vector3f &p) const {
+  for (int i = 0; i < 3; i++) {
+    if (p[i] < pMin[i] || p[i] > pMax[i])
+      return false;
+  }
+  return true;
 }
 
 BoundBox Union(const BoundBox &lhs, const BoundBox &rhs) {

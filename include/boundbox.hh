@@ -23,13 +23,7 @@ struct BoundBox {
     Vector3f d = Diagonal();
     return d.x * d.y * d.z;
   }
-  bool InBox(const Vector3f &p) const {
-    for (int i = 0; i < 3; i++) {
-      if (p[i] < pMin[i] || p[i] > pMax[i])
-        return false;
-    }
-    return true;
-  }
+  bool InBox(const Vector3f &p) const;
   Vector3f Middle() const { return (pMin + pMax) * (Float)0.5; }
   bool CanContain(const BoundBox &b) const {
     for (int i = 0; i < 3; ++i) {
