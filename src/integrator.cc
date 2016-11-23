@@ -41,6 +41,20 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
       ray = (*ri).SpawnRay(wo);
     } else if (bsdf.type() == BSDF::Type::Refractive) {
       // refractive
+      auto n = (*ri).g.Normal(ray((*ri).t));
+      // transmission part
+      auto trans = bsdf.pdf(n, ray.d);
+      if (std::get<0>(trans) <= 0) {
+        auto rfl = Specular::pdf(ray.d * n <= 0 ? n : -n, ray.d);
+        ray = (*ri).SpawnRay(std::get<1>(rfl));
+        continue;
+      }
+      ray = (*ri).SpawnRay(std::get<1>(trans));
+      Spectrum tmp = PathIntegrator::Li(scene, ray, maxBounces - i);
+      L += F * tmp;
+      // specular part
+      auto rfl = Specular::pdf(ray.d * n <= 0 ? n : -n, ray.d);
+      ray = (*ri).SpawnRay(std::get<1>(rfl));
     } else {
       WARN("no such bsdf type, %d", bsdf.type());
       continue;

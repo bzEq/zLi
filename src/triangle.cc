@@ -26,12 +26,12 @@ std::optional<RaySurfaceIntersection> Triangle::Intersect(const Ray &ray) {
 }
 
 BoundBox Triangle::Bounds() {
-  return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)),
-                           std::min(a.y, std::min(b.y, c.y)),
-                           std::min(a.z, std::min(b.z, c.z))),
-                  Vector3f(std::max(a.x, std::max(b.x, c.x)),
-                           std::max(a.y, std::max(b.y, c.y)),
-                           std::max(a.z, std::max(b.z, c.z))));
+  return BoundBox(Vector3f(std::min(a.x, std::min(b.x, c.x)) - EPSILON,
+                           std::min(a.y, std::min(b.y, c.y)) - EPSILON,
+                           std::min(a.z, std::min(b.z, c.z)) - EPSILON),
+                  Vector3f(std::max(a.x, std::max(b.x, c.x)) + EPSILON,
+                           std::max(a.y, std::max(b.y, c.y)) + EPSILON,
+                           std::max(a.z, std::max(b.z, c.z)) + EPSILON));
 }
 
 Vector3f Triangle::Normal(const Vector3f &position) { return n; }

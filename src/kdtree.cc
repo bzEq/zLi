@@ -73,19 +73,22 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &r) {
     // q.push(std::make_tuple(current->child[1], tmin, tmax));
     // continue;
     if (ray.d[current->split_axis] == 0) {
-      if (ray.o[current->split_axis] <= current->split_plane) {
+      if (ray.o[current->split_axis] < current->split_plane) {
         q.push(std::make_tuple(current->child[0], tmin, tmax));
-      } else {
+      } else if (ray.o[current->split_axis] > current->split_plane) {
         q.push(std::make_tuple(current->child[1], tmin, tmax));
+      } else {
+        q.push(std::make_tuple(current->child[0], tmin, tmax));
+        q.push(std::make_tuple(current->child[0], tmin, tmax));
       }
       continue;
     }
     Float tsplit = (current->split_plane - ray.o[current->split_axis]) /
                    ray.d[current->split_axis];
-    if (tsplit >= tmax || tsplit <= tmin) {
-      if (ray(tmin)[current->split_axis] <= current->split_plane) {
+    if (tsplit > tmax || tsplit < tmin) {
+      if (ray(tmin)[current->split_axis] < current->split_plane) {
         q.push(std::make_tuple(current->child[0], tmin, tmax));
-      } else {
+      } else if (ray(tmin)[current->split_axis] > current->split_plane) {
         q.push(std::make_tuple(current->child[1], tmin, tmax));
       }
     } else {

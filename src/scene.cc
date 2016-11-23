@@ -58,8 +58,8 @@ Scene::TriangleFromJson(const boost::property_tree::ptree &json) {
     Vector3f c = Utils::Vector3FromJson(json.get_child("c"));
     Spectrum Le(Utils::SpectrumFromJson(json.get_child("le")));
     Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
-    return Ok(Triangle(a, b, c, Le, R,
-                       Utils::BSDFFromName(json.get<std::string>("bsdf"))));
+    return Ok(
+        Triangle(a, b, c, Le, R, Utils::BSDFFromJson(json.get_child("bsdf"))));
   } catch (const std::exception &e) {
     return ::Error(e.what());
   }
@@ -93,7 +93,7 @@ Result<Sphere> Scene::SphereFromJson(const boost::property_tree::ptree &json) {
     Spectrum Le(Utils::SpectrumFromJson(json.get_child("le")));
     Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
     return Ok(Sphere(center, radius, Le, R,
-                     Utils::BSDFFromName(json.get<std::string>("bsdf"))));
+                     Utils::BSDFFromJson(json.get_child("bsdf"))));
   } catch (const std::exception &e) {
     return ::Error(e.what());
   }

@@ -1,4 +1,5 @@
 #include "sphere.hh"
+#include "logging.hh"
 
 namespace zLi {
 
