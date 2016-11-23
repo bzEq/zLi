@@ -27,7 +27,7 @@ struct Geometry {
   // @args: position
   // @return: normal
   std::function<Vector3f(const Vector3f &)> Normal;
-  std::function<BSDF()> bsdf;
+  std::function<BSDF &()> bsdf;
   std::function<BoundBox()> Bounds;
 };
 

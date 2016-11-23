@@ -1,5 +1,7 @@
 #include "bsdf.hh"
 
+#include <memory>
+
 namespace zLi {
 
 std::tuple<Float, Vector3f> LambertianDiffuse::pdf(const Vector3f &normal,
@@ -14,36 +16,37 @@ std::tuple<Float, Vector3f> LambertianDiffuse::pdf(const Vector3f &normal,
 
 Float LambertianDiffuse::f(const Vector3f &normal, const Vector3f &wi,
                            const Vector3f &wo) {
-  if (normal * wo <= 0 || normal * wi >= 0)
+  if (normal * wo <= 0 || normal * wi >= 0) {
     return 0;
+  }
   return 1 / PI;
 }
 
-BSDF::Type LambertianDiffuse::type() { return BSDF::Type::Diffuse; }
-
 BSDF LambertianDiffuse::ImplBSDF() {
-  return BSDF{
+  BSDF ret;
+  ret.brdf = std::make_unique<BRDF>(BRDF{
       .pdf = std::bind(&LambertianDiffuse::pdf, std::placeholders::_1,
                        std::placeholders::_2),
 
       .f = std::bind(&LambertianDiffuse::f, std::placeholders::_1,
                      std::placeholders::_2, std::placeholders::_3),
-      .type = std::bind(&LambertianDiffuse::type),
-  };
+      .type = []() { return BRDF::Type::Diffuse; },
+  });
+  return ret;
 }
 
 BSDF Specular::ImplBSDF() {
-  return BSDF{
+  BSDF ret;
+  ret.brdf = std::make_unique<BRDF>(BRDF{
       .pdf = std::bind(&Specular::pdf, std::placeholders::_1,
                        std::placeholders::_2),
 
       .f = std::bind(&Specular::f, std::placeholders::_1, std::placeholders::_2,
                      std::placeholders::_3),
-      .type = std::bind(&Specular::type),
-  };
+      .type = []() { return BRDF::Type::Specular; },
+  });
+  return ret;
 }
-
-BSDF::Type Specular::type() { return BSDF::Type::Specular; }
 
 std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
                                           const Vector3f &wi) {
@@ -62,7 +65,8 @@ Float Specular::f(const Vector3f &noraml, const Vector3f &wi,
 }
 
 BSDF Refractive::ImplBSDF(Float index) {
-  return BSDF{
+  BSDF ret;
+  ret.btdf = std::make_unique<BTDF>(BTDF{
       .pdf =
           [index](const Vector3f &normal, const Vector3f &wi) mutable {
             Vector3f n(normal);
@@ -82,8 +86,8 @@ BSDF Refractive::ImplBSDF(Float index) {
             return std::make_tuple(1.f, wo.Normalize());
           },
       .f = [index](const Vector3f &normal, const Vector3f &wi,
-                   const Vector3f &wo) -> Float { return 0; },
-      .type = []() { return BSDF::Type::Refractive; },
-  };
+                   const Vector3f &wo) -> Float { return 0.5; },
+  });
+  return ret;
 }
 }

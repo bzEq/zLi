@@ -19,14 +19,14 @@ struct Sphere : std::enable_shared_from_this<Sphere> {
   Sphere() : r(1) {}
   Sphere(const Vector3f &c, Float r, const Spectrum &le = Spectrum(),
          const Spectrum &rfl = Spectrum(),
-         const BSDF &bsdf = LambertianDiffuse::ImplBSDF())
-      : c(c), r(r), le(le), rfl(rfl), bsdf_(bsdf) {}
+         BSDF &&bsdf = LambertianDiffuse::ImplBSDF())
+      : c(c), r(r), le(le), rfl(rfl), bsdf_(std::move(bsdf)) {}
   ~Sphere() {}
   std::optional<RaySurfaceIntersection> Intersect(const Ray &ray);
   BoundBox Bounds();
   Spectrum Le() { return le; }
   Spectrum R() { return rfl; }
-  BSDF bsdf() { return bsdf_; }
+  BSDF &bsdf() { return bsdf_; }
   Vector3f Normal(const Vector3f &position) {
     return (position - c).Normalize();
   }

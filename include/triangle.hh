@@ -23,9 +23,9 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
 
   Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c,
            const Spectrum &le = Spectrum(), const Spectrum &rfl = Spectrum(),
-           const BSDF &bsdf = LambertianDiffuse::ImplBSDF())
+           BSDF &&bsdf = LambertianDiffuse::ImplBSDF())
       : a(a), b(b), c(c), n(((b - a) ^ (c - a)).Normalize()), le(le), rfl(rfl),
-        bsdf_(bsdf) {}
+        bsdf_(std::move(bsdf)) {}
 
   ~Triangle() {}
 
@@ -34,7 +34,7 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
   BoundBox Bounds();
   Spectrum R() { return rfl; }
   Spectrum Le() { return le; }
-  BSDF bsdf() { return bsdf_; }
+  BSDF &bsdf() { return bsdf_; }
   Vector3f Normal(const Vector3f &_);
   Geometry ImplGeometry();
 };

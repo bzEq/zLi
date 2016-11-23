@@ -19,45 +19,38 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
     //       pos.y, pos.z);
     L += F * scene.DirectLight(*ri);
     // bsdf
-    auto bsdf((*ri).g.bsdf());
-    if (bsdf.type() == BSDF::Type::Specular) {
-      // specular
+    auto &bsdf = (*ri).g.bsdf();
+    if (bsdf.btdf) {
       auto n = (*ri).g.Normal(ray((*ri).t));
-      n = ray.d * n <= 0 ? n : -n;
-      auto rfl = bsdf.pdf(n, ray.d);
-      ray = (*ri).SpawnRay(std::get<1>(rfl));
-    } else if (bsdf.type() == BSDF::Type::Diffuse) {
-      // diffuse
-      auto n = (*ri).g.Normal(ray((*ri).t));
-      auto rfl = bsdf.pdf(n, ray.d);
-      Float pdf = std::get<0>(rfl);
-      if (pdf <= 0) {
-        break;
+      auto rfr = bsdf.btdf->pdf(n, ray.d);
+      Float pdf = std::get<0>(rfr);
+      if (pdf > 0) {
+        auto wo = std::get<1>(rfr);
+        ray = (*ri).SpawnRay(wo);
+        Spectrum tmp = PathIntegrator::Li(scene, ray, maxBounces - i);
+        Float f = bsdf.btdf->f(n, ray.d, wo);
+        L += (*ri).g.R() * (f * std::abs(n * wo) / pdf) * tmp;
       }
-      auto wo = std::get<1>(rfl);
-      Float f = bsdf.f(n, ray.d, wo);
-      F *= f * std::abs(n * wo) / pdf;
-      F *= (*ri).g.R();
-      ray = (*ri).SpawnRay(wo);
-    } else if (bsdf.type() == BSDF::Type::Refractive) {
-      // refractive
-      auto n = (*ri).g.Normal(ray((*ri).t));
-      // transmission part
-      auto trans = bsdf.pdf(n, ray.d);
-      if (std::get<0>(trans) <= 0) {
-        auto rfl = Specular::pdf(ray.d * n <= 0 ? n : -n, ray.d);
+    }
+    if (bsdf.brdf) {
+      if (bsdf.brdf->type() == BRDF::Type::Specular) {
+        auto n = (*ri).g.Normal(ray((*ri).t));
+        n = ray.d * n <= 0 ? n : -n;
+        auto rfl = bsdf.brdf->pdf(n, ray.d);
         ray = (*ri).SpawnRay(std::get<1>(rfl));
-        continue;
+      } else if (bsdf.brdf->type() == BRDF::Type::Diffuse) {
+        auto n = (*ri).g.Normal(ray((*ri).t));
+        auto rfl = bsdf.brdf->pdf(n, ray.d);
+        Float pdf = std::get<0>(rfl);
+        if (pdf <= 0) {
+          break;
+        }
+        auto wo = std::get<1>(rfl);
+        Float f = bsdf.brdf->f(n, ray.d, wo);
+        F *= f * std::abs(n * wo) / pdf;
+        F *= (*ri).g.R();
+        ray = (*ri).SpawnRay(wo);
       }
-      ray = (*ri).SpawnRay(std::get<1>(trans));
-      Spectrum tmp = PathIntegrator::Li(scene, ray, maxBounces - i);
-      L += F * tmp;
-      // specular part
-      auto rfl = Specular::pdf(ray.d * n <= 0 ? n : -n, ray.d);
-      ray = (*ri).SpawnRay(std::get<1>(rfl));
-    } else {
-      WARN("no such bsdf type, %d", bsdf.type());
-      continue;
     }
     // russian roulette
     if (i > 3) {

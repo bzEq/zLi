@@ -7,23 +7,46 @@
 
 namespace zLi {
 
-struct BSDF {
+struct BRDF {
   enum class Type {
     Specular,
-    Refractive,
     Diffuse,
   };
-  // type of bsdf
-  std::function<Type()> type;
-
   // @args: normal, wi
   // @return (pdf, wo)
   std::function<std::tuple<Float, Vector3f>(const Vector3f &, const Vector3f &)>
       pdf;
 
   // @args: normal, wi, wo
-  // @return bsdf
+  // @return brdf
   std::function<Float(const Vector3f &, const Vector3f &, const Vector3f &)> f;
+  std::function<BRDF::Type()> type;
+};
+
+struct BTDF {
+  // @args: normal, wi
+  // @return (pdf, wo)
+  std::function<std::tuple<Float, Vector3f>(const Vector3f &, const Vector3f &)>
+      pdf;
+
+  // @args: normal, wi, wo
+  // @return btdf
+  std::function<Float(const Vector3f &, const Vector3f &, const Vector3f &)> f;
+};
+
+struct BSDF {
+  BSDF() = default;
+  BSDF(const BSDF &rhs) {
+    if (rhs.brdf) {
+      brdf = std::make_unique<BRDF>(*rhs.brdf);
+    }
+    if (rhs.btdf) {
+      btdf = std::make_unique<BTDF>(*rhs.btdf);
+    }
+  }
+  BSDF(BSDF &&) = default;
+  std::unique_ptr<BRDF> brdf;
+  std::unique_ptr<BTDF> btdf;
 };
 
 struct LambertianDiffuse {
@@ -31,7 +54,6 @@ struct LambertianDiffuse {
                                          const Vector3f &wi);
   static Float f(const Vector3f &normal, const Vector3f &wi,
                  const Vector3f &wo);
-  static BSDF::Type type();
   static BSDF ImplBSDF();
 };
 
@@ -40,16 +62,12 @@ struct Specular {
                                          const Vector3f &wi);
   static Float f(const Vector3f &normal, const Vector3f &wi,
                  const Vector3f &wo);
-  static BSDF::Type type();
   static BSDF ImplBSDF();
 };
 
 struct Refractive {
-  static std::tuple<Float, Vector3f> pdf(const Vector3f &normal,
-                                         const Vector3f &wi);
   static BSDF ImplBSDF(Float);
 };
 
-} // end namespace zLi
-
+} // zLi
 #endif
