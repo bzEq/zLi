@@ -1,6 +1,4 @@
-#include "logging.hh"
-#include "renderer.hh"
-#include "window.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
@@ -9,6 +7,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+
+#include "logging.hh"
+#include "renderer.hh"
+#include "window.hh"
 
 namespace po = boost::program_options;
 
@@ -63,7 +65,8 @@ int main(int argc, char *argv[]) {
   window.Loop(
       [chan, &window]() {
         static const int EventProcessLimits = 128;
-        int count = std::min((int)chan->Size(), EventProcessLimits);
+        int count =
+            std::min(static_cast<int>(chan->Size()), EventProcessLimits);
         while (count--) {
           auto res = chan->Popi();
           if (!res) {
