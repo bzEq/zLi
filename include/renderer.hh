@@ -20,7 +20,7 @@ public:
     int x, y;
     xyYColor xyY;
   };
-  Renderer(const std::string &sceneFile, int film_width, int film_height,
+  Renderer(const std::string &scene_file, int film_width, int film_height,
            int spp = 128);
   Result<void> Render();
   void Stop();

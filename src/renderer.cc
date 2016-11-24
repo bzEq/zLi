@@ -18,9 +18,9 @@
 namespace zLi {
 
 const Float Renderer::SampleRadius = 0.5;
-Renderer::Renderer(const std::string &sceneFile, int film_width,
+Renderer::Renderer(const std::string &scene_file, int film_width,
                    int film_height, int spp)
-    : scene_file_(sceneFile), film_width_(film_width),
+    : scene_file_(scene_file), film_width_(film_width),
       film_height_(film_height), render_job_(0), stopped_(false), spp_(spp) {
   xyY_chan_ = std::make_shared<Chan<RenderResult>>();
 }
