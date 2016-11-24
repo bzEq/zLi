@@ -1,15 +1,19 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_CAMERA_HH_
 #define _ZLI_CAMERA_HH_
+#include <iostream>
+
 #include "math.hh"
 #include "ray.hh"
-
-#include <iostream>
 
 namespace zLi {
 
 struct PerspectiveCamera {
-  Vector3f e, front, up, right; // position and direction in world space
-  Transform wd2cam0, wd2cam, cam2wd0, cam2wd; // world2camera, camera2world;
+  // position and direction in world space
+  Vector3f e, front, up, right;
+  // world2camera, camera2world;
+  Transform wd2cam0, wd2cam, cam2wd0, cam2wd;
   Float fov, lensr, lensp;
   Float l;
   PerspectiveCamera() = default;
@@ -49,6 +53,6 @@ struct PerspectiveCamera {
   }
 };
 
-} // end namespace zLi
+}  // end namespace zLi
 
 #endif

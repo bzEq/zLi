@@ -1,15 +1,20 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_BOUNDBOX_HH_
 #define _ZLI_BOUNDBOX_HH_
+#include <algorithm>
+#include <iostream>
+#include <tuple>
+
 #include "math.hh"
 #include "ray.hh"
-
-#include <iostream>
 
 namespace zLi {
 
 struct BoundBox {
-  Vector3f min_point, max_point; // min_point for bottom left corner, max_point
-                                 // for top right corner
+  // min_point for bottom left corner, max_point
+  // for top right corner
+  Vector3f min_point, max_point;
   BoundBox()
       : min_point(Vector3f(INF, INF, INF)),
         max_point(Vector3f(NINF, NINF, NINF)) {}
@@ -39,5 +44,5 @@ struct BoundBox {
   std::optional<std::tuple<Float, Float>> Intersect(const Ray &ray) const;
   std::optional<std::tuple<BoundBox, BoundBox>> Split(int axis, Float d) const;
 };
-}
+}  // namespace zLi
 #endif

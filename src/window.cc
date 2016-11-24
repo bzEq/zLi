@@ -1,8 +1,10 @@
-#include "window.hh"
-#include "logging.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <chrono>
 #include <thread>
+
+#include "logging.hh"
+#include "window.hh"
 
 namespace zLi {
 
@@ -87,4 +89,4 @@ void Window::Loop(std::function<void()> &&display,
   }
 }
 
-} // zLi
+}  // namespace zLi

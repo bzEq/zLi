@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _RESULT_HH_
 #define _RESULT_HH_
 #include <cassert>
@@ -6,14 +8,16 @@
 #include <string>
 #include <utility>
 
-template <typename V> struct result_value {
+template <typename V>
+struct result_value {
   V v;
   result_value() = default;
-  result_value(const V &vv) : v(vv) {}
-  result_value(V &&vv) : v(std::move(vv)) {}
+  explicit result_value(const V &vv) : v(vv) {}
+  explicit result_value(V &&vv) : v(std::move(vv)) {}
 };
 
-template <> struct result_value<void> {};
+template <>
+struct result_value<void> {};
 
 template <typename VV, typename V = typename std::decay<VV>::type>
 inline result_value<V> Ok(VV &&v) {
@@ -22,11 +26,12 @@ inline result_value<V> Ok(VV &&v) {
 
 inline result_value<void> Ok() { return result_value<void>(); }
 
-template <typename E> struct result_error {
+template <typename E>
+struct result_error {
   E e;
   result_error() = default;
-  result_error(const E &ee) : e(ee) {}
-  result_error(E &&ee) : e(std::move(ee)) {}
+  explicit result_error(const E &ee) : e(ee) {}
+  explicit result_error(E &&ee) : e(std::move(ee)) {}
 };
 
 template <typename EE, typename E = typename std::decay<EE>::type>
@@ -34,7 +39,8 @@ inline result_error<E> Error(EE &&e) {
   return result_error<E>(std::forward<EE>(e));
 }
 
-template <typename V, typename E> class result {
+template <typename V, typename E>
+class result {
 public:
   result() = default;
   result(const result<V, E> &r) : ok_(r.ok_), v_(nullptr), e_(nullptr) {
@@ -80,7 +86,8 @@ private:
   std::unique_ptr<result_error<E>> e_;
 };
 
-template <typename E> class result<void, E> {
+template <typename E>
+class result<void, E> {
 public:
   result() = default;
   result(const result<void, E> &r) : ok_(r.ok_), e_(nullptr) {
@@ -104,7 +111,8 @@ private:
   std::unique_ptr<result_error<E>> e_;
 };
 
-template <typename V> using Result = result<V, std::string>;
+template <typename V>
+using Result = result<V, std::string>;
 
 inline result_error<std::string> Error(const char *err) {
   return Error(std::string(err));
@@ -118,18 +126,18 @@ template <typename... Args>
 inline result_error<std::string> FormatError(const char *fmt, Args &&... args) {
   static const int LIMITS = (1 << 16);
   int cap = 64;
-  char *buf = (char *)malloc(cap);
+  char *buf = new char[cap];
   while (cap <= LIMITS) {
     int len = std::snprintf(buf, cap, fmt, std::forward<Args>(args)...);
     if (len < cap) {
       break;
     }
-    free(buf);
+    delete[] buf;
     cap <<= 1;
-    buf = (char *)malloc(cap);
+    buf = new char[cap];
   }
   std::string s(buf);
-  free(buf);
+  delete[] buf;
   return Error(std::move(s));
 }
 

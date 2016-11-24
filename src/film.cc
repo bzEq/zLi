@@ -1,9 +1,11 @@
-#include "film.hh"
-#include "color.hh"
-#include "result.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <OpenEXR/ImfRgba.h>
 #include <OpenEXR/ImfRgbaFile.h>
+
+#include "color.hh"
+#include "film.hh"
+#include "result.hh"
 
 namespace zLi {
 
@@ -52,4 +54,4 @@ Result<void> Film::WriteEXR(const std::string &exr) {
   delete[] pixels;
   return Ok();
 }
-} // zLi
+}  // namespace zLi

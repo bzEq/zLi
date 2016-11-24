@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "integrator.hh"
 #include "logging.hh"
 #include "scene.hh"
@@ -72,4 +74,4 @@ Spectrum PathIntegrator::Li(const Scene &scene, const Ray &r, int maxBounces) {
   return L;
 }
 
-} // end namespace zLi
+}  // namespace zLi

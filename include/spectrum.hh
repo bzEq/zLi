@@ -1,11 +1,13 @@
-#ifndef _ZLI_SPD_HH_
-#define _ZLI_SPD_HH_
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
+#ifndef _ZLI_SPECTRUM_HH_
+#define _ZLI_SPECTRUM_HH_
+#include <cmath>
+#include <iostream>
+
 #include "color.hh"
 #include "diagram2d.hh"
 #include "math.hh"
-
-#include <cmath>
-#include <iostream>
 
 namespace zLi {
 
@@ -16,7 +18,7 @@ public:
   static const Float DefaultSampleY[];
 
   Spectrum();
-  Spectrum(Float v);
+  explicit Spectrum(Float v);
   Spectrum(const Float *, const Float *, size_t);
   Spectrum(const Spectrum &) = default;
 
@@ -67,8 +69,8 @@ public:
   xyYColor ToxyY() const;
 
 private:
-  Spectrum(const Diagram2D &s) : spd_(s) {}
-  Diagram2D spd_; // Spectral power distribution
+  explicit Spectrum(const Diagram2D &s) : spd_(s) {}
+  Diagram2D spd_;  // Spectral power distribution
 };
-}
+}  // namespace zLi
 #endif

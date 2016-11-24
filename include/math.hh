@@ -1,15 +1,19 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_MATH_HH_
 #define _ZLI_MATH_HH_
-#include "option.hh"
-
 #include <cassert>
 #include <cmath>
 #include <cstring>
-#include <experimental/optional>
+
+#include <algorithm>
 #include <iostream>
 #include <limits>
 #include <random>
 #include <tuple>
+#include <utility>
+
+#include "option.hh"
 
 namespace std {
 
@@ -20,9 +24,11 @@ using optional = Option<T>;
 
 namespace zLi {
 
-template <typename T> struct Vector4;
+template <typename T>
+struct Vector4;
 
-template <typename T> struct Vector3 {
+template <typename T>
+struct Vector3 {
   T x, y, z;
   Vector3() : x(0), y(0), z(0) {}
   Vector3(const Vector3 &) = default;
@@ -71,7 +77,8 @@ template <typename T> struct Vector3 {
   Vector4<T> ToVector4() const;
 };
 
-template <typename T> struct Vector4 {
+template <typename T>
+struct Vector4 {
   T x, y, z, w;
   Vector4() : x(0), y(0), z(0), w(0) {}
   Vector4(const Vector4 &) = default;
@@ -97,7 +104,8 @@ template <typename T> struct Vector4 {
   }
 };
 
-template <typename T> struct Matrix4x4 {
+template <typename T>
+struct Matrix4x4 {
   T m[4][4];
 
   Matrix4x4() {
@@ -107,8 +115,8 @@ template <typename T> struct Matrix4x4 {
   }
   Matrix4x4(const Matrix4x4 &) = default;
 
-  Matrix4x4(const T mm[4][4]) { std::memcpy(m, mm, 16 * sizeof(T)); }
-  Matrix4x4(const T mm[3][3]) {
+  explicit Matrix4x4(const T mm[4][4]) { std::memcpy(m, mm, 16 * sizeof(T)); }
+  explicit Matrix4x4(const T mm[3][3]) {
     std::memset(m, 0, 16 * sizeof(T));
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
@@ -167,8 +175,10 @@ template <typename T> struct Matrix4x4 {
           break;
         }
       }
-      if (pick < 0)
-        return {}; // singular matrix
+      if (pick < 0) {
+        // singular matrix
+        return {};
+      }
       if (i != pick) {
         for (int j = 0; j < 4; j++) {
           std::swap(minv[i][j], minv[pick][j]);
@@ -200,14 +210,16 @@ template <typename T> struct Matrix4x4 {
         int tmp = ind[i];
         ind[i] = ind[tmp];
         ind[tmp] = tmp;
-      } else
+      } else {
         i++;
+      }
     }
     return Matrix4x4(minv);
   }
 };
 
-template <typename T> struct Quaternion {
+template <typename T>
+struct Quaternion {
   T r, i, j, k;
   Quaternion() : r(0), i(0), j(0), k(0) {}
   Quaternion(const Quaternion &) = default;
@@ -264,7 +276,8 @@ template <typename T> struct Quaternion {
   }
 };
 
-template <typename T> struct Line3 {
+template <typename T>
+struct Line3 {
   Vector3<T> pt, d;
   Line3() = default;
   Line3(const Line3 &) = default;
@@ -272,7 +285,8 @@ template <typename T> struct Line3 {
   Line3(const Vector3<T> &pt, const Vector3<T> &d) : pt(pt), d(d) {}
 };
 
-template <typename T> Matrix4x4<T> inline SingularMatrixFallback() {
+template <typename T>
+Matrix4x4<T> inline SingularMatrixFallback() {
   std::cerr << "singular matrix found" << std::endl;
   return Matrix4x4<T>();
 }
@@ -288,12 +302,14 @@ inline Matrix4x4<T> operator*(const Matrix4x4<T> &m, T f) {
   return ret;
 }
 
-template <typename T> Vector4<T> InvalidVector4Fallback() {
+template <typename T>
+Vector4<T> InvalidVector4Fallback() {
   std::cerr << "invalid vector4, check w component" << std::endl;
   return Vector4<T>();
 }
 
-template <typename T> inline Vector4<T> Vector3<T>::ToVector4() const {
+template <typename T>
+inline Vector4<T> Vector3<T>::ToVector4() const {
   return Vector4<T>(*this, 1);
 }
 
@@ -318,7 +334,8 @@ inline Vector3<T> operator^(const Vector3<T> &u, const Vector3<T> &v) {
                     u.x * v.y - u.y * v.x);
 }
 
-template <typename T> inline Vector3<T> operator-(const Vector3<T> &v) {
+template <typename T>
+inline Vector3<T> operator-(const Vector3<T> &v) {
   return Vector3<T>(-v.x, -v.y, -v.z);
 }
 
@@ -371,7 +388,8 @@ inline std::ostream &operator<<(std::ostream &out, const Matrix4x4<T> &m) {
   return out;
 }
 
-template <typename T> inline Quaternion<T> operator-(const Quaternion<T> &q) {
+template <typename T>
+inline Quaternion<T> operator-(const Quaternion<T> &q) {
   return Quaternion<T>(-q.r, -q.i, -q.j, -q.k);
 }
 
@@ -472,9 +490,9 @@ inline Matrix4x4f TranslateTransform(const Vector3f &v) {
 
 inline Matrix4x4f OrthoTransform(Float l, Float r, Float b, Float t, Float n,
                                  Float f) {
+  // use gl convention
   return Matrix4x4f(2 / (r - l), 0, 0, -(r + l) / (r - l), 0, 2 / (t - b), 0,
-                    -(t + b) / (t - b), 0, 0, -2 / (f - n),
-                    -(f + n) / (f - n), // use gl convention
+                    -(t + b) / (t - b), 0, 0, -2 / (f - n), -(f + n) / (f - n),
                     0, 0, 0, 1);
 }
 
@@ -526,7 +544,8 @@ inline Float Lerp(Float x0, Float y0, Float x1, Float y1, Float x) {
   return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-template <typename T> inline T UniformInt(T l, T r) {
+template <typename T>
+inline T UniformInt(T l, T r) {
   static std::random_device rd;
   static std::mt19937 g(rd());
   std::uniform_int_distribution<> u(l, r);
@@ -591,6 +610,6 @@ inline Float EstimateIntegration2D(Func F, Float u, Float v, Float radius,
   return radius * radius * s;
 }
 
-} // end namespace zLi
+}  // end namespace zLi
 
 #endif

@@ -1,5 +1,14 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_SCENE_HH_
 #define _ZLI_SCENE_HH_
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "bsdf.hh"
 #include "camera.hh"
 #include "geometry.hh"
@@ -11,12 +20,6 @@
 #include "spectrum.hh"
 #include "sphere.hh"
 #include "triangle.hh"
-
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-
-#include <string>
-#include <vector>
 
 namespace zLi {
 
@@ -37,12 +40,12 @@ public:
 
 private:
   Scene() = default;
-  Scene(std::vector<Geometry> &&gs) : gs_(gs) {} // kdt_(gs_) {}
+  explicit Scene(std::vector<Geometry> &&gs) : gs_(gs) {}  // kdt_(gs_) {}
   std::vector<Light> lights_;
   PerspectiveCamera camera_;
   std::vector<Geometry> gs_;
   std::unique_ptr<KdTree> kdt_;
 };
 
-} // end namespace zLi
+}  // end namespace zLi
 #endif

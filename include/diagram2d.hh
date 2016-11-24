@@ -1,9 +1,12 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_DIAGRAM2D_HH_
 #define _ZLI_DIAGRAM2D_HH_
-#include "math.hh"
-
 #include <iostream>
+#include <tuple>
 #include <vector>
+
+#include "math.hh"
 
 namespace zLi {
 class Diagram2D {
@@ -33,5 +36,5 @@ public:
 private:
   std::vector<std::tuple<Float, Float>> diagram_;
 };
-}
+}  // namespace zLi
 #endif

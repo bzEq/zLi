@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "boundbox.hh"
 
 namespace zLi {
@@ -47,4 +49,4 @@ BoundBox Union(const BoundBox &lhs, const BoundBox &rhs) {
   return res;
 }
 
-} // namespace zLi
+}  // namespace zLi

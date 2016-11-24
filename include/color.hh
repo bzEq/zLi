@@ -1,8 +1,10 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_COLOR_HH_
 #define _ZLI_COLOR_HH_
-#include "math.hh"
-
 #include <iostream>
+
+#include "math.hh"
 
 namespace zLi {
 
@@ -44,5 +46,5 @@ inline std::ostream &operator<<(std::ostream &out, const xyYColor &c) {
   return out;
 }
 
-} // zLi
+}  // namespace zLi
 #endif

@@ -1,3 +1,5 @@
+// Copyright(c) 2016 Kai Luo.All rights reserved.
+
 #include "spectrum.hh"
 #include "CIE.hh"
 #include "color.hh"
@@ -36,4 +38,4 @@ XYZColor Spectrum::ToXYZ() const {
 
 RGBColor Spectrum::ToRGB() const { return CIE::XYZ2RGB(ToXYZ()); }
 xyYColor Spectrum::ToxyY() const { return CIE::XYZ2xyY(ToXYZ()); }
-} // zLi
+}  // namespace zLi

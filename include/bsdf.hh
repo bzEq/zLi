@@ -1,9 +1,12 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_BSDF_HH_
 #define _ZLI_BSDF_HH_
-#include "math.hh"
-
 #include <functional>
 #include <memory>
+#include <tuple>
+
+#include "math.hh"
 
 namespace zLi {
 
@@ -69,5 +72,5 @@ struct Refractive {
   static BSDF ImplBSDF(Float);
 };
 
-} // zLi
+}  // namespace zLi
 #endif

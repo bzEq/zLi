@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_CIE_HH_
 #define _ZLI_CIE_HH_
 #include "color.hh"
@@ -18,5 +20,5 @@ public:
   static XYZColor RGB2XYZ(const RGBColor &);
   static RGBColor xyY2RGB(const xyYColor &);
 };
-}
+}  // namespace zLi
 #endif

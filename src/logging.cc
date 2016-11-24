@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "logging.hh"
 
 namespace zLi {
@@ -22,4 +24,4 @@ void Logger::Logging(Logger::LogLevel level, const char *file, const char *func,
   OutputMutex.unlock();
 }
 
-} // namespace zLi
+}  // namespace zLi

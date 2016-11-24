@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "sphere.hh"
 #include "logging.hh"
 
@@ -43,4 +45,4 @@ Geometry Sphere::ImplGeometry() {
   };
 }
 
-} // namespace zLi
+}  // namespace zLi

@@ -1,13 +1,17 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_KDTREE_HH_
 #define _ZLI_KDTREE_HH_
+#include <iostream>
+#include <memory>
+#include <stack>
+#include <utility>
+#include <vector>
+
 #include "boundbox.hh"
 #include "geometry.hh"
 #include "math.hh"
 #include "ray.hh"
-
-#include <iostream>
-#include <stack>
-#include <vector>
 
 namespace zLi {
 class KdTree {
@@ -34,9 +38,9 @@ private:
   };
   KdTree() : root_(nullptr) {}
   KdTree(const KdTree &) = default;
-  KdTree(BoundBox &&b) : root_(nullptr), world_(std::move(b)) {}
+  explicit KdTree(BoundBox &&b) : root_(nullptr), world_(std::move(b)) {}
   Node *root_;
   BoundBox world_;
 };
-} // zLi
+}  // namespace zLi
 #endif

@@ -1,13 +1,15 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_WINDOW_HH_
 #define _ZLI_WINDOW_HH_
-#include "color.hh"
-#include "result.hh"
-
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+
+#include "color.hh"
+#include "result.hh"
 
 namespace zLi {
 class Window {
@@ -41,5 +43,5 @@ private:
   bool should_close_;
 };
 
-} // zLi
+}  // namespace zLi
 #endif

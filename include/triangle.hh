@@ -1,14 +1,17 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_TRIANGLE_HH_
 #define _ZLI_TRIANGLE_HH_
+#include <iostream>
+#include <memory>
+#include <utility>
+
 #include "boundbox.hh"
 #include "bsdf.hh"
 #include "geometry.hh"
 #include "math.hh"
 #include "ray.hh"
 #include "spectrum.hh"
-
-#include <iostream>
-#include <memory>
 
 namespace zLi {
 struct Triangle : std::enable_shared_from_this<Triangle> {
@@ -39,6 +42,6 @@ struct Triangle : std::enable_shared_from_this<Triangle> {
   Geometry ImplGeometry();
 };
 
-} // end namespace zLi
+}  // end namespace zLi
 
 #endif

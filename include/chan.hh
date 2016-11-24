@@ -1,17 +1,21 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_CHAN_HH_
 #define _ZLI_CHAN_HH_
-#include "math.hh"
-
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <utility>
+
+#include "math.hh"
 
 namespace zLi {
 
 // a blocking channel impl
-template <typename T> class Chan {
+template <typename T>
+class Chan {
 public:
   Chan() = default;
   Chan(const Chan &c) = delete;
@@ -26,7 +30,7 @@ public:
     return q_.size();
   }
 
-  // TODO: version of dealing with time out is required.
+  // TODO(Kai Luo): version of dealing with time out is required.
   friend bool operator<<(Chan &c, const T &v) {
     std::unique_lock<std::mutex> l(c.mu_);
     if (c.closed_)
@@ -97,5 +101,5 @@ private:
   std::queue<T> q_;
   bool closed_;
 };
-}
+}  // namespace zLi
 #endif

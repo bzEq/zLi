@@ -1,10 +1,12 @@
-#include "kdtree.hh"
-#include "boundbox.hh"
-#include "geometry.hh"
-#include "logging.hh"
-#include "math.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <queue>
+
+#include "boundbox.hh"
+#include "geometry.hh"
+#include "kdtree.hh"
+#include "logging.hh"
+#include "math.hh"
 
 namespace zLi {
 
@@ -123,4 +125,4 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &r) {
 BoundBox KdTree::World() { return world_; }
 KdTree::~KdTree() {}
 
-} // .zLi
+}  // namespace zLi

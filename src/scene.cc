@@ -1,14 +1,16 @@
-#include "scene.hh"
-#include "geometry.hh"
-#include "logging.hh"
-#include "sphere.hh"
-#include "triangle.hh"
-#include "utils.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include <string>
+
+#include "geometry.hh"
+#include "logging.hh"
+#include "scene.hh"
+#include "sphere.hh"
+#include "triangle.hh"
+#include "utils.hh"
 
 namespace zLi {
 
@@ -152,4 +154,4 @@ bool Scene::IsVisible(const RaySurfaceIntersection &ri, const Vector3f &p) {
   return t <= (*test).t;
 }
 
-} // zLi
+}  // namespace zLi

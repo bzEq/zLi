@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "color.hh"
 
 namespace zLi {
@@ -66,4 +68,4 @@ RGBColor RGBColor::sRGB() const {
   return rgb;
 }
 
-} // zLi
+}  // namespace zLi

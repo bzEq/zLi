@@ -1,8 +1,10 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_FILTER_HH_
 #define _ZLI_FILTER_HH_
-#include "math.hh"
-
 #include <cmath>
+
+#include "math.hh"
 
 namespace zLi {
 namespace filter {
@@ -10,9 +12,10 @@ namespace filter {
 class Tent1D {
 public:
   Tent1D() : r_(1) {}
-  Tent1D(Float r) : r_(r) {}
+  explicit Tent1D(Float r) : r_(r) {}
   Float f(Float x) { return tent(x / r_) / r_; }
-  template <typename Func> Float Convolve(Func F, Float x) {
+  template <typename Func>
+  Float Convolve(Func F, Float x) {
     auto conv = [&](Float t) { return f(t) * F(x - t); };
     return EstimateIntegration1D(conv, -r_, r_);
   }
@@ -28,7 +31,7 @@ private:
 class Box1D {
 public:
   Box1D() : r_(1) {}
-  Box1D(Float r) : r_(r) {}
+  explicit Box1D(Float r) : r_(r) {}
   Float f(Float x) {
     x = std::abs(x);
     if (x >= r_) {
@@ -36,7 +39,8 @@ public:
     }
     return 1 / (2 * r_);
   }
-  template <typename Func> Float Convolve(Func F, Float x) {
+  template <typename Func>
+  Float Convolve(Func F, Float x) {
     auto conv = [&](Float t) { return f(t) * F(x - t); };
     return EstimateIntegration1D(conv, -r_, r_);
   }
@@ -58,7 +62,8 @@ public:
     }
     return 0;
   }
-  template <typename Func> static Float Convolve(Func F, Float x) {
+  template <typename Func>
+  static Float Convolve(Func F, Float x) {
     auto conv = [&](Float t) { return f(t) * F(x - t); };
     return EstimateIntegration1D(conv, -2, 2);
   }
@@ -69,8 +74,9 @@ public:
   Gauss1D() : A_(1), fx_(1) {}
   Gauss1D(Float A, Float fx) : A_(A), fx_(fx) {}
   Float f(Float x) { return A_ * std::exp(-(x * x) / (2 * fx_ * fx_)); }
-  template <typename Func> Float Convolve(Func F, Float x) {
-    static const Float r = std::sqrt(fx_ * fx_); // FIXME
+  template <typename Func>
+  Float Convolve(Func F, Float x) {
+    static const Float r = std::sqrt(fx_ * fx_);  // FIXME
     auto conv = [&](Float t) { return f(t) * F(x - t); };
     return EstimateIntegration1D(conv, -r, r);
   }
@@ -79,6 +85,6 @@ private:
   Float A_, fx_;
 };
 
-} // filter
-} // zLi
+}  // namespace filter
+}  // namespace zLi
 #endif

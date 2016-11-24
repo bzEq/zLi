@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "bsdf.hh"
 
 #include <memory>
@@ -53,7 +55,7 @@ std::tuple<Float, Vector3f> Specular::pdf(const Vector3f &normal,
   if (normal * wi >= 0) {
     return std::make_tuple(0, Vector3f());
   }
-  auto wo = (wi - normal * (2 * (wi * normal))); // if noraml and wi r unit
+  auto wo = (wi - normal * (2 * (wi * normal)));  // if noraml and wi r unit
   // vectors, wo should be an unit
   // vector too
   return std::make_tuple(1.f, wo);
@@ -120,4 +122,4 @@ BSDF Refractive::ImplBSDF(Float index) {
   });
   return ret;
 }
-}
+}  // namespace zLi

@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "diagram2d.hh"
 
 #include <algorithm>
@@ -100,4 +102,4 @@ Diagram2D operator+(const Diagram2D &lhs, const Diagram2D &rhs) {
   }
   return res;
 }
-}
+}  // namespace zLi

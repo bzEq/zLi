@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #include "CIE.hh"
 #include "math.hh"
 
@@ -116,4 +118,4 @@ RGBColor CIE::xyY2RGB(const xyYColor &xyY) {
   Float x = xyY.x, y = xyY.y, Y = xyY.Y;
   return XYZ2RGB(XYZColor(Y * x / y, Y, Y * (1 - x - y) / y));
 }
-}
+}  // namespace zLi

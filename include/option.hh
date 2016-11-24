@@ -1,3 +1,5 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _OPTION_HH_
 #define _OPTION_HH_
 #include <cassert>
@@ -6,7 +8,8 @@
 #include <string>
 #include <utility>
 
-template <typename T> class Option {
+template <typename T>
+class Option {
 public:
   Option() : none_(true) {}
   Option(const Option<T> &o) : none_(o.none_), v_(nullptr) {
@@ -38,9 +41,5 @@ template <typename TT, typename T = typename std::decay<TT>::type>
 inline Option<T> Some(TT &&v) {
   return Option<T>(std::forward<TT>(v));
 }
-
-template <typename T> Option<T> None() { return Option<T>(nullptr); }
-
-inline std::nullptr_t None() { return nullptr; }
 
 #endif

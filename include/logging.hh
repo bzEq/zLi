@@ -1,7 +1,10 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_LOGGING_HH_
 #define _ZLI_LOGGING_HH_
 #include <mutex>
 #include <string>
+#include <utility>
 
 #define LOG(level, format, ...)                                                \
   zLi::Logger::Logging(level, __FILE__, __FUNCTION__, __LINE__, format,        \
@@ -46,18 +49,18 @@ public:
       return;
     }
     int cap = 64;
-    char *buf = (char *)malloc(cap);
+    char *buf = new char[cap];
     while (cap <= LIMITS) {
       int len = snprintf(buf, cap, fmt, std::forward<Args>(args)...);
       if (len < cap) {
         break;
       }
-      free(buf);
+      delete[] buf;
       cap <<= 1;
-      buf = (char *)malloc(cap);
+      buf = new char[cap];
     }
     Logging(level, file, func, line, buf);
-    free(buf);
+    delete[] buf;
     return;
   }
 
@@ -65,26 +68,7 @@ private:
   static std::mutex OutputMutex;
   static LogLevel CurrentLevel;
   static const char *LogLevelString[5];
-
-  template <typename... Args>
-  static std::string FormatToString(const char *fmt, Args &&... args) {
-    static const int LIMITS = (1 << 16);
-    int cap = 64;
-    char *buf = (char *)malloc(cap);
-    while (cap <= LIMITS) {
-      int len = snprintf(buf, cap, fmt, std::forward<Args>(args)...);
-      if (len < cap) {
-        break;
-      }
-      free(buf);
-      cap <<= 1;
-      buf = (char *)malloc(cap);
-    }
-    std::string s(buf);
-    free(buf);
-    return s;
-  }
 };
-} // namespace zLi
+}  // namespace zLi
 
 #endif

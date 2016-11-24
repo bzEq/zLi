@@ -1,6 +1,8 @@
-#include "triangle.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <functional>
+
+#include "triangle.hh"
 
 namespace zLi {
 
@@ -49,4 +51,4 @@ Geometry Triangle::ImplGeometry() {
   };
 }
 
-} // namespace zLi
+}  // namespace zLi

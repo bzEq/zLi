@@ -1,14 +1,17 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_FILM_HH_
 #define _ZLI_FILM_HH_
-#include "math.hh"
-#include "result.hh"
-#include "spectrum.hh"
-
 #include <OpenEXR/ImfRgba.h>
 #include <OpenEXR/ImfRgbaFile.h>
 
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "math.hh"
+#include "result.hh"
+#include "spectrum.hh"
 
 namespace zLi {
 class Film {
@@ -30,5 +33,5 @@ private:
   void FillRgba(Imf::Rgba *);
 };
 
-} // namespace zLi
+}  // namespace zLi
 #endif

@@ -1,13 +1,16 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef _ZLI_SPHERE_HH_
 #define _ZLI_SPHERE_HH_
+#include <iostream>
+#include <memory>
+#include <utility>
+
 #include "boundbox.hh"
 #include "bsdf.hh"
 #include "geometry.hh"
 #include "math.hh"
 #include "ray.hh"
-
-#include <iostream>
-#include <memory>
 
 namespace zLi {
 struct Sphere : std::enable_shared_from_this<Sphere> {
@@ -33,5 +36,5 @@ struct Sphere : std::enable_shared_from_this<Sphere> {
   Geometry ImplGeometry();
 };
 
-} // end namespace zLi
+}  // end namespace zLi
 #endif

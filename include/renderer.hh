@@ -1,14 +1,17 @@
+// Copyright (c) 2016 Kai Luo. All rights reserved.
+
 #ifndef __ZLI_RENDERER_HH_
 #define __ZLI_RENDERER_HH_
+#include <atomic>
+#include <memory>
+#include <string>
+
 #include "chan.hh"
 #include "film.hh"
 #include "filter.hh"
 #include "option.hh"
 #include "scene.hh"
 #include "spectrum.hh"
-
-#include <atomic>
-#include <memory>
 
 namespace zLi {
 class Renderer {
@@ -41,11 +44,11 @@ private:
   std::atomic<int> render_job_;
   std::atomic<bool> stopped_;
   Spectrum SampleSpectrumAt(Float, Float);
-  int spp_; // samples per pixel
+  int spp_;  // samples per pixel
   // std::shared_ptr<Chan<RenderResult>> rgb_chan_;
   std::shared_ptr<Chan<RenderResult>> xyY_chan_;
   filter::Gauss1D filter_;
 };
-}
+}  // namespace zLi
 
 #endif

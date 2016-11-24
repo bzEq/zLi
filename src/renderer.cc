@@ -1,10 +1,4 @@
-#include "renderer.hh"
-#include "CIE.hh"
-#include "color.hh"
-#include "integrator.hh"
-#include "logging.hh"
-#include "math.hh"
-#include "scene.hh"
+// Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -12,6 +6,14 @@
 #include <atomic>
 #include <chrono>
 #include <thread>
+
+#include "CIE.hh"
+#include "color.hh"
+#include "integrator.hh"
+#include "logging.hh"
+#include "math.hh"
+#include "renderer.hh"
+#include "scene.hh"
 
 namespace zLi {
 
@@ -40,7 +42,7 @@ Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
 static xyYColor PrimaryColors[] = {
     xyYColor(0.64, 0.33, 0.2126), xyYColor(0.3, 0.6, 0.7152),
     xyYColor(0.15, 0.06, 0.0722),
-    xyYColor(0.3127, 0.329, 1.0), // red, green, blue, white
+    xyYColor(0.3127, 0.329, 1.0),  // red, green, blue, white
 };
 
 void Renderer::AddToxyYChan(int i, int j, const Spectrum &s) {
@@ -63,7 +65,7 @@ void Renderer::Work(int i, int j) {
     // DEBUG("pixel sample (%f, %f)", x, y);
     Spectrum s = SampleSpectrumAt(x, y);
     Float r = std::sqrt((x - i) * (x - i) + (y - j) * (y - j));
-    s *= filter_.f(r) * (Float{1} / spp_);
+    s *= filter_.f(r) * (1.f / spp_);
     res += s;
   }
   AddToxyYChan(i, j, res);
@@ -128,4 +130,4 @@ Film Renderer::MoveRenderResult() { return std::move(*film_); }
 
 Renderer::~Renderer() {}
 
-} // namespace zLi
+}  // namespace zLi
