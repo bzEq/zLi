@@ -24,8 +24,8 @@ Renderer::Renderer(const std::string &sceneFile, int film_width,
 }
 
 Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
-  Float l = (Float)std::max(film_width_ + 2 * SampleRadius,
-                            film_height_ + 2 * SampleRadius);
+  Float l = Float{std::max(film_width_ + 2 * SampleRadius,
+                           film_height_ + 2 * SampleRadius)};
   Float tx = (film_width_ + 2 * SampleRadius) / (2 * l);
   Float ty = (film_height_ + 2 * SampleRadius) / (2 * l);
   // normalize
@@ -63,7 +63,7 @@ void Renderer::Work(int i, int j) {
     // DEBUG("pixel sample (%f, %f)", x, y);
     Spectrum s = SampleSpectrumAt(x, y);
     Float r = std::sqrt((x - i) * (x - i) + (y - j) * (y - j));
-    s *= filter_.f(r) * ((Float)1 / spp_);
+    s *= filter_.f(r) * (Float{1} / spp_);
     res += s;
   }
   AddToxyYChan(i, j, res);
