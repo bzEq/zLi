@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
       return;
     }
     if (!exr.empty()) {
-      zLi::Film f(rd.GetRenderResult());
+      zLi::Film f(rd.MoveRenderResult());
       f.WriteEXR(exr);
     }
     DEBUG("render finished");

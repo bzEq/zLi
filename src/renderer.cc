@@ -124,7 +124,7 @@ Result<void> Renderer::Render() {
   // return SlowRender();
 }
 
-Film Renderer::GetRenderResult() { return std::move(*film_); }
+Film Renderer::MoveRenderResult() { return std::move(*film_); }
 
 Renderer::~Renderer() {}
 

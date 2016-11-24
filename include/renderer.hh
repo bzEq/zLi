@@ -24,7 +24,7 @@ public:
   bool Stopped();
   // std::shared_ptr<Chan<RenderResult>> RGBChan() { return rgb_chan_; }
   std::shared_ptr<Chan<RenderResult>> xyYChan() { return xyY_chan_; }
-  Film GetRenderResult();
+  Film MoveRenderResult();
   ~Renderer();
 
 private:
