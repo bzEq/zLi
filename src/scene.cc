@@ -119,7 +119,7 @@ std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {
   //     std::cerr << ray.o << " " << ray.d;
   //     WARN(" %f %f", ray.tmin, ray.tmax);
   //     auto world(kdt_->World());
-  //     std::cerr << world.pMin << " " << world.pMax << std::endl;
+  //     std::cerr << world.min_point << " " << world.max_point << std::endl;
   //     assert(world.Intersect(ray));
   //     assert(false);
   //   }

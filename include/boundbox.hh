@@ -8,13 +8,13 @@
 namespace zLi {
 
 struct BoundBox {
-  Vector3f pMin, pMax; // pMin for bottom left corner, pMax for top right corner
+  Vector3f min_point, max_point; // min_point for bottom left corner, max_point for top right corner
   BoundBox()
-      : pMin(Vector3f(INF, INF, INF)), pMax(Vector3f(NINF, NINF, NINF)) {}
+      : min_point(Vector3f(INF, INF, INF)), max_point(Vector3f(NINF, NINF, NINF)) {}
   BoundBox(const Vector3f &p, const Vector3f &q)
-      : pMin(std::min(p.x, q.x), std::min(p.y, q.y), std::min(p.z, q.z)),
-        pMax(std::max(p.x, q.x), std::max(p.y, q.y), std::max(p.z, q.z)) {}
-  Vector3f Diagonal() const { return pMax - pMin; }
+      : min_point(std::min(p.x, q.x), std::min(p.y, q.y), std::min(p.z, q.z)),
+        max_point(std::max(p.x, q.x), std::max(p.y, q.y), std::max(p.z, q.z)) {}
+  Vector3f Diagonal() const { return max_point - min_point; }
   Float SurfaceArea() const {
     Vector3f d = Diagonal();
     return 2 * (d.x * d.y + d.y * d.z + d.z * d.x);
@@ -24,10 +24,10 @@ struct BoundBox {
     return d.x * d.y * d.z;
   }
   bool InBox(const Vector3f &p) const;
-  Vector3f Middle() const { return (pMin + pMax) * (Float)0.5; }
+  Vector3f Middle() const { return (min_point + max_point) * (Float)0.5; }
   bool CanContain(const BoundBox &b) const {
     for (int i = 0; i < 3; ++i) {
-      if (b.pMin[i] < pMin[i] || b.pMax[i] > pMax[i]) {
+      if (b.min_point[i] < min_point[i] || b.max_point[i] > max_point[i]) {
         return false;
       }
     }

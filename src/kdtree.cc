@@ -17,15 +17,15 @@ void KdTree::Node::Insert(int axis, const Geometry &g) {
   }
   if (split_axis == NonAxis) {
     split_axis = axis;
-    split_plane = ++axis & 1 ? geometry->Bounds().pMin[split_axis]
-                             : geometry->Bounds().pMax[split_axis];
+    split_plane = ++axis & 1 ? geometry->Bounds().min_point[split_axis]
+                             : geometry->Bounds().max_point[split_axis];
     child[0] = new Node();
     child[1] = new Node();
   }
   BoundBox b = g.Bounds();
-  if (b.pMin[split_axis] > split_plane) {
+  if (b.min_point[split_axis] > split_plane) {
     child[1]->Insert(++axis % 3, g);
-  } else if (b.pMax[split_axis] < split_plane) {
+  } else if (b.max_point[split_axis] < split_plane) {
     child[0]->Insert(++axis % 3, g);
   } else {
     child[0]->Insert(++axis % 3, g);
