@@ -20,13 +20,13 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
   for (auto it = json.begin(); it != json.end(); ++it) {
     auto s = it->second;
     auto type = s.get<std::string>("type");
-    DEBUG("geometry type: %s", type.c_str());
+    DEBUGLOG("geometry type: %s", type.c_str());
     if (type == "sphere") {
       auto res = SphereFromJson(s);
       if (res) {
         gs.push_back(std::make_shared<Sphere>(std::move(*res))->ImplGeometry());
       } else {
-        WARN(res.Error().c_str());
+        WARNLOG(res.Error().c_str());
       }
     } else if (type == "triangle") {
       auto res = TriangleFromJson(s);
@@ -34,7 +34,7 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
         gs.push_back(
             std::make_shared<Triangle>(std::move(*res))->ImplGeometry());
       } else {
-        WARN(res.Error().c_str());
+        WARNLOG(res.Error().c_str());
       }
     }
   }

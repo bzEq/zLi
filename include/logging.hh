@@ -6,27 +6,27 @@
 #include <string>
 #include <utility>
 
-#define LOG(level, format, ...)                                                \
+#define ZLOG(level, format, ...)                                               \
   zLi::Logger::Logging(level, __FILE__, __FUNCTION__, __LINE__, format,        \
                        ##__VA_ARGS__)
 
-#define INFO(format, ...)                                                      \
+#define INFOLOG(format, ...)                                                   \
   zLi::Logger::Logging(zLi::Logger::INFO, __FILE__, __FUNCTION__, __LINE__,    \
                        format, ##__VA_ARGS__)
 
-#define DEBUG(format, ...)                                                     \
+#define DEBUGLOG(format, ...)                                                  \
   zLi::Logger::Logging(zLi::Logger::DEBUG, __FILE__, __FUNCTION__, __LINE__,   \
                        format, ##__VA_ARGS__)
 
-#define WARN(format, ...)                                                      \
+#define WARNLOG(format, ...)                                                   \
   zLi::Logger::Logging(zLi::Logger::WARN, __FILE__, __FUNCTION__, __LINE__,    \
                        format, ##__VA_ARGS__)
 
-#define ERROR(format, ...)                                                     \
+#define ERRORLOG(format, ...)                                                  \
   zLi::Logger::Logging(zLi::Logger::ERROR, __FILE__, __FUNCTION__, __LINE__,   \
                        format, ##__VA_ARGS__)
 
-#define FATAL(format, ...)                                                     \
+#define FATALLOG(format, ...)                                                  \
   zLi::Logger::Logging(zLi::Logger::FATAL, __FILE__, __FUNCTION__, __LINE__,   \
                        format, ##__VA_ARGS__)
 

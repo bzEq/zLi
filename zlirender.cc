@@ -16,7 +16,7 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
   zLi::Logger::SetLogLevel(zLi::Logger::DEBUG);
-  INFO("main program started...");
+  INFOLOG("main program started...");
   po::options_description desc("Usage:");
   desc.add_options()("help", "help message")("scene", po::value<std::string>(),
                                              "scene json file")(
@@ -46,20 +46,20 @@ int main(int argc, char *argv[]) {
   zLi::Window window(w, h);
   auto res = window.Init();
   if (!res) {
-    ERROR(res.Error().c_str());
+    ERRORLOG(res.Error().c_str());
     exit(1);
   }
   std::thread rt([&rd, exr]() {
     auto res = rd.Render();
     if (!res) {
-      ERROR(res.Error().c_str());
+      ERRORLOG(res.Error().c_str());
       return;
     }
     if (!exr.empty()) {
       zLi::Film f(rd.MoveRenderResult());
       f.WriteEXR(exr);
     }
-    DEBUG("render finished");
+    DEBUGLOG("render finished");
   });
   auto chan = rd.xyYChan();
   window.Loop(
@@ -79,6 +79,6 @@ int main(int argc, char *argv[]) {
       },
       [&rd]() { rd.Stop(); });
   rt.join();
-  INFO("main program exiting...");
+  INFOLOG("main program exiting...");
   return 0;
 }

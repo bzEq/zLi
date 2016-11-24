@@ -81,7 +81,7 @@ bool Renderer::Stopped() { return stopped_; }
 Result<void> Renderer::SlowRender() {
   int n = render_job_++;
   while (!stopped_ && n < film_width_ * film_height_) {
-    INFO("start working on No.%d job", n);
+    INFOLOG("start working on No.%d job", n);
     Work(n / film_height_, n % film_height_);
     n = render_job_++;
   }
@@ -96,7 +96,7 @@ Result<void> Renderer::ParallelRender() {
     workers.push_back(std::thread([this] {
       while (!stopped_) {
         int n = render_job_++;
-        INFO("start working on No.%d job", n);
+        INFOLOG("start working on No.%d job", n);
         if (n >= film_width_ * film_height_) {
           break;
         }
@@ -109,7 +109,7 @@ Result<void> Renderer::ParallelRender() {
   }
   std::chrono::duration<Float> diff =
       std::chrono::high_resolution_clock::now() - start;
-  DEBUG("time elapse: %fs", diff.count());
+  DEBUGLOG("time elapse: %fs", diff.count());
   stopped_.store(true);
   return Ok();
 }
@@ -117,7 +117,7 @@ Result<void> Renderer::ParallelRender() {
 Result<void> Renderer::Render() {
   auto res = Scene::SceneFromJson(scene_file_);
   if (!res) {
-    DEBUG("can't load scene file: %s", scene_file_.c_str());
+    DEBUGLOG("can't load scene file: %s", scene_file_.c_str());
     return FormatError("can't load scene file: %s", scene_file_.c_str());
   }
   scene_ = std::make_unique<Scene>(std::move(*res));
