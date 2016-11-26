@@ -28,11 +28,14 @@ public:
   Scene(Scene &&) = default;
   static Result<Scene> SceneFromJson(const std::string &file);
   static Result<Sphere> SphereFromJson(const boost::property_tree::ptree &);
+  static Result<PointLight>
+  PointLightFromJson(const boost::property_tree::ptree &);
   static Result<Triangle> TriangleFromJson(const boost::property_tree::ptree &);
   static std::vector<Geometry>
   GeometriesFromJson(const boost::property_tree::ptree &);
+  static std::vector<Light> LightsFromJson(const boost::property_tree::ptree &);
   static PerspectiveCamera CameraFromJson(const boost::property_tree::ptree &);
-  Spectrum DirectLight(const RaySurfaceIntersection &ri) const;
+  Spectrum DirectLight(const RaySurfaceIntersection &) const;
   bool IsVisible(const RaySurfaceIntersection &, const Vector3f &);
   std::optional<RaySurfaceIntersection> Intersect(const Ray &) const;
   std::optional<RaySurfaceIntersection> NaiveIntersect(const Ray &) const;

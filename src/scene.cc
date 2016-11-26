@@ -41,6 +41,26 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
   return gs;
 }
 
+std::vector<Light>
+Scene::LightsFromJson(const boost::property_tree::ptree &json) {
+  std::vector<Light> ls;
+  for (auto it = json.begin(); it != json.end(); ++it) {
+    auto s = it->second;
+    auto type = s.get<std::string>("type");
+    DEBUGLOG("light type: %s", type.c_str());
+    if (type == "point") {
+      auto res = PointLightFromJson(s);
+      if (res) {
+        ls.push_back(
+            std::make_shared<PointLight>(std::move(*res))->ImplLight());
+      } else {
+        WARNLOG(res.Error().c_str());
+      }
+    }
+  }
+  return ls;
+}
+
 PerspectiveCamera
 Scene::CameraFromJson(const boost::property_tree::ptree &json) {
   auto eye = Utils::Vector3FromJson(json.get_child("eye"));
@@ -73,9 +93,12 @@ Result<Scene> Scene::SceneFromJson(const std::string &file) {
     boost::property_tree::read_json(file, json);
     // read geometries
     std::vector<Geometry> gs(GeometriesFromJson(json.get_child("geometry")));
+    std::vector<Light> ls(LightsFromJson(json.get_child("light")));
     // Scene scene((KdTree(gs)));
     auto rep(gs);
-    Scene scene(std::move(gs));
+    Scene scene;
+    scene.gs_ = std::move(gs);
+    scene.lights_ = std::move(ls);
     scene.kdt_ = std::make_unique<KdTree>(KdTree::BuildKdTree(std::move(rep)));
     // add lights
     // add camera
@@ -101,8 +124,23 @@ Result<Sphere> Scene::SphereFromJson(const boost::property_tree::ptree &json) {
   }
 }
 
+Result<PointLight>
+Scene::PointLightFromJson(const boost::property_tree::ptree &json) {
+  try {
+    Vector3f p(Utils::Vector3FromJson(json.get_child("position")));
+    Spectrum le(Utils::SpectrumFromJson(json.get_child("le")));
+    return Ok(PointLight(p, le));
+  } catch (const std::exception &e) {
+    return ::Error(e.what());
+  }
+}
+
 Spectrum Scene::DirectLight(const RaySurfaceIntersection &ri) const {
-  return ri.g.Le();
+  Spectrum le(ri.g.Le());
+  for (auto &l : lights_) {
+    le += l.Le(ri);
+  }
+  return le;
 }
 
 std::optional<RaySurfaceIntersection> Scene::Intersect(const Ray &ray) const {

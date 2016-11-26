@@ -3,14 +3,28 @@
 #ifndef _ZLI_LIGHT_HH_
 #define _ZLI_LIGHT_HH_
 #include <functional>
+#include <memory>
 
+#include "geometry.hh"
 #include "math.hh"
+#include "spectrum.hh"
 
 namespace zLi {
 
 struct Light {
-  // @arg: position, emit direction
-  // std::function<Spectrum(const Vector3f &, const Vector3f &)> Le;
+  std::function<Spectrum(const RaySurfaceIntersection &)> Le;
+};
+
+class PointLight : public std::enable_shared_from_this<PointLight> {
+public:
+  PointLight(PointLight &&) = default;
+  PointLight(const Vector3f &p, const Spectrum &s) : position_(p), le_(s) {}
+  Spectrum Le(const RaySurfaceIntersection &);
+  Light ImplLight();
+
+private:
+  Vector3f position_;
+  Spectrum le_;
 };
 
 }  // namespace zLi
