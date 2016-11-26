@@ -27,7 +27,7 @@ void KdTree::Node::Insert(int axis, const Geometry &g) {
   BoundBox b = g.Bounds();
   if (b.min_point[split_axis] > split_plane) {
     child[1]->Insert(++axis % 3, g);
-  } else if (b.max_point[split_axis] < split_plane) {
+  } else if (b.max_point[split_axis] <= split_plane) {
     child[0]->Insert(++axis % 3, g);
   } else {
     child[0]->Insert(++axis % 3, g);
@@ -73,23 +73,23 @@ std::optional<RaySurfaceIntersection> KdTree::Intersect(const Ray &r) {
       continue;
     }
     if (ray.d[current->split_axis] == 0) {
-      if (ray.o[current->split_axis] < current->split_plane &&
+      if (ray.o[current->split_axis] <= current->split_plane &&
           (!ans || ans->t > tmin)) {
         q.push(std::make_tuple(current->child[0], tmin, tmax));
       } else if (ray.o[current->split_axis] > current->split_plane &&
                  (!ans || ans->t > tmin)) {
         q.push(std::make_tuple(current->child[1], tmin, tmax));
-      } else if (!ans || ans->t > tmin) {
-        q.push(std::make_tuple(current->child[0], tmin, tmax));
-        q.push(std::make_tuple(current->child[1], tmin, tmax));
-      }
+      }  // else if (!ans || ans->t > tmin) {
+      // q.push(std::make_tuple(current->child[0], tmin, tmax));
+      // q.push(std::make_tuple(current->child[1], tmin, tmax));
+      //}
       continue;
     }
     Float tsplit = (current->split_plane - ray.o[current->split_axis]) /
                    ray.d[current->split_axis];
     assert(!std::isnan(tsplit));
     if (tmin <= tsplit && tsplit <= tmax) {
-      if (ray(tmin)[current->split_axis] < current->split_plane) {
+      if (ray(tmin)[current->split_axis] <= current->split_plane) {
         if (!ans || ans->t > tmin) {
           q.push(std::make_tuple(current->child[0], tmin, tsplit));
         }
