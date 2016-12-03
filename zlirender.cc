@@ -12,25 +12,25 @@
 #include "renderer.hh"
 #include "window.hh"
 
-namespace po = boost::program_options;
-
 int main(int argc, char *argv[]) {
   zLi::Logger::SetLogLevel(zLi::Logger::DEBUG);
   INFOLOG("main program started...");
-  po::options_description desc("Usage:");
-  desc.add_options()("help", "help message")("scene", po::value<std::string>(),
-                                             "scene json file")(
-      "width", po::value<int>(), "film width")("height", po::value<int>(),
-                                               "film height")(
-      "exr", po::value<std::string>(), "output openexr file");
-  po::variables_map vm;
+  boost::program_options::options_description desc("Usage:");
+  desc.add_options()("help", "help message")(
+      "scene", boost::program_options::value<std::string>(), "scene json file")(
+      "width", boost::program_options::value<int>(), "film width")(
+      "height", boost::program_options::value<int>(),
+      "film height")("exr", boost::program_options::value<std::string>(),
+                     "output openexr file");
+  boost::program_options::variables_map vm;
   try {
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    boost::program_options::store(
+        boost::program_options::parse_command_line(argc, argv, desc), vm);
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
     exit(1);
   }
-  po::notify(vm);
+  boost::program_options::notify(vm);
   if (vm.count("help") || !vm.count("scene") || !vm.count("width") ||
       !vm.count("height")) {
     std::cerr << desc << std::endl;
