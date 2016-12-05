@@ -6,7 +6,7 @@ namespace zLi {
 
 std::mutex Logger::OutputMutex;
 
-Logger::LogLevel Logger::CurrentLevel = Logger::INFO;
+std::atomic<Logger::LogLevel> Logger::CurrentLevel(Logger::INFO);
 
 const char *Logger::LogLevelString[5] = {"INFO", "DEBUG", "WARN", "ERROR",
                                          "FATAL"};

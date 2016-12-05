@@ -2,6 +2,7 @@
 
 #ifndef _ZLI_LOGGING_HH_
 #define _ZLI_LOGGING_HH_
+#include <atomic>
 #include <mutex>
 #include <string>
 #include <utility>
@@ -66,8 +67,8 @@ public:
 
 private:
   static std::mutex OutputMutex;
-  static LogLevel CurrentLevel;
   static const char *LogLevelString[5];
+  static std::atomic<LogLevel> CurrentLevel;
 };
 }  // namespace zLi
 
