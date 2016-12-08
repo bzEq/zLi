@@ -123,22 +123,18 @@ inline result_error<std::string> FormatError(const char *err) {
 }
 
 template <typename... Args>
+inline std::string FormatString(const char *fmt, Args &&... args) {
+  // http://en.cppreference.com/w/cpp/io/c/fprintf
+  static const size_t size_limit = 1 << 16;
+  size_t size = std::snprintf(nullptr, 0, fmt, std::forward<Args>(args)...);
+  std::vector<char> buf(std::min(size_limit, size + 1));
+  std::snprintf(&buf[0], buf.size(), fmt, std::forward<Args>(args)...);
+  return std::string(buf.data(), buf.size() - 1);
+}
+
+template <typename... Args>
 inline result_error<std::string> FormatError(const char *fmt, Args &&... args) {
-  static const int LIMITS = (1 << 16);
-  int cap = 64;
-  char *buf = new char[cap];
-  while (cap <= LIMITS) {
-    int len = std::snprintf(buf, cap, fmt, std::forward<Args>(args)...);
-    if (len < cap) {
-      break;
-    }
-    delete[] buf;
-    cap <<= 1;
-    buf = new char[cap];
-  }
-  std::string s(buf);
-  delete[] buf;
-  return Error(std::move(s));
+  return Error(FormatString(fmt, std::forward<Args>(args)...));
 }
 
 #endif

@@ -6,6 +6,7 @@
 #include <mutex>
 #include <string>
 #include <utility>
+#include <vector>
 
 #define ZLOG(level, format, ...)                                               \
   zLi::Logger::Logging(level, __FILE__, __FUNCTION__, __LINE__, format,        \
@@ -45,24 +46,14 @@ public:
   template <typename... Args>
   static void Logging(LogLevel level, const char *file, const char *func,
                       int line, const char *fmt, Args &&... args) {
-    static const int LIMITS = (1 << 16);
+    static const size_t size_limit = (1 << 16);
     if (level < CurrentLevel) {
       return;
     }
-    int cap = 64;
-    char *buf = new char[cap];
-    while (cap <= LIMITS) {
-      int len = snprintf(buf, cap, fmt, std::forward<Args>(args)...);
-      if (len < cap) {
-        break;
-      }
-      delete[] buf;
-      cap <<= 1;
-      buf = new char[cap];
-    }
-    Logging(level, file, func, line, buf);
-    delete[] buf;
-    return;
+    size_t size = std::snprintf(nullptr, 0, fmt, std::forward<Args>(args)...);
+    std::vector<char> buf(std::min(size_limit, size + 1));
+    std::snprintf(&buf[0], buf.size(), fmt, std::forward<Args>(args)...);
+    return Logging(level, file, func, line, buf.data());
   }
 
 private:
