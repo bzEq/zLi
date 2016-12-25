@@ -7,13 +7,13 @@
 #include <chrono>
 #include <thread>
 
-#include "CIE.hh"
-#include "color.hh"
-#include "integrator.hh"
-#include "logging.hh"
-#include "math.hh"
-#include "renderer.hh"
-#include "scene.hh"
+#include "CIE.h"
+#include "color.h"
+#include "integrator.h"
+#include "logging.h"
+#include "core_math.h"
+#include "renderer.h"
+#include "scene.h"
 
 namespace zLi {
 

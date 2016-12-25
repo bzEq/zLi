@@ -1,8 +1,8 @@
-#include "kdtree.hh"
-#include "geometry.hh"
-#include "logging.hh"
-#include "sphere.hh"
-#include "triangle.hh"
+#include "kdtree.h"
+#include "geometry.h"
+#include "logging.h"
+#include "sphere.h"
+#include "triangle.h"
 
 #include <iostream>
 

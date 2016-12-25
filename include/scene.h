@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_SCENE_HH_
-#define _ZLI_SCENE_HH_
+#ifndef _ZLI_SCENE_H_
+#define _ZLI_SCENE_H_
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -9,17 +9,17 @@
 #include <string>
 #include <vector>
 
-#include "bsdf.hh"
-#include "camera.hh"
-#include "geometry.hh"
-#include "kdtree.hh"
-#include "light.hh"
-#include "math.hh"
-#include "ray.hh"
-#include "result.hh"
-#include "spectrum.hh"
-#include "sphere.hh"
-#include "triangle.hh"
+#include "bsdf.h"
+#include "camera.h"
+#include "geometry.h"
+#include "kdtree.h"
+#include "light.h"
+#include "core_math.h"
+#include "ray.h"
+#include "result.h"
+#include "spectrum.h"
+#include "sphere.h"
+#include "triangle.h"
 
 namespace zLi {
 

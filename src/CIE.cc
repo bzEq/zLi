@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "CIE.hh"
-#include "math.hh"
+#include "CIE.h"
+#include "core_math.h"
 
 namespace zLi {
 // https://en.wikipedia.org/wiki/CIE_1931_color_space

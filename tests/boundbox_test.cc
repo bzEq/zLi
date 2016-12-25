@@ -1,4 +1,4 @@
-#include "boundbox.hh"
+#include "boundbox.h"
 
 int main() {
   using namespace zLi;

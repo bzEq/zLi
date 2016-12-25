@@ -1,9 +1,9 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "integrator.hh"
-#include "logging.hh"
-#include "scene.hh"
-#include "spectrum.hh"
+#include "integrator.h"
+#include "logging.h"
+#include "scene.h"
+#include "spectrum.h"
 
 namespace zLi {
 

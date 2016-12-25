@@ -1,12 +1,12 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_INTEGRATOR_HH_
-#define _ZLI_INTEGRATOR_HH_
+#ifndef _ZLI_INTEGRATOR_H_
+#define _ZLI_INTEGRATOR_H_
 #include <vector>
 
-#include "light.hh"
-#include "scene.hh"
-#include "spectrum.hh"
+#include "light.h"
+#include "scene.h"
+#include "spectrum.h"
 
 namespace zLi {
 

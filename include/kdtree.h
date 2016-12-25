@@ -1,17 +1,17 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_KDTREE_HH_
-#define _ZLI_KDTREE_HH_
+#ifndef _ZLI_KDTREE_H_
+#define _ZLI_KDTREE_H_
 #include <iostream>
 #include <memory>
 #include <stack>
 #include <utility>
 #include <vector>
 
-#include "boundbox.hh"
-#include "geometry.hh"
-#include "math.hh"
-#include "ray.hh"
+#include "boundbox.h"
+#include "geometry.h"
+#include "core_math.h"
+#include "ray.h"
 
 namespace zLi {
 class KdTree {

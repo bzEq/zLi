@@ -1,17 +1,17 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef __ZLI_RENDERER_HH_
-#define __ZLI_RENDERER_HH_
+#ifndef __ZLI_RENDERER_H_
+#define __ZLI_RENDERER_H_
 #include <atomic>
 #include <memory>
 #include <string>
 
-#include "chan.hh"
-#include "film.hh"
-#include "filter.hh"
-#include "option.hh"
-#include "scene.hh"
-#include "spectrum.hh"
+#include "chan.h"
+#include "film.h"
+#include "filter.h"
+#include "option.h"
+#include "scene.h"
+#include "spectrum.h"
 
 namespace zLi {
 class Renderer {

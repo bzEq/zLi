@@ -1,6 +1,6 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "color.hh"
+#include "color.h"
 
 namespace zLi {
 

@@ -1,6 +1,6 @@
 // Copyright (c) 2016 Kai Luo <gluokai@gmail.com>. All rights reserved.
 
-#include "light.hh"
+#include "light.h"
 
 namespace zLi {
 

@@ -1,13 +1,13 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_SPECTRUM_HH_
-#define _ZLI_SPECTRUM_HH_
+#ifndef _ZLI_SPECTRUM_H_
+#define _ZLI_SPECTRUM_H_
 #include <cmath>
 #include <iostream>
 
-#include "color.hh"
-#include "diagram2d.hh"
-#include "math.hh"
+#include "color.h"
+#include "diagram2d.h"
+#include "core_math.h"
 
 namespace zLi {
 

@@ -1,13 +1,13 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_LIGHT_HH_
-#define _ZLI_LIGHT_HH_
+#ifndef _ZLI_LIGHT_H_
+#define _ZLI_LIGHT_H_
 #include <functional>
 #include <memory>
 
-#include "geometry.hh"
-#include "math.hh"
-#include "spectrum.hh"
+#include "geometry.h"
+#include "core_math.h"
+#include "spectrum.h"
 
 namespace zLi {
 

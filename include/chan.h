@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_CHAN_HH_
-#define _ZLI_CHAN_HH_
+#ifndef _ZLI_CHAN_H_
+#define _ZLI_CHAN_H_
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
@@ -9,7 +9,7 @@
 #include <thread>
 #include <utility>
 
-#include "math.hh"
+#include "core_math.h"
 
 namespace zLi {
 

@@ -1,16 +1,16 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_SPHERE_HH_
-#define _ZLI_SPHERE_HH_
+#ifndef _ZLI_SPHERE_H_
+#define _ZLI_SPHERE_H_
 #include <iostream>
 #include <memory>
 #include <utility>
 
-#include "boundbox.hh"
-#include "bsdf.hh"
-#include "geometry.hh"
-#include "math.hh"
-#include "ray.hh"
+#include "boundbox.h"
+#include "bsdf.h"
+#include "geometry.h"
+#include "core_math.h"
+#include "ray.h"
 
 namespace zLi {
 struct Sphere : std::enable_shared_from_this<Sphere> {

@@ -3,9 +3,9 @@
 #include <OpenEXR/ImfRgba.h>
 #include <OpenEXR/ImfRgbaFile.h>
 
-#include "color.hh"
-#include "film.hh"
-#include "result.hh"
+#include "color.h"
+#include "film.h"
+#include "result.h"
 
 namespace zLi {
 

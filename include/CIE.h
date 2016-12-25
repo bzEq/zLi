@@ -1,10 +1,10 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_CIE_HH_
-#define _ZLI_CIE_HH_
-#include "color.hh"
-#include "diagram2d.hh"
-#include "math.hh"
+#ifndef _ZLI_CIE_H_
+#define _ZLI_CIE_H_
+#include "color.h"
+#include "diagram2d.h"
+#include "core_math.h"
 
 namespace zLi {
 class CIE {

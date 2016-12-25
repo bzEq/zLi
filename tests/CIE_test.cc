@@ -1,5 +1,5 @@
-#include "CIE.hh"
-#include "spectrum.hh"
+#include "CIE.h"
+#include "spectrum.h"
 
 #include <iostream>
 

@@ -1,12 +1,12 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_BSDF_HH_
-#define _ZLI_BSDF_HH_
+#ifndef _ZLI_BSDF_H_
+#define _ZLI_BSDF_H_
 #include <functional>
 #include <memory>
 #include <tuple>
 
-#include "math.hh"
+#include "core_math.h"
 
 namespace zLi {
 

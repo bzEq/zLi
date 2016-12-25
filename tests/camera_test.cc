@@ -1,5 +1,5 @@
-#include "camera.hh"
-#include "math.hh"
+#include "camera.h"
+#include "core_math.h"
 
 #include <iostream>
 

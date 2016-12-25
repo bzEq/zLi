@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_DEFER_HH_
-#define _ZLI_DEFER_HH_
+#ifndef _ZLI_DEFER_H_
+#define _ZLI_DEFER_H_
 #include <functional>
 
 namespace zLi {

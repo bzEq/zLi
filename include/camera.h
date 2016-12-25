@@ -1,11 +1,11 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_CAMERA_HH_
-#define _ZLI_CAMERA_HH_
+#ifndef _ZLI_CAMERA_H_
+#define _ZLI_CAMERA_H_
 #include <iostream>
 
-#include "math.hh"
-#include "ray.hh"
+#include "core_math.h"
+#include "ray.h"
 
 namespace zLi {
 

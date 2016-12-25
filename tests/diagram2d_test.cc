@@ -1,4 +1,4 @@
-#include "diagram2d.hh"
+#include "diagram2d.h"
 
 #include <iostream>
 

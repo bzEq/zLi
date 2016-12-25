@@ -1,20 +1,20 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_UTILS_HH_
-#define _ZLI_UTILS_HH_
+#ifndef _ZLI_UTILS_H_
+#define _ZLI_UTILS_H_
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include <string>
 #include <vector>
 
-#include "camera.hh"
-#include "light.hh"
-#include "math.hh"
-#include "result.hh"
-#include "spectrum.hh"
-#include "sphere.hh"
-#include "triangle.hh"
+#include "camera.h"
+#include "light.h"
+#include "core_math.h"
+#include "result.h"
+#include "spectrum.h"
+#include "sphere.h"
+#include "triangle.h"
 
 namespace zLi {
 class Utils {

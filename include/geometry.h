@@ -1,16 +1,16 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_GEOMETRY_HH_
-#define _ZLI_GEOMETRY_HH_
+#ifndef _ZLI_GEOMETRY_H_
+#define _ZLI_GEOMETRY_H_
 #include <functional>
 #include <iostream>
 #include <memory>
 
-#include "boundbox.hh"
-#include "bsdf.hh"
-#include "math.hh"
-#include "ray.hh"
-#include "spectrum.hh"
+#include "boundbox.h"
+#include "bsdf.h"
+#include "core_math.h"
+#include "ray.h"
+#include "spectrum.h"
 
 namespace zLi {
 

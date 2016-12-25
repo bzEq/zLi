@@ -1,10 +1,10 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_FILTER_HH_
-#define _ZLI_FILTER_HH_
+#ifndef _ZLI_FILTER_H_
+#define _ZLI_FILTER_H_
 #include <cmath>
 
-#include "math.hh"
+#include "core_math.h"
 
 namespace zLi {
 namespace filter {

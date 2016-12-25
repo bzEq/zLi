@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "sphere.hh"
-#include "logging.hh"
+#include "sphere.h"
+#include "logging.h"
 
 namespace zLi {
 

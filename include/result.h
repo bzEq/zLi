@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _RESULT_HH_
-#define _RESULT_HH_
+#ifndef _RESULT_H_
+#define _RESULT_H_
 #include <cassert>
 #include <iostream>
 #include <memory>

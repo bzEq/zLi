@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_FILM_HH_
-#define _ZLI_FILM_HH_
+#ifndef _ZLI_FILM_H_
+#define _ZLI_FILM_H_
 #include <OpenEXR/ImfRgba.h>
 #include <OpenEXR/ImfRgbaFile.h>
 
@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 
-#include "math.hh"
-#include "result.hh"
-#include "spectrum.hh"
+#include "core_math.h"
+#include "result.h"
+#include "spectrum.h"
 
 namespace zLi {
 class Film {

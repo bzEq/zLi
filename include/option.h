@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _OPTION_HH_
-#define _OPTION_HH_
+#ifndef _OPTION_H_
+#define _OPTION_H_
 #include <cassert>
 #include <iostream>
 #include <memory>

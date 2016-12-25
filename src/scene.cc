@@ -5,12 +5,12 @@
 
 #include <string>
 
-#include "geometry.hh"
-#include "logging.hh"
-#include "scene.hh"
-#include "sphere.hh"
-#include "triangle.hh"
-#include "utils.hh"
+#include "geometry.h"
+#include "logging.h"
+#include "scene.h"
+#include "sphere.h"
+#include "triangle.h"
+#include "utils.h"
 
 namespace zLi {
 

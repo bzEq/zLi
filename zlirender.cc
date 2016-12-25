@@ -8,9 +8,9 @@
 #include <cstdlib>
 #include <string>
 
-#include "logging.hh"
-#include "renderer.hh"
-#include "window.hh"
+#include "logging.h"
+#include "renderer.h"
+#include "window.h"
 
 int main(int argc, char *argv[]) {
   zLi::Logger::SetLogLevel(zLi::Logger::DEBUG);

@@ -1,4 +1,4 @@
-#include "triangle.hh"
+#include "triangle.h"
 
 #include <memory>
 

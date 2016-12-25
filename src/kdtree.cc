@@ -2,11 +2,11 @@
 
 #include <queue>
 
-#include "boundbox.hh"
-#include "geometry.hh"
-#include "kdtree.hh"
-#include "logging.hh"
-#include "math.hh"
+#include "boundbox.h"
+#include "geometry.h"
+#include "kdtree.h"
+#include "logging.h"
+#include "core_math.h"
 
 namespace zLi {
 

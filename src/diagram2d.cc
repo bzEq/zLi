@@ -1,6 +1,6 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "diagram2d.hh"
+#include "diagram2d.h"
 
 #include <algorithm>
 

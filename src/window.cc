@@ -3,8 +3,8 @@
 #include <chrono>
 #include <thread>
 
-#include "logging.hh"
-#include "window.hh"
+#include "logging.h"
+#include "window.h"
 
 namespace zLi {
 

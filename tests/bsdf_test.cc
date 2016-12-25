@@ -1,4 +1,4 @@
-#include "bsdf.hh"
+#include "bsdf.h"
 
 #include <cmath>
 #include <iostream>

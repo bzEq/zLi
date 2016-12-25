@@ -1,17 +1,17 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_TRIANGLE_HH_
-#define _ZLI_TRIANGLE_HH_
+#ifndef _ZLI_TRIANGLE_H_
+#define _ZLI_TRIANGLE_H_
 #include <iostream>
 #include <memory>
 #include <utility>
 
-#include "boundbox.hh"
-#include "bsdf.hh"
-#include "geometry.hh"
-#include "math.hh"
-#include "ray.hh"
-#include "spectrum.hh"
+#include "boundbox.h"
+#include "bsdf.h"
+#include "geometry.h"
+#include "core_math.h"
+#include "ray.h"
+#include "spectrum.h"
 
 namespace zLi {
 struct Triangle : std::enable_shared_from_this<Triangle> {

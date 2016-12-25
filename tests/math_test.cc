@@ -1,5 +1,5 @@
-#include "math.hh"
-#include "CIE.hh"
+#include "core_math.h"
+#include "CIE.h"
 
 #include <iostream>
 

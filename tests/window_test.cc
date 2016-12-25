@@ -1,4 +1,4 @@
-#include "window.hh"
+#include "window.h"
 
 int main() {
   zLi::Window w(1280, 720);

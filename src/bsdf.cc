@@ -1,6 +1,6 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#include "bsdf.hh"
+#include "bsdf.h"
 
 #include <memory>
 

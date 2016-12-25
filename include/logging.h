@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_LOGGING_HH_
-#define _ZLI_LOGGING_HH_
+#ifndef _ZLI_LOGGING_H_
+#define _ZLI_LOGGING_H_
 #include <atomic>
 #include <mutex>
 #include <string>

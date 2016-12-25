@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "triangle.hh"
+#include "triangle.h"
 
 namespace zLi {
 

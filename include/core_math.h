@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_MATH_HH_
-#define _ZLI_MATH_HH_
+#ifndef _ZLI_CORE_MATH_H_
+#define _ZLI_CORE_MATH_H_
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -13,7 +13,7 @@
 #include <tuple>
 #include <utility>
 
-#include "option.hh"
+#include "option.h"
 
 namespace std {
 

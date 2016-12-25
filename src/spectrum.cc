@@ -1,9 +1,9 @@
 // Copyright(c) 2016 Kai Luo.All rights reserved.
 
-#include "spectrum.hh"
-#include "CIE.hh"
-#include "color.hh"
-#include "diagram2d.hh"
+#include "spectrum.h"
+#include "CIE.h"
+#include "color.h"
+#include "diagram2d.h"
 
 namespace zLi {
 

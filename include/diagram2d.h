@@ -1,12 +1,12 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_DIAGRAM2D_HH_
-#define _ZLI_DIAGRAM2D_HH_
+#ifndef _ZLI_DIAGRAM2D_H_
+#define _ZLI_DIAGRAM2D_H_
 #include <iostream>
 #include <tuple>
 #include <vector>
 
-#include "math.hh"
+#include "core_math.h"
 
 namespace zLi {
 class Diagram2D {

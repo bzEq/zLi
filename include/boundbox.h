@@ -1,13 +1,13 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_BOUNDBOX_HH_
-#define _ZLI_BOUNDBOX_HH_
+#ifndef _ZLI_BOUNDBOX_H_
+#define _ZLI_BOUNDBOX_H_
 #include <algorithm>
 #include <iostream>
 #include <tuple>
 
-#include "math.hh"
-#include "ray.hh"
+#include "core_math.h"
+#include "ray.h"
 
 namespace zLi {
 

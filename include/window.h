@@ -1,15 +1,15 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_WINDOW_HH_
-#define _ZLI_WINDOW_HH_
+#ifndef _ZLI_WINDOW_H_
+#define _ZLI_WINDOW_H_
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
 
-#include "color.hh"
-#include "result.hh"
+#include "color.h"
+#include "result.h"
 
 namespace zLi {
 class Window {

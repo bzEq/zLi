@@ -1,10 +1,10 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_COLOR_HH_
-#define _ZLI_COLOR_HH_
+#ifndef _ZLI_COLOR_H_
+#define _ZLI_COLOR_H_
 #include <iostream>
 
-#include "math.hh"
+#include "core_math.h"
 
 namespace zLi {
 
