@@ -1,0 +1,6 @@
+[submodule "kl"]
+	path = kl
+	url = git://github.com/bzEq/kl.git
+[submodule "openexr"]
+	path = openexr
+	url = git://github.com/openexr/openexr.git
