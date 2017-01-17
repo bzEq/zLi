@@ -12,6 +12,8 @@ all: $(TESTS)
 	@echo "==== CONG! ALL TESTS PASSED."
 
 $(TESTS): $(ZLI_LIB) $(KL_LIB)
+
+$(ZLI_LIB) $(KL_LIB):
 	$(MAKE) -C ..
 
 $(TESTS): %_test: %_test.o
