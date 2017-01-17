@@ -1,7 +1,6 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include "integrator.h"
-#include "logging.h"
 #include "scene.h"
 #include "spectrum.h"
 

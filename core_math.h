@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_CORE_MATH_H_
-#define _ZLI_CORE_MATH_H_
+#ifndef ZLI_CORE_MATH_H_
+#define ZLI_CORE_MATH_H_
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -13,13 +13,11 @@
 #include <tuple>
 #include <utility>
 
-#include "option.h"
+#include "kl/option.h"
 
 namespace std {
-
 template <typename T>
-// using optional = std::experimental::fundamentals_v1::optional<T>;
-using optional = Option<T>;
+using optional = kl::Option<T>;
 }
 
 namespace zLi {
@@ -610,6 +608,6 @@ inline Float EstimateIntegration2D(Func F, Float u, Float v, Float radius,
   return radius * radius * s;
 }
 
-}  // end namespace zLi
+}  // namespace zLi
 
 #endif

@@ -1,24 +1,34 @@
-.PHONY: all clean source test
+.PHONY: all clean test
 
-CXX := clang++
-HEADERS := include/
-CXXFLAGS := -Wall -g -std=c++14 -I$(HEADERS) -O2
-SRC := src/
-LDFLAGS := -lm -lpthread -L$(SRC) -lzli -lboost_program_options -lX11 \
-	  $(shell pkg-config --libs OpenEXR)
+KL := kl
+KL_LIB := libkl.a
+CXX := g++
+CXXFLAGS := -Wall -g -std=c++14 -O2
+LDFLAGS := -lpthread -L. -lkl -lzli -lpthread -lm -lboost_program_options -lX11 \
+	$(shell pkg-config --libs OpenEXR)
+
+ZLI_LIB := libzli.a
+OBJECTS := $(patsubst %.cc, %.o, $(wildcard *.cc))
 
 all: zlirender
 
-source:
-	$(MAKE) -C src
+$(KL_LIB): $(KL)
+	@cd $< && $(MAKE) all && cp libkl.a ../
 
-test: source
-	$(MAKE) -C tests
+$(KL):
+	@git submodule update --remote $@
 
-zlirender: zlirender.cc source test
+%.o: %.cc
+	$(CXX) $(CXXFLAGS) -fPIC -c $<
+
+$(ZLI_LIB): $(OBJECTS)
+	@ar rcsv $@ $^
+
+zlirender: zlirender.o $(KL_LIB) $(ZLI_LIB)
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
 
+test:
+	$(MAKE) -C tests
+
 clean:
-	@rm -vf zlirender
-	$(MAKE) -C tests clean
-	$(MAKE) -C src clean
+	@rm -rvf *.o *.a *.so

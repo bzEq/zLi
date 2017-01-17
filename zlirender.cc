@@ -8,13 +8,12 @@
 #include <cstdlib>
 #include <string>
 
-#include "logging.h"
+#include "kl/logger.h"
 #include "renderer.h"
 #include "window.h"
 
 int main(int argc, char *argv[]) {
-  zLi::Logger::SetLogLevel(zLi::Logger::DEBUG);
-  INFOLOG("main program started...");
+  KL_INFO("main program started...");
   boost::program_options::options_description desc("Usage:");
   desc.add_options()("help", "help message")(
       "scene", boost::program_options::value<std::string>(), "scene json file")(
@@ -46,20 +45,20 @@ int main(int argc, char *argv[]) {
   zLi::Window window(w, h);
   auto res = window.Init();
   if (!res) {
-    ERRORLOG(res.Error().c_str());
+    KL_ERROR(res.Err().ToCString());
     exit(1);
   }
   std::thread rt([&rd, exr]() {
     auto res = rd.Render();
     if (!res) {
-      ERRORLOG(res.Error().c_str());
+      KL_ERROR(res.Err().ToCString());
       return;
     }
     if (!exr.empty()) {
       zLi::Film f(rd.MoveRenderResult());
       f.WriteEXR(exr);
     }
-    DEBUGLOG("render finished");
+    KL_DEBUG("render finished");
   });
   auto chan = rd.xyYChan();
   window.Loop(
@@ -68,7 +67,7 @@ int main(int argc, char *argv[]) {
         int count =
             std::min(static_cast<int>(chan->Size()), EventProcessLimits);
         while (count--) {
-          auto res = chan->Popi();
+          auto res = chan->Pop();
           if (!res) {
             break;
           }
@@ -79,6 +78,6 @@ int main(int argc, char *argv[]) {
       },
       [&rd]() { rd.Stop(); });
   rt.join();
-  INFOLOG("main program exiting...");
+  KL_INFO("main program exiting...");
   return 0;
 }

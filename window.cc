@@ -1,10 +1,11 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
+// Use of this source code is governed by the BSD license that can be found in
+// the LICENSE file.
+
+#include "window.h"
 
 #include <chrono>
 #include <thread>
-
-#include "logging.h"
-#include "window.h"
 
 namespace zLi {
 
@@ -12,6 +13,7 @@ const float Window::FPSLimit = 120;
 
 Window::Window(int w, int h)
     : width_(w), height_(h), disp_(nullptr), should_close_(false) {}
+
 Window::~Window() {
   if (disp_) {
     XDestroyWindow(disp_, window_);
@@ -33,10 +35,10 @@ std::string Window::ToXColorName(const xyYColor &xyY) {
 
 void Window::Flush() { XFlush(disp_); }
 
-Result<void> Window::Init() {
+kl::Result<void> Window::Init() {
   disp_ = XOpenDisplay(nullptr);
   if (!disp_) {
-    return Error("Can't open display");
+    return kl::Err("Can't open display");
   }
 
   screen_ = DefaultScreen(disp_);
@@ -51,7 +53,7 @@ Result<void> Window::Init() {
   // unsigned long valuemask = GCCapStyle | GCJoinStyle;
   gc_ = DefaultGC(disp_, screen_);
   XMapWindow(disp_, window_);
-  return Ok();
+  return kl::Ok();
 }
 
 void Window::PollEvents() {

@@ -9,9 +9,9 @@
 
 #include "CIE.h"
 #include "color.h"
-#include "integrator.h"
-#include "logging.h"
 #include "core_math.h"
+#include "integrator.h"
+#include "kl/logger.h"
 #include "renderer.h"
 #include "scene.h"
 
@@ -22,7 +22,7 @@ Renderer::Renderer(const std::string &scene_file, int film_width,
                    int film_height, int spp)
     : scene_file_(scene_file), film_width_(film_width),
       film_height_(film_height), render_job_(0), stopped_(false), spp_(spp) {
-  xyY_chan_ = std::make_shared<Chan<RenderResult>>();
+  xyY_chan_ = std::make_shared<kl::Chan<RenderResult>>();
 }
 
 Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
@@ -78,25 +78,25 @@ void Renderer::Stop() { stopped_.store(true); }
 
 bool Renderer::Stopped() { return stopped_; }
 
-Result<void> Renderer::SlowRender() {
+kl::Result<void> Renderer::SlowRender() {
   int n = render_job_++;
   while (!stopped_ && n < film_width_ * film_height_) {
-    INFOLOG("start working on No.%d job", n);
+    KL_INFO("start working on No.%d job", n);
     Work(n / film_height_, n % film_height_);
     n = render_job_++;
   }
   stopped_.store(true);
-  return Ok();
+  return kl::Ok();
 }
 
-Result<void> Renderer::ParallelRender() {
+kl::Result<void> Renderer::ParallelRender() {
   std::vector<std::thread> workers;
   auto start = std::chrono::high_resolution_clock::now();
   for (unsigned i = 0; i < std::thread::hardware_concurrency(); ++i) {
     workers.push_back(std::thread([this] {
       while (!stopped_) {
         int n = render_job_++;
-        INFOLOG("start working on No.%d job", n);
+        KL_INFO("start working on No.%d job", n);
         if (n >= film_width_ * film_height_) {
           break;
         }
@@ -109,16 +109,16 @@ Result<void> Renderer::ParallelRender() {
   }
   std::chrono::duration<Float> diff =
       std::chrono::high_resolution_clock::now() - start;
-  DEBUGLOG("time elapse: %fs", diff.count());
+  KL_DEBUG("time elapse: %fs", diff.count());
   stopped_.store(true);
-  return Ok();
+  return kl::Ok();
 }
 
-Result<void> Renderer::Render() {
+kl::Result<void> Renderer::Render() {
   auto res = Scene::SceneFromJson(scene_file_);
   if (!res) {
-    DEBUGLOG("can't load scene file: %s", scene_file_.c_str());
-    return FormatError("can't load scene file: %s", scene_file_.c_str());
+    KL_DEBUG("can't load scene file: %s", scene_file_.c_str());
+    return kl::Err("can't load scene file: %s", scene_file_.c_str());
   }
   scene_ = std::make_unique<Scene>(std::move(*res));
   film_ = std::make_unique<Film>(film_width_, film_height_);

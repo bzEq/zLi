@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "core_math.h"
-#include "result.h"
+#include "kl/error.h"
 #include "spectrum.h"
 
 namespace zLi {
@@ -25,7 +25,7 @@ public:
   Film(const Film &);
   Film(Film &&) = default;
   void Set(int i, int j, Spectrum &&s);
-  Result<void> WriteEXR(const std::string &);
+  kl::Result<void> WriteEXR(const std::string &);
 
 private:
   int width_, height_;

@@ -5,7 +5,7 @@
 
 #include "color.h"
 #include "film.h"
-#include "result.h"
+#include "kl/error.h"
 
 namespace zLi {
 
@@ -40,7 +40,7 @@ void Film::FillRgba(Imf::Rgba *pixels) {
   }
 }
 
-Result<void> Film::WriteEXR(const std::string &exr) {
+kl::Result<void> Film::WriteEXR(const std::string &exr) {
   Imf::Rgba *pixels = new Imf::Rgba[width_ * height_];
   FillRgba(pixels);
   try {
@@ -49,9 +49,9 @@ Result<void> Film::WriteEXR(const std::string &exr) {
     file.writePixels(height_);
   } catch (const std::exception &e) {
     delete[] pixels;
-    return Error(e.what());
+    return kl::Err(e.what());
   }
   delete[] pixels;
-  return Ok();
+  return kl::Ok();
 }
 }  // namespace zLi

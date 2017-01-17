@@ -3,10 +3,9 @@
 #include <queue>
 
 #include "boundbox.h"
+#include "core_math.h"
 #include "geometry.h"
 #include "kdtree.h"
-#include "logging.h"
-#include "core_math.h"
 
 namespace zLi {
 

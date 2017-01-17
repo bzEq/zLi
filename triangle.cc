@@ -39,16 +39,16 @@ BoundBox Triangle::Bounds() {
 Vector3f Triangle::Normal(const Vector3f &position) { return n; }
 
 Geometry Triangle::ImplGeometry() {
-  return Geometry{
-      .Intersect = std::bind(&Triangle::Intersect, shared_from_this(),
-                             std::placeholders::_1),
-      .Bounds = std::bind(&Triangle::Bounds, shared_from_this()),
-      .Normal = std::bind(&Triangle::Normal, shared_from_this(),
-                          std::placeholders::_1),
-      .Le = std::bind(&Triangle::Le, shared_from_this()),
-      .R = std::bind(&Triangle::R, shared_from_this()),
-      .bsdf = std::bind(&Triangle::bsdf, shared_from_this()),
-  };
+  Geometry g;
+  g.Intersect = std::bind(&Triangle::Intersect, shared_from_this(),
+                          std::placeholders::_1);
+  g.Bounds = std::bind(&Triangle::Bounds, shared_from_this());
+  g.Normal =
+      std::bind(&Triangle::Normal, shared_from_this(), std::placeholders::_1);
+  g.Le = std::bind(&Triangle::Le, shared_from_this());
+  g.R = std::bind(&Triangle::R, shared_from_this());
+  g.bsdf = std::bind(&Triangle::bsdf, shared_from_this());
+  return g;
 }
 
 }  // namespace zLi

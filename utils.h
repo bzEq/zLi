@@ -9,9 +9,8 @@
 #include <vector>
 
 #include "camera.h"
-#include "light.h"
 #include "core_math.h"
-#include "result.h"
+#include "light.h"
 #include "spectrum.h"
 #include "sphere.h"
 #include "triangle.h"

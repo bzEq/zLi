@@ -6,7 +6,6 @@
 #include <string>
 
 #include "geometry.h"
-#include "logging.h"
 #include "scene.h"
 #include "sphere.h"
 #include "triangle.h"
@@ -20,13 +19,13 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
   for (auto it = json.begin(); it != json.end(); ++it) {
     auto s = it->second;
     auto type = s.get<std::string>("type");
-    DEBUGLOG("geometry type: %s", type.c_str());
+    KL_DEBUG("geometry type: %s", type.c_str());
     if (type == "sphere") {
       auto res = SphereFromJson(s);
       if (res) {
         gs.push_back(std::make_shared<Sphere>(std::move(*res))->ImplGeometry());
       } else {
-        WARNLOG(res.Error().c_str());
+        KL_WARN(res.Err().ToCString());
       }
     } else if (type == "triangle") {
       auto res = TriangleFromJson(s);
@@ -34,7 +33,7 @@ Scene::GeometriesFromJson(const boost::property_tree::ptree &json) {
         gs.push_back(
             std::make_shared<Triangle>(std::move(*res))->ImplGeometry());
       } else {
-        WARNLOG(res.Error().c_str());
+        KL_WARN(res.Err().ToCString());
       }
     }
   }
@@ -47,14 +46,14 @@ Scene::LightsFromJson(const boost::property_tree::ptree &json) {
   for (auto it = json.begin(); it != json.end(); ++it) {
     auto s = it->second;
     auto type = s.get<std::string>("type");
-    DEBUGLOG("light type: %s", type.c_str());
+    KL_DEBUG("light type: %s", type.c_str());
     if (type == "point") {
       auto res = PointLightFromJson(s);
       if (res) {
         ls.push_back(
             std::make_shared<PointLight>(std::move(*res))->ImplLight());
       } else {
-        WARNLOG(res.Error().c_str());
+        KL_WARN(res.Err().ToCString());
       }
     }
   }
@@ -72,7 +71,7 @@ Scene::CameraFromJson(const boost::property_tree::ptree &json) {
   return PerspectiveCamera(eye, lookat, up, fov, lensr, lensp);
 }
 
-Result<Triangle>
+kl::Result<Triangle>
 Scene::TriangleFromJson(const boost::property_tree::ptree &json) {
   try {
     Vector3f a = Utils::Vector3FromJson(json.get_child("a"));
@@ -80,14 +79,14 @@ Scene::TriangleFromJson(const boost::property_tree::ptree &json) {
     Vector3f c = Utils::Vector3FromJson(json.get_child("c"));
     Spectrum Le(Utils::SpectrumFromJson(json.get_child("le")));
     Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
-    return Ok(
+    return kl::Ok(
         Triangle(a, b, c, Le, R, Utils::BSDFFromJson(json.get_child("bsdf"))));
   } catch (const std::exception &e) {
-    return ::Error(e.what());
+    return kl::Err(e.what());
   }
 }
 
-Result<Scene> Scene::SceneFromJson(const std::string &file) {
+kl::Result<Scene> Scene::SceneFromJson(const std::string &file) {
   boost::property_tree::ptree json;
   try {
     boost::property_tree::read_json(file, json);
@@ -103,35 +102,36 @@ Result<Scene> Scene::SceneFromJson(const std::string &file) {
     // add lights
     // add camera
     scene.camera_ = CameraFromJson(json.get_child("camera"));
-    return Ok(std::move(scene));
+    return kl::Ok(std::move(scene));
   } catch (std::exception &e) {
-    return ::Error(e.what());
+    return kl::Err(e.what());
   }
 }
 
 Ray Scene::GenerateRay(Float u, Float v) { return camera_.GenerateRay(u, v); }
 
-Result<Sphere> Scene::SphereFromJson(const boost::property_tree::ptree &json) {
+kl::Result<Sphere>
+Scene::SphereFromJson(const boost::property_tree::ptree &json) {
   try {
     Float radius = json.get<Float>("radius");
     Vector3f center(Utils::Vector3FromJson(json.get_child("center")));
     Spectrum Le(Utils::SpectrumFromJson(json.get_child("le")));
     Spectrum R(Utils::SpectrumFromJson(json.get_child("R")));
-    return Ok(Sphere(center, radius, Le, R,
-                     Utils::BSDFFromJson(json.get_child("bsdf"))));
+    return kl::Ok(Sphere(center, radius, Le, R,
+                         Utils::BSDFFromJson(json.get_child("bsdf"))));
   } catch (const std::exception &e) {
-    return ::Error(e.what());
+    return kl::Err(e.what());
   }
 }
 
-Result<PointLight>
+kl::Result<PointLight>
 Scene::PointLightFromJson(const boost::property_tree::ptree &json) {
   try {
     Vector3f p(Utils::Vector3FromJson(json.get_child("position")));
     Spectrum le(Utils::SpectrumFromJson(json.get_child("le")));
-    return Ok(PointLight(p, le));
+    return kl::Ok(PointLight(p, le));
   } catch (const std::exception &e) {
-    return ::Error(e.what());
+    return kl::Err(e.what());
   }
 }
 

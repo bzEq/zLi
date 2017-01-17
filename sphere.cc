@@ -1,7 +1,6 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
 #include "sphere.h"
-#include "logging.h"
 
 namespace zLi {
 
@@ -33,16 +32,16 @@ BoundBox Sphere::Bounds() {
 }
 
 Geometry Sphere::ImplGeometry() {
-  return Geometry{
-      .Intersect = std::bind(&Sphere::Intersect, shared_from_this(),
-                             std::placeholders::_1),
-      .Bounds = std::bind(&Sphere::Bounds, shared_from_this()),
-      .Normal =
-          std::bind(&Sphere::Normal, shared_from_this(), std::placeholders::_1),
-      .Le = std::bind(&Sphere::Le, shared_from_this()),
-      .R = std::bind(&Sphere::R, shared_from_this()),
-      .bsdf = std::bind(&Sphere::bsdf, shared_from_this()),
-  };
+  Geometry g;
+  g.Intersect =
+      std::bind(&Sphere::Intersect, shared_from_this(), std::placeholders::_1);
+  g.Bounds = std::bind(&Sphere::Bounds, shared_from_this());
+  g.Normal =
+      std::bind(&Sphere::Normal, shared_from_this(), std::placeholders::_1);
+  g.Le = std::bind(&Sphere::Le, shared_from_this());
+  g.R = std::bind(&Sphere::R, shared_from_this());
+  g.bsdf = std::bind(&Sphere::bsdf, shared_from_this());
+  return g;
 }
 
 }  // namespace zLi
