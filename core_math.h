@@ -13,6 +13,7 @@
 #include <tuple>
 #include <utility>
 
+#include "kl/logger.h"
 #include "kl/option.h"
 
 namespace std {
@@ -84,7 +85,7 @@ struct Vector4 {
   Vector4(const T x, const T y, const T z, const T w)
       : x(x), y(y), z(z), w(w) {}
   Vector4(const Vector3<T> &v, const T w) : x(v.x), y(v.y), z(v.z), w(w) {}
-  std::optional<Vector3<T>> ToVector3() const {
+  kl::Option<Vector3<T>> ToVector3() const {
     if (w == 0)
       return {};
     return Vector3<T>(x / w, y / w, z / w);
@@ -161,58 +162,60 @@ struct Matrix4x4 {
     return r;
   }
 
-  std::optional<Matrix4x4> Inverse() const {
-    T minv[4][4];
-    int ind[4] = {0, 1, 2, 3};
-    std::memcpy(minv, m, 4 * 4 * sizeof(T));
-    for (int i = 0; i < 4; i++) {
+  // A'A = I' = RowSwap * I = I * ColSwap
+  // (A^-1) = (RowSwap^-1) * A' = A' * (ColSwap^-1)
+  kl::Option<Matrix4x4> Inverse() const {
+    T inverse[4][4];
+    int index[4] = {0, 1, 2, 3};
+    ::memcpy(inverse, m, 4 * 4 * sizeof(T));
+    for (int i = 0; i < 4; ++i) {
       int pick = -1;
-      for (int j = i; j < 4; j++) {
-        if (std::abs(minv[j][i]) != 0) {
+      for (int j = i; j < 4; ++j) {
+        if (std::abs(inverse[j][i]) != 0) {
           pick = j;
           break;
         }
       }
       if (pick < 0) {
-        // singular matrix
-        return {};
+        std::cout << Matrix4x4(inverse) << std::endl;
+        return kl::None();
       }
       if (i != pick) {
-        for (int j = 0; j < 4; j++) {
-          std::swap(minv[i][j], minv[pick][j]);
+        for (int j = 0; j < 4; ++j) {
+          std::swap(inverse[pick][j], inverse[i][j]);
         }
+        std::swap(index[i], index[pick]);
       }
-      std::swap(ind[i], ind[pick]);
-
-      T f = 1. / minv[i][i];
-      minv[i][i] = 1.;
-      for (int j = 0; j < 4; j++) {
-        minv[i][j] *= f;
+      T f = 1. / inverse[i][i];
+      inverse[i][i] = 1;
+      for (int j = 0; j < 4; ++j) {
+        inverse[i][j] *= f;
       }
-
-      for (int j = 0; j < 4; j++) {
+      for (int j = 0; j < 4; ++j) {
         if (i != j) {
-          T old = minv[j][i];
-          minv[j][i] = 0;
-          for (int k = 0; k < 4; k++)
-            minv[j][k] -= minv[i][k] * old;
+          T old = inverse[j][i];
+          inverse[j][i] = 0;
+          for (int k = 0; k < 4; ++k) {
+            inverse[j][k] -= inverse[i][k] * old;
+          }
+        }
+      }
+      for (int i = 0; i < 4;) {
+        if (index[i] != i) {
+          for (int j = 0; j < 4; ++j) {
+            // column and row based swap r the same.
+            std::swap(inverse[i][j], inverse[index[i]][j]);
+            // std::swap(inverse[j][i], inverse[j][index[i]]);
+          }
+          int tmp = index[i];
+          index[i] = index[tmp];
+          index[tmp] = tmp;
+        } else {
+          ++i;
         }
       }
     }
-
-    for (int i = 0; i < 4;) {
-      if (ind[i] != i) {
-        for (int j = 0; j < 4; j++) {
-          std::swap(minv[j][i], minv[j][ind[i]]);
-        }
-        int tmp = ind[i];
-        ind[i] = ind[tmp];
-        ind[tmp] = tmp;
-      } else {
-        i++;
-      }
-    }
-    return Matrix4x4(minv);
+    return Matrix4x4(inverse);
   }
 };
 
@@ -372,8 +375,8 @@ inline Vector4<T> operator*(const Matrix4x4<T> &m, const Vector4<T> &v) {
 }
 
 template <typename T>
-inline std::optional<Vector3<T>> operator*(const Matrix4x4<T> &m,
-                                           const Vector3<T> &v) {
+inline kl::Option<Vector3<T>> operator*(const Matrix4x4<T> &m,
+                                        const Vector3<T> &v) {
   return (m * (v.ToVector4())).ToVector3();
 }
 
@@ -450,8 +453,8 @@ const Float EPSILON = 1e-6;
 const Float PI = 4 * std::atan(Float{1});
 const Float E = std::exp(1);
 
-inline std::optional<std::tuple<Float, Float>> Quadratic(Float a, Float b,
-                                                         Float c) {
+inline kl::Option<std::tuple<Float, Float>> Quadratic(Float a, Float b,
+                                                      Float c) {
   assert(a != 0);
   assert(!std::isnan(a));
   assert(!std::isnan(b));
