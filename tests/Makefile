@@ -3,7 +3,7 @@
 KL_LIB := ../libkl.a
 ZLI_LIB := ../libzli.a
 CXX := g++
-CXXFLAGS := -Wall -g -std=c++14
+CXXFLAGS := -Wall -g -std=c++14 -I..
 LDFLAGS := -lpthread -L.. -lkl -lzli
 TESTS := $(patsubst %.cc, %, $(wildcard *_test.cc))
 
