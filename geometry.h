@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_GEOMETRY_H_
-#define _ZLI_GEOMETRY_H_
+#ifndef ZLI_GEOMETRY_H_
+#define ZLI_GEOMETRY_H_
 #include <functional>
 #include <iostream>
 #include <memory>

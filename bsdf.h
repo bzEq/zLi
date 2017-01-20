@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_BSDF_H_
-#define _ZLI_BSDF_H_
+#ifndef ZLI_BSDF_H_
+#define ZLI_BSDF_H_
 #include <functional>
 #include <memory>
 #include <tuple>

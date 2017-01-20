@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_SCENE_H_
-#define _ZLI_SCENE_H_
+#ifndef ZLI_SCENE_H_
+#define ZLI_SCENE_H_
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 

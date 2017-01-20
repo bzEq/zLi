@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef __ZLI_RENDERER_H_
-#define __ZLI_RENDERER_H_
+#ifndef ZLI_RENDERER_H_
+#define ZLI_RENDERER_H_
 #include <atomic>
 #include <memory>
 #include <string>

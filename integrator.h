@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_INTEGRATOR_H_
-#define _ZLI_INTEGRATOR_H_
+#ifndef ZLI_INTEGRATOR_H_
+#define ZLI_INTEGRATOR_H_
 #include <vector>
 
 #include "light.h"

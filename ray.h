@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_RAY_H_
-#define _ZLI_RAY_H_
+#ifndef ZLI_RAY_H_
+#define ZLI_RAY_H_
 #include <iostream>
 
 #include "core_math.h"

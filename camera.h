@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_CAMERA_H_
-#define _ZLI_CAMERA_H_
+#ifndef ZLI_CAMERA_H_
+#define ZLI_CAMERA_H_
 #include <iostream>
 
 #include "core_math.h"

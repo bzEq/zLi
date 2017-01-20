@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_DIAGRAM2D_H_
-#define _ZLI_DIAGRAM2D_H_
+#ifndef ZLI_DIAGRAM2D_H_
+#define ZLI_DIAGRAM2D_H_
 #include <iostream>
 #include <tuple>
 #include <vector>

@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_BOUNDBOX_H_
-#define _ZLI_BOUNDBOX_H_
+#ifndef ZLI_BOUNDBOX_H_
+#define ZLI_BOUNDBOX_H_
 #include <algorithm>
 #include <iostream>
 #include <tuple>

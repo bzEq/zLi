@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_FILM_H_
-#define _ZLI_FILM_H_
+#ifndef ZLI_FILM_H_
+#define ZLI_FILM_H_
 #include <OpenEXR/ImfRgba.h>
 #include <OpenEXR/ImfRgbaFile.h>
 

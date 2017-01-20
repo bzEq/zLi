@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_KDTREE_H_
-#define _ZLI_KDTREE_H_
+#ifndef ZLI_KDTREE_H_
+#define ZLI_KDTREE_H_
 #include <iostream>
 #include <memory>
 #include <stack>
@@ -9,8 +9,8 @@
 #include <vector>
 
 #include "boundbox.h"
-#include "geometry.h"
 #include "core_math.h"
+#include "geometry.h"
 #include "ray.h"
 
 namespace zLi {

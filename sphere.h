@@ -1,15 +1,15 @@
 // Copyright (c) 2016 Kai Luo. All rights reserved.
 
-#ifndef _ZLI_SPHERE_H_
-#define _ZLI_SPHERE_H_
+#ifndef ZLI_SPHERE_H_
+#define ZLI_SPHERE_H_
 #include <iostream>
 #include <memory>
 #include <utility>
 
 #include "boundbox.h"
 #include "bsdf.h"
-#include "geometry.h"
 #include "core_math.h"
+#include "geometry.h"
 #include "ray.h"
 
 namespace zLi {
