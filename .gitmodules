@@ -2,7 +2,3 @@
 	path = kl
 	url = git://github.com/bzEq/kl.git
         ignore = dirty
-[submodule "openexr"]
-	path = openexr
-	url = git://github.com/openexr/openexr.git
-        ignore = dirty
