@@ -39,11 +39,11 @@ Spectrum Renderer::SampleSpectrumAt(Float x, Float y) {
   return PathIntegrator::Li(*scene_, ray);
 }
 
-static xyYColor PrimaryColors[] = {
-    xyYColor(0.64, 0.33, 0.2126), xyYColor(0.3, 0.6, 0.7152),
-    xyYColor(0.15, 0.06, 0.0722),
-    xyYColor(0.3127, 0.329, 1.0),  // red, green, blue, white
-};
+// static xyYColor PrimaryColors[] = {
+//     xyYColor(0.64, 0.33, 0.2126), xyYColor(0.3, 0.6, 0.7152),
+//     xyYColor(0.15, 0.06, 0.0722),
+//     xyYColor(0.3127, 0.329, 1.0),  // red, green, blue, white
+// };
 
 void Renderer::AddToxyYChan(int i, int j, const Spectrum &s) {
   xyY_chan_->Push(RenderResult{
